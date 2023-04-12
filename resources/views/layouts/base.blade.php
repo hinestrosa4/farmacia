@@ -21,10 +21,9 @@
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
-                            class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="{{ route('listaProductos') }}" class="nav-link">Home</a>
@@ -32,9 +31,8 @@
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="" class="nav-link">Contact</a>
                 </li>
-                <li>
-                    <a href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <li class="nav-item">
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="nav-link">
                         <img src="{{ asset('img/log_out.png') }}" width="40px">
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST">
@@ -42,6 +40,7 @@
                     </form>
                 </li>
             </ul>
+            
         </nav>
         <!-- /.navbar -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -56,20 +55,19 @@
                 <!-- Sidebar user (optional) -->
 
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-
-                        <img src=@foreach ($usuario as $user)
-                        @if ($user->sexo == 'hombre') {{ asset('img/avatarUser.png') }}
-                        @elseif ($user->sexo == 'mujer')
-                        {{ asset('img/avatarUserMujer.png') }} @endif @endforeach
-                            class="img-circle elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="#" class="d-block">{{ Auth::user()->apellidos }},
-                            {{ Auth::user()->nombre }}</a>
-                    </div>
+                    <a href="{{ route('datosPersonales') }}">
+                        <div class="image">
+                            <img src=@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatarUser.png') }}
+                                 @elseif (Auth::user()->sexo == 'mujer')
+                                 {{ asset('img/avatarUserMujer.png') }} @endif
+                                class="img-circle elevation-2" alt="User Image">
+                        </div>
+                        <div class="info">
+                            <a href="{{ route('datosPersonales') }}" class="d-block">{{ Auth::user()->apellidos }},
+                                {{ Auth::user()->nombre }}</a>
+                        </div>
+                    </a>
                 </div>
-
 
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
@@ -94,6 +92,14 @@
                                 <i class="bi bi-person-fill-gear"></i>
                                 <p>
                                     Datos personales
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('gestionUsuario') }}" class="nav-link">
+                                <i class="bi bi-person-lines-fill"></i>
+                                <p>
+                                    Gestión de usuarios
                                 </p>
                             </a>
                         </li>

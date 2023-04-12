@@ -72,7 +72,7 @@
     <div class="input-group has-validation">
         <span class="input-group-text" id="inputGroupPrepend">@</span>
         <input type="text" name="email" class="form-control" id="email" value="{{ old('email') }}"
-            placeholder="email" aria-describedby="inputGroupPrepend">
+            placeholder="Correo electrónico" aria-describedby="inputGroupPrepend">
     </div>
     {!! $errors->first('email', '<span style=color:red>:message</span>') !!}
 </div>

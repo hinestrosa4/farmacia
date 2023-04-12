@@ -19,13 +19,24 @@ class LoginController extends Controller
         $credentials = $request->only(['email', 'password']);
         // dd(Auth::attempt($credentials));
         if (Auth::attempt($credentials)) {
-
             $usuario = Usuario::where('email', $request->email)->first();
             $time = date("H:i:s");
             $time = date("H:i:s", strtotime($time . "+1 hour"));
 
             if ($usuario->tipo === 1) {
                 session(['administrador' => $time]);
+                return redirect()->route('listaProductos');
+            }
+            if ($usuario->tipo === 2) {
+                session(['farmaceutico' => $time]);
+                return redirect()->route('listaProductos');
+            }
+            if ($usuario->tipo === 3) {
+                session(['tecnico' => $time]);
+                return redirect()->route('listaProductos');
+            }
+            if ($usuario->tipo === 4) {
+                session(['auxiliar' => $time]);
                 return redirect()->route('listaProductos');
             }
             // else {

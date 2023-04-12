@@ -23,19 +23,26 @@ use App\Http\Controllers\UsuarioController;
 // });
 
 //Login
-Route::get('/', LoginController::class)->name('login');
-Route::post('/', [LoginController::class, 'store']);
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/', App\Http\Controllers\LoginController::class)->name('login');
+Route::post('/', [App\Http\Controllers\LoginController::class, 'store'])->name('login.store');
+Route::post('logout', [App\Http\Controllers\LoginController::class, 'logout'])->name('logout');
 
 //Registrarse
-Route::get('/register', RegisterController::class)->name('register');
-Route::get('/formRegister', RegisterController::class)->name('formRegister');
-Route::post('formRegister', [RegisterController::class, 'store']);
+Route::get('/register', App\Http\Controllers\RegisterController::class)->name('register');
+Route::get('/formRegister', App\Http\Controllers\RegisterController::class)->name('formRegister');
+Route::post('formRegister', [App\Http\Controllers\RegisterController::class, 'store']);
 
 Route::middleware(['auth'])->group(function () {
     //Producto
-    Route::get('/listaProductos', [ProductoController::class, 'listar'])->name('listaProductos');
+    Route::get('/listaProductos', [App\Http\Controllers\ProductoController::class, 'listar'])->name('listaProductos');
 
     //Usuario
-    Route::get('/datosPersonales', UsuarioController::class)->name('datosPersonales');
+    Route::get('/datosPersonales', App\Http\Controllers\UsuarioController::class)->name('datosPersonales');
+    Route::put('datosPersonalesUpdate/{id}', [App\Http\Controllers\UsuarioController::class, 'update'])->name('datosPersonalesUpdate');
+    Route::put('updatePassword/{id}', [App\Http\Controllers\UsuarioController::class, 'updatePassword'])->name('updatePassword');
+
+    //Listado de usuarios
+    Route::get('/gestionUsuario', [App\Http\Controllers\UsuarioController::class, 'gestionUsuarioView'])->name('gestionUsuario');
+
+
 });
