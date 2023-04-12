@@ -36,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/listaProductos', [ProductoController::class, 'listar'])->name('listaProductos');
 
     //Usuario
-    Route::get('/datosPersonales', UsuarioController::class)->name('datosPersonales');
+    Route::get('/datosPersonales/{id}', UsuarioController::class)->name('datosPersonales');
     Route::put('datosPersonalesUpdate/{id}', [UsuarioController::class, 'update'])->name('datosPersonalesUpdate');
     Route::put('updatePassword/{id}', [UsuarioController::class, 'updatePassword'])->name('updatePassword');
 

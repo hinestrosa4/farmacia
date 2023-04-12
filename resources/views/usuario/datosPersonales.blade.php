@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
                             <li class="breadcrumb-item active">Datos personales</li>
                         </ol>
                     </div>
@@ -63,17 +63,17 @@
                                             <b style="color:#0B7300">Edad</b>
                                             <span class="float-right" style="color:rgb(26, 57, 255)">
                                                 <?php
-                                                    $fecha_nacimiento = new DateTime($user->fecha_nacimiento);
-                                                    $hoy = new DateTime();
-                                                    $edad = $hoy->diff($fecha_nacimiento)->y;
-                                                    echo $edad . ' años';
+                                                $fecha_nacimiento = new DateTime($user->fecha_nacimiento);
+                                                $hoy = new DateTime();
+                                                $edad = $hoy->diff($fecha_nacimiento)->y;
+                                                echo $edad . ' años';
                                                 ?>
                                             </span>
                                         </li>
-                                        
+
                                         <li class="list-group-item">
-                                            <b style="color:#0B7300">DNI</b><span
-                                                class="float-right" style="color:rgb(26, 57, 255)">{{ $user->dni }}</span>
+                                            <b style="color:#0B7300">DNI</b><span class="float-right"
+                                                style="color:rgb(26, 57, 255)">{{ $user->dni }}</span>
                                         </li>
                                         <li class="list-group-item">
                                             <b style="color:#0B7300">Tipo</b><span
@@ -118,16 +118,33 @@
                                                     <div class="modal-body">
                                                         <div class="form-group">
                                                             <label for="nueva-contraseña">Nueva contraseña</label>
-                                                            <input type="password" class="form-control"
-                                                                id="nueva-contraseña" name="password">
+                                                            <div class="input-group">
+                                                                <input type="password" class="form-control"
+                                                                    id="nueva-contraseña" name="password">
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-outline-secondary" type="button"
+                                                                        id="toggle-password">
+                                                                        <i class="fa fa-eye-slash"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                             {!! $errors->first('password', '<span style=color:red>:message</span>') !!}
                                                         </div>
+                                                        
                                                         <div class="form-group">
                                                             <label for="confirmar-contraseña">Confirmar contraseña</label>
+                                                            <div class="input-group">
                                                             <input type="password" class="form-control"
                                                                 id="confirmar-contraseña" name="passwordConfirm">
-                                                            {!! $errors->first('passwordConfirm', '<span style=color:red>:message</span>') !!}
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-outline-secondary" type="button"
+                                                                        id="toggle-password-confirm">
+                                                                        <i class="fa fa-eye-slash"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
+                                                        {!! $errors->first('passwordConfirm', '<span style=color:red>:message</span>') !!}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
@@ -150,11 +167,13 @@
                                     <strong style="color:#0B7300">
                                         <i class="bi bi-telephone-fill mr-1"></i>Teléfono
                                     </strong>
-                                    <p class="text-muted">{{ $user->telefono }}</p>
+                                    <p class="text-muted">{{ $user->telefono == '' ? 'Sin definir' : $user->telefono }}
+                                    </p>
                                     <strong style="color:#0B7300">
                                         <i class="bi bi-geo-alt-fill"></i> Dirección
                                     </strong>
-                                    <p class="text-muted">{{ $user->direccion }}</p>
+                                    <p class="text-muted">{{ $user->direccion == '' ? 'Sin definir' : $user->direccion }}
+                                    </p>
                                     <strong style="color:#0B7300">
                                         <i class="fas fa-at mr-1"></i>Correo electrónico
                                     </strong>
@@ -194,8 +213,9 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="validationCustom01" class="form-label">Apellidos</label>
-                                                <input type="text" name="apellidos" class="form-control" id="apellidos"
-                                                    placeholder="Apellidos" value="{{ old('apellidos') }}">
+                                                <input type="text" name="apellidos" class="form-control"
+                                                    id="apellidos" placeholder="Apellidos"
+                                                    value="{{ old('apellidos') }}">
                                                 {!! $errors->first('apellidos', '<span style=color:red>:message</span>') !!}
                                             </div>
                                             <div class="col-md-4">
@@ -207,7 +227,8 @@
                                             <div class="col-md-4">
                                                 <label for="validationCustom01" class="form-label">Dirección</label>
                                                 <input type="text" name="direccion" class="form-control"
-                                                    id="direccion" placeholder="Direccion" value="{{ old('direccion') }}">
+                                                    id="direccion" placeholder="Direccion"
+                                                    value="{{ old('direccion') }}">
                                                 {!! $errors->first('direccion', '<span style=color:red>:message</span>') !!}
                                             </div>
                                             <div class="col-md-4">
@@ -225,14 +246,16 @@
                                                 <label for="validationCustom04" class="form-label">Sexo</label>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="sexo"
-                                                        id="hombre" value="hombre" {{ old('sexo') == 'hombre' ? 'checked' : '' }}>
+                                                        id="hombre" value="hombre"
+                                                        {{ old('sexo') == 'hombre' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="flexRadioDefault1">
                                                         Hombre
                                                     </label>
                                                 </div>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="sexo"
-                                                        id="mujer" value="mujer" {{ old('sexo') == 'mujer' ? 'checked' : '' }}>
+                                                        id="mujer" value="mujer"
+                                                        {{ old('sexo') == 'mujer' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="flexRadioDefault2">
                                                         Mujer
                                                     </label>
@@ -253,6 +276,8 @@
                 </div>
         </section>
     </div>
+
+    {{-- Pasar datos al formulario cuando pulsa editar --}}
     <script>
         var nombre = "{{ $user->nombre }}";
         var apellidos = "{{ $user->apellidos }}";
@@ -276,6 +301,8 @@
             }
         });
     </script>
+
+    {{-- Activar boton hasta que sean iguales --}}
     <script>
         // Obtener los campos de contraseña
         const nuevaContraseña = document.getElementById('nueva-contraseña');
@@ -297,6 +324,38 @@
                 btnGuardarCambios.disabled = true;
             }
         }
+    </script>
+
+    {{-- ver o ocultar contraseña --}}
+    <script>
+        $(document).ready(function() {
+            $('#toggle-password').click(function() {
+                var passwordInput = $('#nueva-contraseña');
+                var passwordIcon = $('#toggle-password i');
+                if (passwordInput.attr('type') == 'password') {
+                    passwordInput.attr('type', 'text');
+                    passwordIcon.removeClass('fa-eye-slash');
+                    passwordIcon.addClass('fa-eye');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    passwordIcon.removeClass('fa-eye');
+                    passwordIcon.addClass('fa-eye-slash');
+                }
+            });
+            $('#toggle-password-confirm').click(function() {
+                var passwordInput = $('#confirmar-contraseña');
+                var passwordIcon = $('#toggle-password-confirm i');
+                if (passwordInput.attr('type') == 'password') {
+                    passwordInput.attr('type', 'text');
+                    passwordIcon.removeClass('fa-eye-slash');
+                    passwordIcon.addClass('fa-eye');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    passwordIcon.removeClass('fa-eye');
+                    passwordIcon.addClass('fa-eye-slash');
+                }
+            });
+        });
     </script>
 
 @endsection

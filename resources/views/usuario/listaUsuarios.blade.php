@@ -24,7 +24,7 @@
 
 @section('menu')
 
-    <!-- Modal para cambiar la contraseña -->
+    <!-- Modal para crear un usuario -->
     <div class="modal fade" id="crearUsuario" tabindex="-1" role="dialog" aria-labelledby="crearUsuario-label"
         data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
@@ -69,10 +69,10 @@
                             </div>
                             <br>
                             <div class="">
-                                <label for="validationCustom02" class="form-label">Edad</label>
-                                <input type="text" name="edad" class="form-control" id="edad"
-                                    value="{{ old('edad') }}" placeholder="Introduzca su edad">
-                                {!! $errors->first('edad', '<span style=color:red>:message</span>') !!}
+                                <label for="validationCustom02" class="form-label">Fecha de nacimiento</label>
+                                <input type="date" name="fecha_nacimiento" class="form-control" id="fecha_nacimiento"
+                                    value="{{ old('fecha_nacimiento') }}" placeholder="Introduzca su fecha de nacimiento">
+                                {!! $errors->first('fecha_nacimiento', '<span style=color:red>:message</span>') !!}
                             </div>
                             <br>
                             <div class="">
@@ -102,11 +102,15 @@
                             <br>
                             <div>
                                 <label for="validationCustom01" class="form-label">Tipo</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select class="form-control" name="tipo">
+                                    <option value="2" {{ old('tipo') == 'farmaceutico' ? 'selected' : '' }}>
+                                        Farmacéutico</option>
+                                    <option value="3" {{ old('tipo') == 'tecnico' ? 'selected' : '' }}>Técnico
+                                    </option>
+                                    <option value="4" {{ old('tipo') == 'auxiliar' ? 'selected' : '' }}>Auxiliar
+                                    </option>
+                                    <option value="1" {{ old('tipo') == 'administrador' ? 'selected' : '' }}>
+                                        Administrador</option>
                                 </select>
                                 {!! $errors->first('tipo', '<span style=color:red>:message</span>') !!}
                             </div>
@@ -137,7 +141,7 @@
                     </div>
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-right">
-                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
                             <li class="breadcrumb-item active">Gestión de usuarios</li>
                         </ol>
                     </div>
@@ -169,36 +173,6 @@
         </section>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            $('#btnSubmit').click(function(e) {
-                e.preventDefault();
-
-                // Deshabilita el botón de envío mientras se procesa la petición AJAX
-                $(this).prop('disabled', true);
-
-                // Realiza la petición AJAX al servidor
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ route('formRegister') }}',
-                    data: $('#form').serialize(),
-                    success: function(data) {
-                        // La petición fue exitosa
-                        $('#modal').modal('hide'); // Cierra el modal
-                        // Agrega aquí el código para mostrar un mensaje de éxito, actualizar la página, etc.
-                    },
-                    error: function(data) {
-                        // La petición falló
-                        // Agrega aquí el código para mostrar un mensaje de error, habilitar el botón de envío, etc.
-                    },
-                    complete: function() {
-                        // Habilita el botón de envío después de que se complete la petición AJAX, independientemente del resultado
-                        $('#btnSubmit').prop('disabled', false);
-                    }
-                });
-            });
-        });
-    </script>
     <script src="{{ asset('js/buscador.js') }}"></script>
 
 @endsection

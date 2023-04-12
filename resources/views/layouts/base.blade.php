@@ -16,7 +16,7 @@
 @yield('header')
 
 <style>
-    .dropdown-item:hover{
+    .dropdown-item:hover {
         color: rgb(255, 255, 255);
         background-color: rgb(78, 78, 78);
     }
@@ -34,7 +34,7 @@
                             class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ route('listaProductos') }}" class="nav-link">Home</a>
+                    <a href="{{ route('listaProductos') }}" class="nav-link">Inicio</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="" class="nav-link">Contact</a>
@@ -50,12 +50,14 @@
                             @elseif (Auth::user()->sexo == 'mujer')
                             {{ asset('img/avatarUserMujer.png') }} @endif"
                                 class="img-circle elevation-2" alt="{{ Auth::user()->nombre }}" width="40px">
-                                
+
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <span class="dropdown-header">{{ Auth::user()->nombre }} {{ Auth::user()->apellidos }}</span>
+                            <span class="dropdown-header">{{ Auth::user()->nombre }}
+                                {{ Auth::user()->apellidos }}</span>
                             <div class="dropdown-divider"></div>
-                            <a href="{{ route('datosPersonales') }}" class="dropdown-item">Mi Perfil</a>
+                            <a href="{{ route('datosPersonales', Auth::user()->id) }}" class="dropdown-item">Mi
+                                Perfil</a>
                             <a href="" class="dropdown-item">Configuración</a>
                             <div class="dropdown-divider"></div>
                             <a href="{{ route('logout') }}"
@@ -84,7 +86,7 @@
                 <!-- Sidebar user (optional) -->
 
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <a href="{{ route('datosPersonales') }}">
+                    <a href="{{ route('datosPersonales', Auth::user()->id) }}">
                         <div class="image">
                             <img src=@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatarUser.png') }}
                                  @elseif (Auth::user()->sexo == 'mujer')
@@ -92,7 +94,7 @@
                                 class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
-                            <a href="{{ route('datosPersonales') }}" class="d-block">{{ Auth::user()->apellidos }},
+                            <a href="{{ route('datosPersonales', Auth::user()->id) }}" class="d-block">{{ Auth::user()->apellidos }},
                                 {{ Auth::user()->nombre }}</a>
                         </div>
                     </a>
@@ -117,7 +119,7 @@
                         data-accordion="false">
                         <li class="nav-header">USUARIO</li>
                         {{-- <li class="nav-item">
-                            <a href="{{ route('datosPersonales') }}" class="nav-link">
+                            <a href="{{ route('datosPersonales', Auth::user()->id) }}" class="nav-link">
                                 <i class="bi bi-person-fill-gear"></i>
                                 <p>
                                     Datos personales

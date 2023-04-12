@@ -34,14 +34,14 @@ class UsuarioController extends Controller
             'nombre' => 'required',
             'apellidos' => 'required',
             'telefono' => 'required|regex:/^(?:(?:\+?[0-9]{2,4})?[ ]?[6789][0-9 ]{8,13})$/',
-            'direccion' => 'required',
+            'direccion' => '',
             'email' => 'required|email',
             'sexo' => 'required',
         ]);
 
         $usuario->update($datos);
         session()->flash('message', 'El usuario ha sido modificado correctamente');
-        return redirect()->route('datosPersonales');
+        return redirect()->route('datosPersonales', $usuario->id);
     }
 
     public function updatePassword($id)
@@ -56,7 +56,7 @@ class UsuarioController extends Controller
 
         $usuario->update($datos);
         session()->flash('message', 'La contraseña ha sido cambiada correctamente');
-        return redirect()->route('datosPersonales');
+        return redirect()->route('datosPersonales', $usuario->id);
     }
 }
 
