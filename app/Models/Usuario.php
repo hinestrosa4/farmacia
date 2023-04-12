@@ -12,5 +12,5 @@ class Usuario extends Authenticatable
     use SoftDeletes;
     protected $table = "usuario";
     public $timestamps = false;
-    protected $fillable = ['id', 'email', 'nombre', 'apellidos', 'edad', 'dni', 'telefono', 'direccion', 'sexo', 'password', 'tipo'];
+    protected $fillable = ['id', 'email', 'nombre', 'apellidos', 'fecha_nacimiento', 'dni', 'telefono', 'direccion', 'sexo', 'password', 'tipo'];
 }

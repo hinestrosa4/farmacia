@@ -1,4 +1,4 @@
-@section('title', 'Datos personales')
+@section('title', 'Gestión de usuarios')
 @extends('layouts.base')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 

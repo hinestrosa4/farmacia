@@ -54,10 +54,10 @@
 </div>
 
 <div class="col-md-3">
-    <label for="validationCustom02" class="form-label">Edad</label>
-    <input type="text" name="edad" class="form-control" id="edad" value="{{ old('edad') }}"
-        placeholder="Introduzca su edad">
-    {!! $errors->first('edad', '<span style=color:red>:message</span>') !!}
+    <label for="validationCustom02" class="form-label">Fecha nacimiento</label>
+    <input type="date" name="fecha_nacimiento" class="form-control" id="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}"
+        placeholder="Introduzca su fecha de nacimiento">
+    {!! $errors->first('fecha_nacimiento', '<span style=color:red>:message</span>') !!}
 </div>
 
 <div class="col-md-3">

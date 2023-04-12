@@ -49,11 +49,9 @@
                                 <small class="or text-center">O</small>
                                 <div class="line"></div>
                             </div>
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    @foreach ($errors->all() as $error)
-                                        {{ $error }}
-                                    @endforeach
+                            @if (session()->has('message'))
+                                <div class="text-center alert alert-success">
+                                    {{ session()->get('message') }}
                                 </div>
                             @endif
                             <div class="row px-3">

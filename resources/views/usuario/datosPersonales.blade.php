@@ -60,12 +60,20 @@
                                     <p class="text-muted text-center">{{ Auth::user()->apellidos }}</p>
                                     <ul class="list-group list-group-unbordered mb-3">
                                         <li class="list-group-item">
-                                            <b style="color:#0B7300">Edad</b><a href=""
-                                                class="float-right">{{ $user->edad }}</a>
+                                            <b style="color:#0B7300">Edad</b>
+                                            <span class="float-right" style="color:rgb(26, 57, 255)">
+                                                <?php
+                                                    $fecha_nacimiento = new DateTime($user->fecha_nacimiento);
+                                                    $hoy = new DateTime();
+                                                    $edad = $hoy->diff($fecha_nacimiento)->y;
+                                                    echo $edad . ' años';
+                                                ?>
+                                            </span>
                                         </li>
+                                        
                                         <li class="list-group-item">
-                                            <b style="color:#0B7300">DNI</b><a href=""
-                                                class="float-right">{{ $user->dni }}</a>
+                                            <b style="color:#0B7300">DNI</b><span
+                                                class="float-right" style="color:rgb(26, 57, 255)">{{ $user->dni }}</span>
                                         </li>
                                         <li class="list-group-item">
                                             <b style="color:#0B7300">Tipo</b><span
@@ -179,15 +187,27 @@
                                             @csrf
                                             @method('PUT')
                                             <div class="col-md-4">
+                                                <label for="validationCustom01" class="form-label">Nombre</label>
+                                                <input type="text" name="nombre" class="form-control" id="nombre"
+                                                    placeholder="Nombre" value="{{ old('nombre') }}">
+                                                {!! $errors->first('nombre', '<span style=color:red>:message</span>') !!}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="validationCustom01" class="form-label">Apellidos</label>
+                                                <input type="text" name="apellidos" class="form-control" id="apellidos"
+                                                    placeholder="Apellidos" value="{{ old('apellidos') }}">
+                                                {!! $errors->first('apellidos', '<span style=color:red>:message</span>') !!}
+                                            </div>
+                                            <div class="col-md-4">
                                                 <label for="validationCustom01" class="form-label">Teléfono</label>
                                                 <input type="text" name="telefono" class="form-control"
-                                                    id="telefono" placeholder="Teléfono">
+                                                    id="telefono" placeholder="Teléfono" value="{{ old('telefono') }}">
                                                 {!! $errors->first('telefono', '<span style=color:red>:message</span>') !!}
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="validationCustom01" class="form-label">Dirección</label>
                                                 <input type="text" name="direccion" class="form-control"
-                                                    id="direccion" placeholder="Direccion">
+                                                    id="direccion" placeholder="Direccion" value="{{ old('direccion') }}">
                                                 {!! $errors->first('direccion', '<span style=color:red>:message</span>') !!}
                                             </div>
                                             <div class="col-md-4">
@@ -197,22 +217,22 @@
                                                     <span class="input-group-text" id="inputGroupPrepend">@</span>
                                                     <input type="text" name="email" class="form-control"
                                                         id="email" placeholder="Correo"
-                                                        aria-describedby="inputGroupPrepend">
+                                                        aria-describedby="inputGroupPrepend" value="{{ old('email') }}">
                                                 </div>
                                                 {!! $errors->first('email', '<span style=color:red>:message</span>') !!}
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="validationCustom04" class="form-label">Tipo</label>
+                                                <label for="validationCustom04" class="form-label">Sexo</label>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="sexo"
-                                                        id="hombre" value="hombre">
+                                                        id="hombre" value="hombre" {{ old('sexo') == 'hombre' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="flexRadioDefault1">
                                                         Hombre
                                                     </label>
                                                 </div>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="sexo"
-                                                        id="mujer" value="mujer">
+                                                        id="mujer" value="mujer" {{ old('sexo') == 'mujer' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="flexRadioDefault2">
                                                         Mujer
                                                     </label>
@@ -234,6 +254,8 @@
         </section>
     </div>
     <script>
+        var nombre = "{{ $user->nombre }}";
+        var apellidos = "{{ $user->apellidos }}";
         var telefono = "{{ $user->telefono }}";
         var direccion = "{{ $user->direccion }}";
         var email = "{{ $user->email }}";
@@ -242,6 +264,8 @@
         // Agregar listener al botón de "Editar"
         $('#editarBtn').click(function() {
             // Establecer los valores de los inputs y radio buttons
+            $('#nombre').val(nombre);
+            $('#apellidos').val(apellidos);
             $('#telefono').val(telefono);
             $('#direccion').val(direccion);
             $('#email').val(email);

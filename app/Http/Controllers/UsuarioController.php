@@ -31,9 +31,11 @@ class UsuarioController extends Controller
     {
         $usuario = Usuario::find($id);
         $datos = request()->validate([
-            'telefono' => 'required',
+            'nombre' => 'required',
+            'apellidos' => 'required',
+            'telefono' => 'required|regex:/^(?:(?:\+?[0-9]{2,4})?[ ]?[6789][0-9 ]{8,13})$/',
             'direccion' => 'required',
-            'email' => 'required',
+            'email' => 'required|email',
             'sexo' => 'required',
         ]);
 

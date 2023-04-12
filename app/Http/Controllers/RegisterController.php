@@ -25,7 +25,7 @@ class RegisterController extends Controller
         $datos = request()->validate([
             'nombre' => 'required',
             'apellidos' => 'required',
-            'edad' => 'required',
+            'fecha_nacimiento' => 'required',
             'dni' => ['required', function ($attribute, $value, $fail) {
                 $validarCIF = new Validaciones();
                 if (!$validarCIF->validateDNI($value)) {
@@ -40,7 +40,7 @@ class RegisterController extends Controller
         $datos['password'] = Hash::make($datos['password']);
 
         Usuario::create($datos);
-        session()->flash('message', 'El usuario ha sido registrado correctamente');
+        session()->flash('message', 'Te has registrado correctamente');
         return redirect()->route('login');
 
         //return view('formRegCliente');
