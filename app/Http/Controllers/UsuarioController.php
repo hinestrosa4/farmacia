@@ -27,6 +27,28 @@ class UsuarioController extends Controller
         return view('usuario.listaUsuarios', compact('user'));
     }
 
+    public function store(Request $request)
+    {
+        $datos = request()->validate([
+         'nombre'=>'',
+         'apellidos'=>'',
+         'fecha_nacimiento'=>'',
+         'dni'=>'',
+         'email'=>'',
+         'password'=>'',
+         'tipo'=>'',
+
+        ]);
+
+        $datos['password'] = Hash::make($datos['password']);
+
+        Usuario::create($datos);
+        session()->flash('message', 'El usuario se ha creado correctamente');
+        return redirect()->route('gestionUsuario');
+
+        //return view('formRegCliente');
+    }
+
     public function update($id)
     {
         $usuario = Usuario::find($id);

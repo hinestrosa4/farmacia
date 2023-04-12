@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
 
     //Usuario
     Route::get('/datosPersonales/{id}', UsuarioController::class)->name('datosPersonales');
+    Route::post('createUser', [UsuarioController::class, 'store'])->name('createUser');
     Route::put('datosPersonalesUpdate/{id}', [UsuarioController::class, 'update'])->name('datosPersonalesUpdate');
     Route::put('updatePassword/{id}', [UsuarioController::class, 'updatePassword'])->name('updatePassword');
 

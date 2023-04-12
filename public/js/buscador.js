@@ -63,7 +63,7 @@ $(document).ready(function () {
                             </div>
                             <div class="card-footer">
                               <div class="text-right">
-                                <a href="#" class="btn btn-sm btn-primary">
+                              <a href="" class="btn btn-sm btn-primary">
                                   <i class="fas fa-user"></i> Ver perfil
                                 </a>
                               </div>

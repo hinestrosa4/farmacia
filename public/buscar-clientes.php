@@ -1,6 +1,7 @@
 <?php
 // Conectar a la base de datos
 $conexion = mysqli_connect("localhost", "root", "", "farmacia");
+// $conexion = mysqli_connect("localhost", "rafaelhinestrosa", "Yv4*1z6c", "rafaelhinestrosa");
 
 // Verificar si la solicitud POST está configurada correctamente
 if (isset($_POST['funcion']) && isset($_POST['consulta'])) {
