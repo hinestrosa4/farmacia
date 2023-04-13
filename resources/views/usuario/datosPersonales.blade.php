@@ -55,9 +55,9 @@
                                             {{ asset('img/avatarUserMujer.png') }} @endif
                                             alt="" class="profile-user-img img-fluid img-circle">
                                     </div>
-                                    <h3 class="profile-username text-center text-success">{{ Auth::user()->nombre }}
+                                    <h3 class="profile-username text-center text-success">{{ $user->nombre }}
                                     </h3>
-                                    <p class="text-muted text-center">{{ Auth::user()->apellidos }}</p>
+                                    <p class="text-muted text-center">{{ $user->apellidos }}</p>
                                     <ul class="list-group list-group-unbordered mb-3">
                                         <li class="list-group-item">
                                             <b style="color:#0B7300">Edad</b>
@@ -104,7 +104,7 @@
                                                         @elseif ($user->sexo == 'mujer')
                                                         {{ asset('img/avatarUserMujer.png') }} @endif
                                                         alt="" class="profile-user-img img-fluid img-circle">
-                                                    <h3 class="profile-username text-center">{{ Auth::user()->nombre }}
+                                                    <h3 class="profile-username text-center">{{ $user->nombre }}
                                                 </div>
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="cambiar-contraseña-modal-label">Cambiar
@@ -263,7 +263,7 @@
                                                 {!! $errors->first('sexo', '<span style=color:red>:message</span>') !!}
                                             </div>
                                             <div class="col-12 mt-4">
-                                                <button class="btn btn-success" type="submit">Enviar Formulario</button>
+                                                <button class="btn btn-success" type="submit">Modificar datos</button>
                                             </div>
                                         </form>
                                     </div>

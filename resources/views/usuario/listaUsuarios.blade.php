@@ -276,6 +276,13 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="mostrarBorrados">
+                        <label class="form-check-label" for="mostrarBorrados">
+                            Mostrar usuarios borrados
+                        </label>
+                    </div>
+
                     <br>
                     @if (session()->has('message'))
                         <div class="alert alert-success text-center">
@@ -293,12 +300,24 @@
             </div>
     </div>
     </section>
-
-
     </div>
 
     <script>
+        window.onload = function() {
+            const botonesPerfil = document.querySelectorAll("#perfil");
+            botonesPerfil.forEach(boton => {
+                boton.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const idUsuario = this.getAttribute("data-id");
+                    const url = "{{ route('datosPersonales', '') }}/" + idUsuario;
+                    window.location.href = url;
+                });
+            });
+        };
+
+
         $(document).ready(function() {
+
             // verifica si el campo de búsqueda está vacío
             if ($('#buscar').val() == "") {
                 buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
@@ -314,6 +333,7 @@
                 if (!consulta) { // Si no hay consulta, selecciona todos los clientes
                     consulta = "todos";
                 }
+                // $('#mostrarBorrados').change(function() {
                 $.ajax({
                         url: 'buscar-clientes.php',
                         type: 'POST',
@@ -324,17 +344,19 @@
                         },
                     })
                     .done(function(respuesta) {
-                        console.log(respuesta);
                         if (respuesta.length > 0) {
                             // Borra los resultados anteriores
                             $('#usuarios').empty();
                             // Agrega los nuevos resultados al cuerpo del card
+                            // if (!this.checked) {
                             respuesta.forEach(function(usuario) {
                                 let tipo = usuario.tipo;
                                 let sexo = usuario.sexo;
-                                let direccion = usuario.direccion == null ? "sin definir" : usuario
+                                let direccion = usuario.direccion == null ?
+                                    "sin definir" : usuario
                                     .direccion;
-                                let telefono = usuario.telefono == null ? "sin definir" : usuario
+                                let telefono = usuario.telefono == null ?
+                                    "sin definir" : usuario
                                     .telefono;
 
                                 let rol = tipo == 1 ? 'Administrador' :
@@ -374,8 +396,10 @@
                                 <a href="#" class="btn btn-sm btn-danger mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${usuario.id}" onclick="actualizarAccionFormulario(this)">
                                     <i class="bi bi-trash"></i> Eliminar
                                 </a>
-                                <a href="" class="btn btn-sm btn-info">
-                                  <i class="fas fa-user"></i> Ver perfil</a>
+                                <a href="{{ route('datosPersonales', '') }}" class="btn btn-sm btn-info" id="perfil" data-id="${usuario.id}">
+                                    <i class="fas fa-user"></i> Ver perfil
+                                </a>
+
                                 <a href="" class="btn btn-sm btn-primary">
                                 <i class="bi bi-arrow-up"></i>
                                 Ascender
@@ -413,29 +437,39 @@
                         `;
 
 
+
                                 $('#usuarios').append(html);
-                            });
+                            }); //foreach
+                            // } //if
+                            // else {
+                            //     console.log("borrados")
+                            // }
                         } else {
                             // Si no se encontraron resultados, muestra un mensaje de error
-                            $('#usuarios').html('<p class="text-danger">No se encontraron resultados</p>');
+                            $('#usuarios').html(
+                                '<p class="text-danger">No se encontraron resultados</p>');
                         }
                     })
                     .fail(function() {
                         console.log("error");
                     });
+                // })// change checkbox
             }
-            
-            
+
         });
+
         function actualizarAccionFormulario(botonEliminar) {
             // Obtener el valor del data-id del botón eliminar
             const idUsuario = botonEliminar.getAttribute("data-id");
 
             // Obtener el elemento form por su id
             const formularioEliminar = document.getElementById("deleteForm");
+            const verPerfil = document.getElementById("perfil");
 
             // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
             formularioEliminar.action = "{{ route('borrarUsuario', '') }}/" + idUsuario;
+            verPerfil.href = "{{ route('datosPersonales', '') }}/" + idUsuario;
+
         }
     </script>
 @endsection

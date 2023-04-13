@@ -15,9 +15,10 @@ class UsuarioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request)
+    public function __invoke($id)
     {
-        $user = $request->user();
+        $user = Usuario::find($id);
+        // dd($user);
         return view('usuario.datosPersonales', compact('user'));
     }
 
