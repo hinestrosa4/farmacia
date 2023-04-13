@@ -27,7 +27,7 @@ class UsuarioController extends Controller
         return view('usuario.listaUsuarios', compact('user'));
     }
 
-    public function store(Request $request)
+    public function store()
     {
         $datos = request()->validate([
          'nombre'=>'',
@@ -79,6 +79,13 @@ class UsuarioController extends Controller
         $usuario->update($datos);
         session()->flash('message', 'La contraseña ha sido cambiada correctamente');
         return redirect()->route('datosPersonales', $usuario->id);
+    }
+
+    public function borrarUsuario(Usuario $usuario)
+    {
+        $usuario->delete();
+        session()->flash('message', 'El usuario ha sido borrada correctamente.');
+        return redirect()->route('gestionUsuario');
     }
 }
 

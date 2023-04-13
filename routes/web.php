@@ -43,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
 
     //Listado de usuarios
     Route::get('/gestionUsuario', [UsuarioController::class, 'gestionUsuarioView'])->name('gestionUsuario');
-
-
+    
+    //borrar usuario
+    Route::delete('/borrarUsuario/{usuario}', [UsuarioController::class, 'borrarUsuario'])->name('borrarUsuario');
 });
