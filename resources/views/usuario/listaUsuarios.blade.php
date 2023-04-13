@@ -1,6 +1,8 @@
 @section('title', 'Gestión de usuarios')
 @extends('layouts.base')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 <style>
     #cuerpo {
@@ -232,9 +234,6 @@
                                 return false;
                             }
                         </script>
-
-
-
                     </div>
                     <div class="card-footer">
 
@@ -276,11 +275,9 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="mostrarBorrados">
-                        <label class="form-check-label" for="mostrarBorrados">
-                            Mostrar usuarios borrados
-                        </label>
+                    <div class="form-check form-switch" style="margin-left:32px; margin-top:5px">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Mostrar usuarios borrados</label>
                     </div>
 
                     <br>
@@ -303,19 +300,6 @@
     </div>
 
     <script>
-        window.onload = function() {
-            const botonesPerfil = document.querySelectorAll("#perfil");
-            botonesPerfil.forEach(boton => {
-                boton.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    const idUsuario = this.getAttribute("data-id");
-                    const url = "{{ route('datosPersonales', '') }}/" + idUsuario;
-                    window.location.href = url;
-                });
-            });
-        };
-
-
         $(document).ready(function() {
 
             // verifica si el campo de búsqueda está vacío
@@ -359,6 +343,16 @@
                                     "sin definir" : usuario
                                     .telefono;
 
+                                let ascender = usuario.tipo == 1 ? "" : `<a href="" class="btn btn-sm btn-primary mt-1">
+                                <i class="bi bi-sort-up"></i>
+                                Ascender
+                                </a>`;
+
+                                let descender = usuario.tipo == 4 ? "" : `<a href="" class="btn btn-sm btn-secondary mt-1">
+                                <i class="bi bi-sort-down"></i>
+                                Descender
+                                </a>`;
+
                                 let rol = tipo == 1 ? 'Administrador' :
                                     tipo == 2 ? 'Farmacéutico' :
                                     tipo == 3 ? 'Técnico' :
@@ -393,17 +387,14 @@
                             </div>
                             <div class="card-footer">
                               <div class="text-right">
-                                <a href="#" class="btn btn-sm btn-danger mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${usuario.id}" onclick="actualizarAccionFormulario(this)">
+                                <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${usuario.id}" onclick="actualizarAccionFormulario(this)">
                                     <i class="bi bi-trash"></i> Eliminar
                                 </a>
-                                <a href="{{ route('datosPersonales', '') }}" class="btn btn-sm btn-info" id="perfil" data-id="${usuario.id}">
-                                    <i class="fas fa-user"></i> Ver perfil
-                                </a>
-
-                                <a href="" class="btn btn-sm btn-primary">
-                                <i class="bi bi-arrow-up"></i>
-                                Ascender
-                                </a>
+                                <a href="{{ route('datosPersonales', '') }}/${usuario.id}" class="btn btn-sm btn-info mt-1" id="perfil" data-id="${usuario.id}">
+                                <i class="fas fa-user"></i> Ver perfil
+                            </a>
+                                ${ascender}
+                                ${descender}
                               </div>
                             </div>
                           </div>

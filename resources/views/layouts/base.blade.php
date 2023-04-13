@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
+   
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <!-- Font Awesome -->
@@ -72,7 +73,6 @@
             </ul>
 
         </nav>
-
         <!-- /.navbar -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
