@@ -43,7 +43,13 @@ Route::middleware(['auth'])->group(function () {
 
     //Listado de usuarios
     Route::get('/gestionUsuario', [UsuarioController::class, 'gestionUsuarioView'])->name('gestionUsuario');
-    
+
     //borrar usuario
     Route::delete('/borrarUsuario/{usuario}', [UsuarioController::class, 'borrarUsuario'])->name('borrarUsuario');
+
+    //ascender
+    Route::put('ascenderUsuario/{usuario_id}', [UsuarioController::class, 'ascenderUsuario'])->name('ascenderUsuario');
+
+    //descender
+    Route::put('descenderUsuario/{usuario_id_des}', [UsuarioController::class, 'descenderUsuario'])->name('descenderUsuario');
 });

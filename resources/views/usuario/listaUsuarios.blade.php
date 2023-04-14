@@ -26,6 +26,94 @@
 
 @section('menu')
 
+    <!-- Modal Ascender-->
+    <div class="modal fade" id="ascenderModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog text-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center" id="passwordModalLabel">Ascender usuario</h4>
+                    <button data-dismiss="modal" aria-label="close" class="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 text-center">
+                        <p class="mb-0" style="font-style: oblique">Al darle más privilegios a este usuario, podrá
+                            realizar acciones y acceder a información que antes estaba restringida.</p>
+                        <br>
+                        <p><strong>¿Deseas continuar?</strong></p>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" style="width: 46px; height:38px" class="btn btn-secondary mr-3" data-dismiss="modal">No</button>
+                        <form id="formAscender" class="g-3 needs-validation" method="POST"
+                            action="{{ route('ascenderUsuario', '') }}">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="usuario_id" id="usuario_id" value="">
+                            <button type="submit" style="width: 46px" class="btn btn-primary" id="acceptPasswordButton">Sí</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).on('click', '#ascendButton', function() {
+            var usuario_id = $(this).data('id');
+            console.log(usuario_id)
+            $('#usuario_id').val(usuario_id);
+            var action_url = '{{ route('ascenderUsuario', '') }}';
+            action_url = action_url.replace('{{ route('ascenderUsuario', '') }}',
+                '{{ route('ascenderUsuario', '') }}/' + usuario_id);
+            $('#formAscender').attr('action', action_url);
+        });
+    </script>
+    <!-- Modal Descender -->
+    <div class="modal fade" id="descenderModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog text-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center" id="passwordModalLabel2">Descender usuario</h4>
+                    <button data-dismiss="modal" aria-label="close" class="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 text-center">
+                        <p class="mb-0" style="font-style: oblique">Al darle menos privilegios a este usuario, no podrá
+                            realizar acciones y acceder a información que antes estaba permitida.</p>
+                        <br>
+                        <p><strong>¿Deseas continuar?</strong></p>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" style="width: 46px; height:38px" class="btn btn-secondary mr-3" data-dismiss="modal">No</button>
+                        <form id="formDescender" class="g-3 needs-validation" method="POST"
+                            action="{{ route('descenderUsuario', '') }}">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="usuario_id_des" id="usuario_id_des" value="">
+                            <button type="submit" style="width: 46px" class="btn btn-primary" id="acceptPasswordButton2">Sí</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).on('click', '#descendButton', function() {
+            var usuario_id_des = $(this).data('id');
+            console.log(usuario_id_des)
+            $('#usuario_id_des').val(usuario_id_des);
+            var action_url = '{{ route('descenderUsuario', '') }}';
+            action_url = action_url.replace('{{ route('descenderUsuario', '') }}',
+                '{{ route('descenderUsuario', '') }}/' + usuario_id_des);
+            $('#formDescender').attr('action', action_url);
+        });
+    </script>
+
+
+
     <!-- Modal para crear un usuario -->
     <div class="modal fade" id="crearUsuario" tabindex="-1" role="dialog" aria-labelledby="crearUsuario-label"
         data-backdrop="static" data-keyboard="false">
@@ -61,7 +149,8 @@
                             <div class="">
                                 <label for="validationCustom02" class="form-label">Fecha de nacimiento</label>
                                 <input type="date" name="fecha_nacimiento" class="form-control" id="fecha_nacimiento"
-                                    value="{{ old('fecha_nacimiento') }}" placeholder="Introduzca su fecha de nacimiento">
+                                    value="{{ old('fecha_nacimiento') }}"
+                                    placeholder="Introduzca su fecha de nacimiento">
                             </div>
                             <br>
                             <div class="">
@@ -235,9 +324,6 @@
                             }
                         </script>
                     </div>
-                    <div class="card-footer">
-
-                    </div>
                 </div>
             </div>
         </div>
@@ -343,12 +429,12 @@
                                     "sin definir" : usuario
                                     .telefono;
 
-                                let ascender = usuario.tipo == 1 ? "" : `<a href="" class="btn btn-sm btn-primary mt-1">
+                                let ascender = usuario.tipo == 1 ? "" : `<a href="#" class="btn btn-sm btn-primary mt-1" data-id="${usuario.id}" id="ascendButton" data-toggle="modal" data-target="#ascenderModal">
                                 <i class="bi bi-sort-up"></i>
                                 Ascender
                                 </a>`;
 
-                                let descender = usuario.tipo == 4 ? "" : `<a href="" class="btn btn-sm btn-secondary mt-1">
+                                let descender = usuario.tipo == 4 ? "" : `<a href="#" data-id="${usuario.id}" id="descendButton"  class="btn btn-sm btn-secondary mt-1" data-toggle="modal" data-target="#descenderModal">
                                 <i class="bi bi-sort-down"></i>
                                 Descender
                                 </a>`;

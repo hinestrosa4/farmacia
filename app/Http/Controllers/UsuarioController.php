@@ -31,13 +31,13 @@ class UsuarioController extends Controller
     public function store()
     {
         $datos = request()->validate([
-         'nombre'=>'',
-         'apellidos'=>'',
-         'fecha_nacimiento'=>'',
-         'dni'=>'',
-         'email'=>'',
-         'password'=>'',
-         'tipo'=>'',
+            'nombre' => '',
+            'apellidos' => '',
+            'fecha_nacimiento' => '',
+            'dni' => '',
+            'email' => '',
+            'password' => '',
+            'tipo' => '',
 
         ]);
 
@@ -81,6 +81,45 @@ class UsuarioController extends Controller
         session()->flash('message', 'La contraseña ha sido cambiada correctamente');
         return redirect()->route('datosPersonales', $usuario->id);
     }
+
+    public function ascenderUsuario($usuario_id)
+    {
+        $usuario = Usuario::find($usuario_id);
+
+        if ($usuario->tipo == 4) {
+            $usuario->tipo = 3;
+            $usuario->save();
+        } else if ($usuario->tipo == 3) {
+            $usuario->tipo = 2;
+            $usuario->save();
+        } else if ($usuario->tipo == 2) {
+            $usuario->tipo = 1;
+            $usuario->save();
+        }
+
+        session()->flash('message', 'El usuario ha sido ascendido');
+        return redirect()->route('gestionUsuario');
+    }
+
+    public function descenderUsuario($usuario_id_des)
+    {
+        $usuario = Usuario::find($usuario_id_des);
+
+        if ($usuario->tipo == 1) {
+            $usuario->tipo = 2;
+            $usuario->save();
+        } else if ($usuario->tipo == 2) {
+            $usuario->tipo = 3;
+            $usuario->save();
+        } else if ($usuario->tipo == 3) {
+            $usuario->tipo = 4;
+            $usuario->save();
+        }
+
+        session()->flash('message', 'El usuario ha sido descendido');
+        return redirect()->route('gestionUsuario');
+    }
+
 
     public function borrarUsuario(Usuario $usuario)
     {
