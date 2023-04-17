@@ -10,6 +10,7 @@ window.Vue = require('vue').default;
 
 import Form from './components/Tasks/Form.vue';
 
+
 const routes = [
     {
         path: '/form',

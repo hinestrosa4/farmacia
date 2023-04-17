@@ -17,7 +17,11 @@ class AtributoController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return view('atributos.listar');
+        $laboratorios = Laboratorio::orderBy('id', 'asc')->get();
+        $tipos = Tipo::orderBy('id', 'asc')->get();
+        $presentaciones = Presentacion::orderBy('id', 'asc')->get();
+
+        return view('atributos.listar', compact('laboratorios','tipos','presentaciones'));
     }
 
     public function storeLab()
@@ -27,7 +31,14 @@ class AtributoController extends Controller
         ]);
 
         Laboratorio::create($datos);
-        session()->flash('message', 'El laboratorio se ha creado correctamente');
+        session()->flash('messageLab', 'El laboratorio se ha creado correctamente');
+        return redirect()->route('gestionAtributos');
+    }
+
+    public function borrarLab(Laboratorio $laboratorio)
+    {
+        $laboratorio->delete();
+        session()->flash('messageLab', 'El laboratorio ha sido borrada correctamente.');
         return redirect()->route('gestionAtributos');
     }
 
@@ -38,7 +49,14 @@ class AtributoController extends Controller
         ]);
 
         Tipo::create($datos);
-        session()->flash('message', 'El tipo se ha creado correctamente');
+        session()->flash('messageTipo', 'El tipo se ha creado correctamente');
+        return redirect()->route('gestionAtributos');
+    }
+
+    public function borrarTipo(Tipo $tipo)
+    {
+        $tipo->delete();
+        session()->flash('messageTipo', 'El tipo ha sido borrada correctamente.');
         return redirect()->route('gestionAtributos');
     }
 
@@ -49,9 +67,17 @@ class AtributoController extends Controller
         ]);
 
         Presentacion::create($datos);
-        session()->flash('message', 'La presentación se ha creado correctamente');
+        session()->flash('messagePre', 'La presentación se ha creado correctamente');
         return redirect()->route('gestionAtributos');
     }
+    
+    public function borrarPre(Presentacion $presentacion)
+    {
+        $presentacion->delete();
+        session()->flash('messagePre', 'La presentacion ha sido borrada correctamente.');
+        return redirect()->route('gestionAtributos');
+    }
+
 
     // public function confirmarBorrar(Cliente $cliente)
     // {

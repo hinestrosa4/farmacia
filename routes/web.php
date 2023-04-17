@@ -59,11 +59,14 @@ Route::middleware(['auth'])->group(function () {
 
     //Laboratorio
     Route::post('createLab', [AtributoController::class, 'storeLab'])->name('createLab');
+    Route::delete('/borrarLab/{laboratorio}', [AtributoController::class, 'borrarLab'])->name('borrarLab');
 
     //Tipo
     Route::post('createTipo', [AtributoController::class, 'storeTipo'])->name('createTipo');
+    Route::delete('/borrarTipo/{tipo}', [AtributoController::class, 'borrarTipo'])->name('borrarTipo');
 
     //Presentacion
     Route::post('createPresentacion', [AtributoController::class, 'storePresentacion'])->name('createPresentacion');
+    Route::delete('/borrarPre/{presentacion}', [AtributoController::class, 'borrarPre'])->name('borrarPre');
 
 });
