@@ -60,13 +60,16 @@ Route::middleware(['auth'])->group(function () {
     //Laboratorio
     Route::post('createLab', [AtributoController::class, 'storeLab'])->name('createLab');
     Route::delete('/borrarLab/{laboratorio}', [AtributoController::class, 'borrarLab'])->name('borrarLab');
+    Route::post('editLab/{laboratorio}', [AtributoController::class, 'updateLab'])->name('editLab');
 
     //Tipo
     Route::post('createTipo', [AtributoController::class, 'storeTipo'])->name('createTipo');
     Route::delete('/borrarTipo/{tipo}', [AtributoController::class, 'borrarTipo'])->name('borrarTipo');
+    Route::post('editTipo/{tipo}', [AtributoController::class, 'updateTipo'])->name('editTipo');
 
     //Presentacion
     Route::post('createPresentacion', [AtributoController::class, 'storePresentacion'])->name('createPresentacion');
     Route::delete('/borrarPre/{presentacion}', [AtributoController::class, 'borrarPre'])->name('borrarPre');
+    Route::post('editPre/{presentacion}', [AtributoController::class, 'updatePre'])->name('editPre');
 
 });

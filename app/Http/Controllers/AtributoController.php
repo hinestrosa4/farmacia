@@ -42,6 +42,18 @@ class AtributoController extends Controller
         return redirect()->route('gestionAtributos');
     }
 
+    public function updateLab($id)
+    {
+        $laboratorio = Laboratorio::find($id);
+        $datos = request()->validate([
+            'nombre' => 'required',
+        ]);
+
+        $laboratorio->update($datos);
+        session()->flash('messageLab', 'El laboratorio ha sido modificado correctamente');
+        return redirect()->route('gestionAtributos');
+    }
+
     public function storeTipo()
     {
         $datos = request()->validate([
@@ -60,6 +72,18 @@ class AtributoController extends Controller
         return redirect()->route('gestionAtributos');
     }
 
+    public function updateTipo($id)
+    {
+        $tipo = Tipo::find($id);
+        $datos = request()->validate([
+            'nombre' => 'required',
+        ]);
+
+        $tipo->update($datos);
+        session()->flash('messageTipo', 'El tipo ha sido modificado correctamente');
+        return redirect()->route('gestionAtributos');
+    }
+
     public function storePresentacion()
     {
         $datos = request()->validate([
@@ -75,6 +99,18 @@ class AtributoController extends Controller
     {
         $presentacion->delete();
         session()->flash('messagePre', 'La presentacion ha sido borrada correctamente.');
+        return redirect()->route('gestionAtributos');
+    }
+
+    public function updatePre($id)
+    {
+        $pre = Presentacion::find($id);
+        $datos = request()->validate([
+            'nombre' => 'required',
+        ]);
+
+        $pre->update($datos);
+        session()->flash('messagePre', 'La presentación ha sido modificado correctamente');
         return redirect()->route('gestionAtributos');
     }
 
