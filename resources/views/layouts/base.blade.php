@@ -6,12 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
-   
-    <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('templates/plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('templates/dist/css/adminlte.min.css') }}">
 </head>
 @yield('header')
@@ -24,11 +20,10 @@
 </style>
 
 <body class="hold-transition sidebar-mini">
-    <!-- Site wrapper -->
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- Left navbar links -->
+            <!-- Top navbar links -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
@@ -42,7 +37,7 @@
                 </li>
             </ul>
 
-            <!-- Right navbar links -->
+            <!-- Left navbar links -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <div class="dropdown">
@@ -73,7 +68,6 @@
             </ul>
 
         </nav>
-        <!-- /.navbar -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="{{ route('listaProductos') }}" class="brand-link">
@@ -83,8 +77,7 @@
 
             <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Sidebar user (optional) -->
-
+                <!-- Sidebar user -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <a href="{{ route('datosPersonales', Auth::user()->id) }}">
                         <div class="image">
@@ -94,7 +87,8 @@
                                 class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
-                            <a href="{{ route('datosPersonales', Auth::user()->id) }}" class="d-block">{{ Auth::user()->apellidos }},
+                            <a href="{{ route('datosPersonales', Auth::user()->id) }}"
+                                class="d-block">{{ Auth::user()->apellidos }},
                                 {{ Auth::user()->nombre }}</a>
                         </div>
                     </a>
@@ -134,42 +128,27 @@
                                 </p>
                             </a>
                         </li>
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-                        <li class="nav-header">PRUEBA</li>
+                        <li class="nav-header">ALMACEN</li>
                         <li class="nav-item">
-                            <a href="../gallery.html" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
+                            <a href="{{ route('gestionAtributos') }}" class="nav-link">
+                                <i class="bi bi-boxes"></i>
                                 <p>
-                                    Prueba
+                                    Gestión de atributos
                                 </p>
                             </a>
                         </li>
                     </ul>
                 </nav>
-                <!-- /.sidebar-menu -->
             </div>
-            <!-- /.sidebar -->
         </aside>
         @yield('menu')
-
         {{-- <footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.2.0
-            </div>
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
-            reserved.
+            <strong>Copyright &copy; 2023 <p>Rafael Hinestrosa</p></strong>
         </footer> --}}
     </div>
-    <!-- ./wrapper -->
-
-    <!-- jQuery -->
     <script src="{{ asset('templates/plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap 4 -->
     <script src="{{ asset('templates/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- AdminLTE App -->
     <script src="{{ asset('templates/dist/js/adminlte.min.js') }}"></script>
-
 </body>
 
 </html>

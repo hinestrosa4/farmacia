@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\AtributoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,4 +53,17 @@ Route::middleware(['auth'])->group(function () {
 
     //descender
     Route::put('descenderUsuario/{usuario_id_des}', [UsuarioController::class, 'descenderUsuario'])->name('descenderUsuario');
+
+    //Atributos
+    Route::get('/gestionAtributos', AtributoController::class)->name('gestionAtributos');
+
+    //Laboratorio
+    Route::post('createLab', [AtributoController::class, 'storeLab'])->name('createLab');
+
+    //Tipo
+    Route::post('createTipo', [AtributoController::class, 'storeTipo'])->name('createTipo');
+
+    //Presentacion
+    Route::post('createPresentacion', [AtributoController::class, 'storePresentacion'])->name('createPresentacion');
+
 });
