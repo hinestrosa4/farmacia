@@ -21,9 +21,8 @@ class AtributoController extends Controller
         $tipos = Tipo::orderBy('id', 'asc')->get();
         $presentaciones = Presentacion::orderBy('id', 'asc')->get();
 
-        return view('atributos.listar', compact('laboratorios','tipos','presentaciones'));
+        return view('atributos.listar', compact('laboratorios', 'tipos', 'presentaciones'));
     }
-
     public function storeLab()
     {
         $datos = request()->validate([
@@ -32,6 +31,7 @@ class AtributoController extends Controller
 
         Laboratorio::create($datos);
         session()->flash('messageLab', 'El laboratorio se ha creado correctamente');
+        session()->flash('activeTab', 'laboratoriotab'); // Agregar variable de sesión para laboratoriotab
         return redirect()->route('gestionAtributos');
     }
 
@@ -62,9 +62,9 @@ class AtributoController extends Controller
 
         Tipo::create($datos);
         session()->flash('messageTipo', 'El tipo se ha creado correctamente');
+        session()->flash('activeTab', 'tipotab'); // Agregar variable de sesión para tipotab
         return redirect()->route('gestionAtributos');
     }
-
     public function borrarTipo(Tipo $tipo)
     {
         $tipo->delete();
@@ -92,9 +92,10 @@ class AtributoController extends Controller
 
         Presentacion::create($datos);
         session()->flash('messagePre', 'La presentación se ha creado correctamente');
+        session()->flash('activeTab', 'presentaciontab'); // Agregar variable de sesión para presentaciontab
         return redirect()->route('gestionAtributos');
     }
-    
+
     public function borrarPre(Presentacion $presentacion)
     {
         $presentacion->delete();

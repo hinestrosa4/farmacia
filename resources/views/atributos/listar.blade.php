@@ -432,66 +432,66 @@
             </div>
         </div>
 
-         <!-- Modal para modificar una presentacion -->
-         <div class="modal fade" id="modificarPre" tabindex="-1" role="dialog"
-         aria-labelledby="crearlaboratorio-label" data-backdrop="static" data-keyboard="false">
-         <div class="modal-dialog" role="document">
-             <div class="modal-content">
-                 <div class="card card-warning">
-                     <div class="card-header">
-                         <h3 class="card-title">
-                             Modificar Presentación
-                         </h3>
-                         <button data-dismiss="modal" aria-label="close" class="close">
-                             <span aria-hidden="true">&times;</span>
-                         </button>
-                     </div>
-                     <div class="card-body">
-                         <form id="formeditPre" class="g-3 needs-validation" method="POST"
-                             action="{{ route('editTipo', '') }}">
-                             @csrf
-                             <h1>Modificar presentación</h1>
-                             <br>
-                             <div class="">
-                                 <label for="validationCustom01" class="form-label">Laboratorio</label>
-                                 <input type="text" name="nombre" class="form-control" id="newnombrePre"
-                                     value="{{ old('nombre') }}" placeholder="Introduzca un laboratorio">
-                             </div>
-                             <br>
-                             <div class="col-12">
-                                 <button id="btnSubmitEditPre" class="btn btn-warning" type="submit">Modificar
-                                     presentación</button>
-                             </div>
-                         </form>
+        <!-- Modal para modificar una presentacion -->
+        <div class="modal fade" id="modificarPre" tabindex="-1" role="dialog"
+            aria-labelledby="crearlaboratorio-label" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Modificar Presentación
+                            </h3>
+                            <button data-dismiss="modal" aria-label="close" class="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <form id="formeditPre" class="g-3 needs-validation" method="POST"
+                                action="{{ route('editTipo', '') }}">
+                                @csrf
+                                <h1>Modificar presentación</h1>
+                                <br>
+                                <div class="">
+                                    <label for="validationCustom01" class="form-label">Laboratorio</label>
+                                    <input type="text" name="nombre" class="form-control" id="newnombrePre"
+                                        value="{{ old('nombre') }}" placeholder="Introduzca un laboratorio">
+                                </div>
+                                <br>
+                                <div class="col-12">
+                                    <button id="btnSubmitEditPre" class="btn btn-warning" type="submit">Modificar
+                                        presentación</button>
+                                </div>
+                            </form>
 
-                         <script>
-                             $(document).ready(function() {
-                                 $("#formedittipo").submit(function(event) {
-                                     // Prevenir la acción predeterminada del formulario
-                                     event.preventDefault();
-                                     // Validar el campo de laboratorio
-                                     if ($("#newnombreTipo").val() == "") {
-                                         $("#newnombreTipo").addClass("is-invalid");
-                                         $("#newnombreTipo").parent().find(".invalid-feedback")
-                                             .remove(); // eliminar cualquier div existente
-                                         $("#newnombreTipo").parent().append(
-                                             "<div class='invalid-feedback'>Por favor, introduce un tipo.</div>");
-                                     } else {
-                                         $("#newnombreTipo").removeClass("is-invalid");
-                                         $("#newnombreTipo").addClass("is-valid");
-                                     }
-                                     // Enviar el formulario si todos los campos son válidos
-                                     if ($(".is-invalid").length == 0) {
-                                         $("#formedittipo").unbind("submit").submit();
-                                     }
-                                 });
-                             });
-                         </script>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
+                            <script>
+                                $(document).ready(function() {
+                                    $("#formedittipo").submit(function(event) {
+                                        // Prevenir la acción predeterminada del formulario
+                                        event.preventDefault();
+                                        // Validar el campo de laboratorio
+                                        if ($("#newnombreTipo").val() == "") {
+                                            $("#newnombreTipo").addClass("is-invalid");
+                                            $("#newnombreTipo").parent().find(".invalid-feedback")
+                                                .remove(); // eliminar cualquier div existente
+                                            $("#newnombreTipo").parent().append(
+                                                "<div class='invalid-feedback'>Por favor, introduce un tipo.</div>");
+                                        } else {
+                                            $("#newnombreTipo").removeClass("is-invalid");
+                                            $("#newnombreTipo").addClass("is-valid");
+                                        }
+                                        // Enviar el formulario si todos los campos son válidos
+                                        if ($(".is-invalid").length == 0) {
+                                            $("#formedittipo").unbind("submit").submit();
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Main content -->
         <section class="content">
@@ -500,36 +500,50 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <ul class="nav nav-pills">
-                                    <li class="nav-item"><a href="#laboratoriotab"
-                                            class="nav-link {{ session()->has('messageLab') ? 'active' : '' }}"
-                                            data-toggle="tab">Laboratorio</a></li>
-                                    <li class="nav-item"><a href="#tipotab"
-                                            class="nav-link {{ session()->has('messageTipo') ? 'active' : '' }}"
-                                            data-toggle="tab">Tipo</a>
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#laboratoriotab"
+                                            role="tab" aria-controls="laboratorio"
+                                            aria-selected="true">Laboratorio</a>
                                     </li>
-                                    <li class="nav-item"><a href="#presentaciontab"
-                                            class="nav-link {{ session()->has('messagePre') ? 'active' : '' }}"
-                                            data-toggle="tab">Presentación</a></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tipotab" role="tab"
+                                            aria-controls="tipo" aria-selected="false">Tipo</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#presentaciontab" role="tab"
+                                            aria-controls="presentacion" aria-selected="false">Presentación</a>
+                                    </li>
                                 </ul>
                             </div>
+                            <style>
+                                .nav-tabs .nav-item .nav-link.active {
+                                    background-color: rgb(30, 36, 43);
+                                    color: white;
+                                    border: none;
+                                    border-bottom-color: transparent;
+                                }
+
+                                .nav-tabs .nav-item .nav-link:hover {
+                                    background-color: rgb(30, 36, 43);
+                                    color: white;
+                                }
+                            </style>
                             <script>
                                 $(document).ready(function() {
-                                    // Obtener el mensaje de sesión correspondiente
-                                    var messageLab = "{{ session()->get('messageLab') }}";
-                                    var messageTipo = "{{ session()->get('messageTipo') }}";
-                                    var messagePresentacion = "{{ session()->get('messagePre') }}";
-
-                                    // Agregar la clase "active" al enlace de pestaña correspondiente
-                                    if (messageLab) {
-                                        $('a[href="#laboratoriotab"]').addClass('active');
-                                    } else if (messageTipo) {
-                                        $('a[href="#tipotab"]').addClass('active');
-                                    } else if (messagePresentacion) {
-                                        $('a[href="#presentaciontab"]').addClass('active');
+                                    // Al cargar la página, activar la última pestaña que se seleccionó
+                                    var lastTab = localStorage.getItem('lastTab');
+                                    if (lastTab) {
+                                        $('#myTab a[href="' + lastTab + '"]').tab('show');
                                     }
+
+                                    // Al hacer clic en una pestaña, recordar cuál fue la última activa
+                                    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                                        localStorage.setItem('lastTab', $(e.target).attr('href'));
+                                    });
                                 });
                             </script>
+
                             <div class="card-body">
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="laboratoriotab">
@@ -558,24 +572,30 @@
                                                     <table class="table table-hover text-center" id="tabla-laboratorio">
                                                         <thead class="table-dark">
                                                             <tr>
+                                                                <th scope="col">#</th>
                                                                 <th scope="col">Laboratorio</th>
                                                                 <th scope="col">Acciones</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($laboratorios as $laboratorio)
+                                                            @foreach ($laboratorios as $index => $laboratorio)
                                                                 <tr class="laboratorio">
+                                                                    <td>{{ $index + 1 }}</td>
                                                                     <td class="nombreLab">{{ $laboratorio->nombre }}</td>
-                                                                    <td><a class="btn btn-danger" data-toggle="modal"
+                                                                    <td>
+                                                                        <a class="btn btn-danger" data-toggle="modal"
                                                                             data-target="#confirmLab"
                                                                             data-id="{{ $laboratorio->id }}"
-                                                                            onclick="pasarIdLab(this)"><i
-                                                                                class="bi bi-trash"></i></a> <a
-                                                                            class="btn btn-warning" data-toggle="modal"
+                                                                            onclick="pasarIdLab(this)">
+                                                                            <i class="bi bi-trash"></i>
+                                                                        </a>
+                                                                        <a class="btn btn-warning" data-toggle="modal"
                                                                             data-target="#modificarLab"
                                                                             data-id="{{ $laboratorio->id }}"
-                                                                            onclick="pasarIdLab(this), datoAntiguo(this)"><i
-                                                                                class="bi bi-pencil-square"></i></a></td>
+                                                                            onclick="pasarIdLab(this), datoAntiguo(this)">
+                                                                            <i class="bi bi-pencil-square"></i>
+                                                                        </a>
+                                                                    </td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
@@ -583,7 +603,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="card-footer"></div>
+
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="tipotab">
@@ -612,13 +632,15 @@
                                                     <table class="table table-hover text-center" id="tabla-tipo">
                                                         <thead class="table-dark">
                                                             <tr>
+                                                                <th scope="col">#</th>
                                                                 <th scope="col">Tipo</th>
                                                                 <th scope="col">Acciones</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($tipos as $tipo)
+                                                            @foreach ($tipos as $index => $tipo)
                                                                 <tr class="tipo">
+                                                                    <td>{{ $index + 1 }}</td>
                                                                     <td class="nombreLab">{{ $tipo->nombre }}</td>
                                                                     <td><a class="btn btn-danger" data-toggle="modal"
                                                                             data-target="#confirmTipo"
@@ -636,7 +658,6 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="card-footer"></div>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="presentaciontab">
@@ -665,13 +686,15 @@
                                                     <table class="table table-hover" id="tabla-presentacion">
                                                         <thead class="table-dark">
                                                             <tr>
+                                                                <th scope="col">#</th>
                                                                 <th scope="col">Presentación</th>
                                                                 <th scope="col">Acciones</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($presentaciones as $presentacion)
+                                                            @foreach ($presentaciones as $index => $presentacion)
                                                                 <tr class="presentacion">
+                                                                    <td>{{ $index + 1 }}</td>
                                                                     <td class="nombreLab">{{ $presentacion->nombre }}</td>
                                                                     <td><a class="btn btn-danger" data-toggle="modal"
                                                                             data-target="#confirmPre"
@@ -689,7 +712,7 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="card-footer"></div>
+
                                         </div>
                                     </div>
                                 </div>
