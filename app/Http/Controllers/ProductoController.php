@@ -19,12 +19,19 @@ class ProductoController extends Controller
         //
     }
 
-   public function listar()
-{
-    $productos = Producto::orderBy('id', 'asc')->get();
-    $usuario = Usuario::orderBy('id', 'asc')->get(); 
-    return view('productos.listar', compact('productos','usuario'));
-}
+    public function listar()
+    {
+        $productos = Producto::orderBy('id', 'asc')->get();
+        $usuario = Usuario::orderBy('id', 'asc')->get();
+        return view('productos.listar', compact('productos', 'usuario'));
+    }
+
+    public function borrarProducto(Producto $producto)
+    {
+        $producto->delete();
+        session()->flash('message', 'El producto ha sido borrada correctamente.');
+        return redirect()->route('listaProductos');
+    }
 
 
     // public function confirmarBorrar(Cliente $cliente)

@@ -111,6 +111,10 @@
                                                         contraseña</h5>
 
                                                 </div>
+                                                <div id="mensaje-contrasenas" style="display: none; color: red; text-align:center">
+                                                    Asegúrate de que ambas contraseñas son iguales
+                                                </div>
+
                                                 <form id="cambiar-contraseña-form"
                                                     action="{{ route('updatePassword', $user->id) }}" method="POST">
                                                     @csrf
@@ -130,12 +134,12 @@
                                                             </div>
                                                             {!! $errors->first('password', '<span style=color:red>:message</span>') !!}
                                                         </div>
-                                                        
+
                                                         <div class="form-group">
                                                             <label for="confirmar-contraseña">Confirmar contraseña</label>
                                                             <div class="input-group">
-                                                            <input type="password" class="form-control"
-                                                                id="confirmar-contraseña" name="passwordConfirm">
+                                                                <input type="password" class="form-control"
+                                                                    id="confirmar-contraseña" name="passwordConfirm">
                                                                 <div class="input-group-append">
                                                                     <button class="btn btn-outline-secondary" type="button"
                                                                         id="toggle-password-confirm">
@@ -319,9 +323,13 @@
                 .value !== '') {
                 // Habilitar el botón de "Guardar cambios"
                 btnGuardarCambios.disabled = false;
+                // Ocultar el mensaje de error
+                document.getElementById('mensaje-contrasenas').style.display = 'none';
             } else {
                 // Deshabilitar el botón de "Guardar cambios"
                 btnGuardarCambios.disabled = true;
+                // Mostrar el mensaje de error
+                document.getElementById('mensaje-contrasenas').style.display = 'block';
             }
         }
     </script>

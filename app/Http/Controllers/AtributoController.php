@@ -6,6 +6,7 @@ use App\Models\Laboratorio;
 use App\Models\Tipo;
 use App\Models\Presentacion;
 use Illuminate\Http\Request;
+use DataTables;
 
 class AtributoController extends Controller
 {
@@ -23,6 +24,7 @@ class AtributoController extends Controller
 
         return view('atributos.listar', compact('laboratorios', 'tipos', 'presentaciones'));
     }
+
     public function storeLab()
     {
         $datos = request()->validate([

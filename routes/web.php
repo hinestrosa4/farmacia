@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AtributoController;
+use App\Http\Controllers\CalendarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +34,13 @@ Route::get('/formRegister', RegisterController::class)->name('formRegister');
 Route::post('formRegister', [RegisterController::class, 'store']);
 
 Route::middleware(['auth'])->group(function () {
+
+    //Calendario
+    Route::get('/calendario', CalendarioController::class)->name('calendario');
+
     //Producto
     Route::get('/listaProductos', [ProductoController::class, 'listar'])->name('listaProductos');
+    Route::delete('/borrarProducto/{producto}', [ProductoController::class, 'borrarProducto'])->name('borrarProducto');
 
     //Usuario
     Route::get('/datosPersonales/{id}', UsuarioController::class)->name('datosPersonales');

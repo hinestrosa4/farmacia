@@ -46,7 +46,6 @@
                             @elseif (Auth::user()->sexo == 'mujer')
                             {{ asset('img/avatarUserMujer.png') }} @endif"
                                 class="img-circle elevation-2" alt="{{ Auth::user()->nombre }}" width="40px">
-
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">
                             <span class="dropdown-header">{{ Auth::user()->nombre }}
@@ -123,17 +122,34 @@
                         <li class="nav-item">
                             <a href="{{ route('gestionUsuario') }}" class="nav-link">
                                 <i class="bi bi-person-lines-fill"></i>
-                                <p>
+                                <p class="ml-1">
                                     Gestión de usuarios
                                 </p>
                             </a>
                         </li>
                         <li class="nav-header">ALMACEN</li>
                         <li class="nav-item">
+                            <a href="{{ route('listaProductos') }}" class="nav-link">
+                                <i class="bi bi-inboxes"></i>
+                                <p class="ml-1">
+                                    Gestión de productos
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('gestionAtributos') }}" class="nav-link">
                                 <i class="bi bi-boxes"></i>
-                                <p>
+                                <p class="ml-1">
                                     Gestión de atributos
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-header">AGENDA</li>
+                        <li class="nav-item">
+                            <a href="{{ route('calendario') }}" class="nav-link">
+                                <i class="bi bi-calendar-event"></i>
+                                <p class="ml-1">
+                                    Calendario
                                 </p>
                             </a>
                         </li>

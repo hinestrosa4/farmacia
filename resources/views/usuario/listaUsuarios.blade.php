@@ -512,9 +512,6 @@
                             </div>
                         </div>
                         `;
-
-
-
                                 $('#usuarios').append(html);
                             }); //foreach
                             // } //if

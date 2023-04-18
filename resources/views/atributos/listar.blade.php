@@ -600,6 +600,21 @@
                                                             @endforeach
                                                         </tbody>
                                                     </table>
+
+                                                    {{-- <div id="table-nav">
+                                                        <div class="btn-group" role="group"
+                                                            aria-label="Navegación de tabla">
+                                                            <button id="first-page" type="button"
+                                                                class="btn btn-primary">&laquo;</button>
+                                                            <button id="prev-page" type="button"
+                                                                class="btn btn-primary">&lsaquo;</button>
+                                                            <div id="page-numbers"></div>
+                                                            <button id="next-page" type="button"
+                                                                class="btn btn-primary">&rsaquo;</button>
+                                                            <button id="last-page" type="button"
+                                                                class="btn btn-primary">&raquo;</button>
+                                                        </div>
+                                                    </div> --}}
                                                 </div>
                                             </div>
 
@@ -824,5 +839,98 @@
             });
         });
     </script>
+
+    {{-- <script>
+        $(document).ready(function() {
+            var rowsPerPage = 5;
+            var currentPage = 0;
+            var totalPages = Math.ceil($("#tabla-laboratorio tbody tr").length / rowsPerPage);
+
+            // Muestra la página actual y oculta las demás
+            function showPage(page) {
+                $("#tabla-laboratorio tbody tr").hide();
+                $("#tabla-laboratorio tbody tr").each(function(index) {
+                    if (index >= rowsPerPage * page && index < rowsPerPage * (page + 1)) {
+                        $(this).show();
+                    }
+                });
+            }
+
+            // Actualiza los botones de navegación y los números de página
+            function updateNavigation() {
+                // Actualiza los botones de navegación
+                $("#first-page").prop("disabled", currentPage == 0);
+                $("#prev-page").prop("disabled", currentPage == 0);
+                $("#next-page").prop("disabled", currentPage == totalPages - 1);
+                $("#last-page").prop("disabled", currentPage == totalPages - 1);
+
+                // Actualiza los números de página
+                var pageNumbers = "";
+                for (var i = 0; i < totalPages; i++) {
+                    if (i == currentPage) {
+                        pageNumbers += "<span class='btn btn-primary active'>" + (i + 1) + "</span>";
+                    } else {
+                        pageNumbers += "<span class='btn btn-primary'>" + (i + 1) + "</span>";
+                    }
+                }
+                $("#page-numbers").html(pageNumbers);
+            }
+
+            // Muestra la primera página al cargar la página
+            showPage(currentPage);
+            updateNavigation();
+
+            // Navega a la página anterior
+            $("#prev-page").on("click", function() {
+                if (currentPage > 0) {
+                    currentPage--;
+                    showPage(currentPage);
+                    updateNavigation();
+                }
+            });
+
+            // Navega a la página siguiente
+            $("#next-page").on("click", function() {
+                if (currentPage < totalPages - 1) {
+                    currentPage++;
+                    showPage(currentPage);
+                    updateNavigation();
+                }
+            });
+
+            // Navega a la primera página
+            $("#first-page").on("click", function() {
+                if (currentPage > 0) {
+                    currentPage = 0;
+                    showPage(currentPage);
+                    updateNavigation();
+                }
+            });
+
+            // Navega a la última página
+            $("#last-page").on("click", function() {
+                if (currentPage < totalPages - 1) {
+                    currentPage = totalPages - 1;
+                    showPage(currentPage);
+                    updateNavigation();
+                }
+            });
+
+            // Busca laboratorios
+            $('#buscar-laboratorio').on('keyup', function() {
+                var texto = $(this).val().toLowerCase();
+                $('table tbody tr.laboratorio').filter(function() {
+                    return $(this).text().toLowerCase().indexOf(texto) < 0;
+                }).hide();
+
+                var visibleRows = $('table tbody tr.laboratorio:visible');
+                totalPages = Math.ceil(visibleRows.length / rowsPerPage);
+                currentPage = 0;
+                updateNavigation();
+
+                showPage(currentPage);
+            });
+        });
+    </script> --}}
 
 @endsection
