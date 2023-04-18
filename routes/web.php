@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     //Producto
     Route::get('/listaProductos', [ProductoController::class, 'listar'])->name('listaProductos');
     Route::delete('/borrarProducto/{producto}', [ProductoController::class, 'borrarProducto'])->name('borrarProducto');
+    Route::post('createProduct', [ProductoController::class, 'store'])->name('createProduct');
 
     //Usuario
     Route::get('/datosPersonales/{id}', UsuarioController::class)->name('datosPersonales');

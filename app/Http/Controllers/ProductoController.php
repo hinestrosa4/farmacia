@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Laboratorio;
+use App\Models\Tipo;
+use App\Models\Presentacion;
 use App\Models\Producto;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
@@ -19,11 +22,39 @@ class ProductoController extends Controller
         //
     }
 
+    public function store()
+    {
+        $datos = request()->validate([
+            'nombre' => '',
+            'concentracion' => '',
+            'adicional' => '',
+            'precio' => '',
+            'imagen' => '',
+            'producto_lab' => '',
+            'producto_tipo' => '',
+            'producto_pre' => '',
+        ]);
+
+        if (request()->hasFile('imagen')) {
+            $nombre_imagen = request()->file('imagen')->getClientOriginalName();
+            $datos['imagen'] = request()->file('imagen')->storeAs('img', $nombre_imagen);
+        }
+
+        Producto::create($datos);
+        session()->flash('message', 'El producto se ha creado correctamente');
+        return redirect()->route('listaProductos');
+    }
+
+
+
     public function listar()
     {
+        $laboratorios = Laboratorio::all();
+        $tipos = Tipo::all();
+        $presentaciones = Presentacion::all();
         $productos = Producto::orderBy('id', 'asc')->get();
         $usuario = Usuario::orderBy('id', 'asc')->get();
-        return view('productos.listar', compact('productos', 'usuario'));
+        return view('productos.listar', compact('productos', 'usuario', 'laboratorios', 'tipos', 'presentaciones'));
     }
 
     public function borrarProducto(Producto $producto)
@@ -32,17 +63,4 @@ class ProductoController extends Controller
         session()->flash('message', 'El producto ha sido borrada correctamente.');
         return redirect()->route('listaProductos');
     }
-
-
-    // public function confirmarBorrar(Cliente $cliente)
-    // {
-    //     return view('confirmacionBorrarCliente', compact('cliente'));
-    // }
-
-    // public function borrarCliente(Cliente $cliente)
-    // {
-    //     $cliente->delete();
-    //     session()->flash('message', 'El cliente ha sido borrada correctamente.');
-    //     return redirect()->route('listaClientes');
-    // }
 }
