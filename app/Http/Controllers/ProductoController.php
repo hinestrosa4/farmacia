@@ -8,6 +8,7 @@ use App\Models\Presentacion;
 use App\Models\Producto;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductoController extends Controller
 {
@@ -44,6 +45,27 @@ class ProductoController extends Controller
         session()->flash('message', 'El producto se ha creado correctamente');
         return redirect()->route('listaProductos');
     }
+
+    public function actualizarImagen(Request $request)
+    {
+        $producto = Producto::findOrFail($request->producto_id);
+        // Si se cargó una nueva imagen, actualizar la ruta de la imagen en la base de datos
+        if ($request->hasFile('imagen')) {
+            Storage::delete($producto->imagen); // Eliminar la imagen anterior
+            $nombre_imagen = $request->file('imagen')->getClientOriginalName();
+            $ruta_imagen = $request->file('imagen')->storeAs('img', $nombre_imagen);
+            $producto->update(['imagen' => $ruta_imagen]);
+        }
+
+        // Si no se cargó una nueva imagen, mantener la imagen actual
+        else {
+            $ruta_imagen = $producto->imagen;
+        }
+
+        session()->flash('message', 'La imagen del producto se ha actualizado correctamente');
+        return redirect()->route('listaProductos');
+    }
+
 
 
 

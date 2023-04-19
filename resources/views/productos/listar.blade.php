@@ -376,12 +376,17 @@
                 </div>
                 <?php
                 $presentaciones = [];
-                $i = 0;
+                $laboratorios = [];
+                $tipos = [];
                 ?>
                 @foreach ($productos as $producto)
                     <?php
                     $presentaciones[] = $producto->presentacion->nombre;
                     $presentaciones_json = json_encode($presentaciones);
+                    $laboratorios[] = $producto->laboratorio->nombre;
+                    $laboratorios_json = json_encode($laboratorios);
+                    $tipos[] = $producto->tipo->nombre;
+                    $tipos_json = json_encode($tipos);
                     ?>
                 @endforeach
 
@@ -397,6 +402,8 @@
     <script>
         $(document).ready(function() {
             var presentaciones = <?php echo $presentaciones_json; ?>;
+            var laboratorios = <?php echo $laboratorios_json; ?>;
+            var tipos = <?php echo $tipos_json; ?>;
 
             // verifica si el campo de búsqueda está vacío
             if ($('#buscar').val() == "") {
@@ -437,6 +444,8 @@
                                     "img/sinFoto.png" : producto
                                     .imagen;
                                 let presentacionNombre = presentaciones[indice]
+                                let laboratorioNombre = laboratorios[indice]
+                                let tipoNombre = tipos[indice]
 
                                 let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                           <div class="card bg-light d-flex flex-fill">
@@ -446,12 +455,14 @@
                             <div class="card-body pt-0">
                               <div class="row">
                                 <div class="col-7">
-                                  <h2 class="lead"><b>${producto.nombre} ${producto.concentracion}</b></h2>
-                                  <p>${producto.adicional} ${presentacionNombre}</p>
-                                                             
-                                  <br>
+                                  <h2 class=""><b>${producto.nombre}</b></h2>
+                                  <h5>${producto.precio} €</h5>
                                   <ul class="ml-2 fa-ul">
-                                    <li style="margin-left:-15px"><i class="bi bi-cash"></i> <strong>Precio:</strong> ${producto.precio} €</li>
+                                    <li style="margin-left:-15px"><i class="fas fa-mortar-pestle"></i><strong> Concentración:</strong> ${producto.concentracion}</li>
+                                    <li style="margin-left:-15px"<i class="fas fa-prescription-bottle-alt"></i><strong> Adicional:</strong> ${producto.adicional}</li>
+                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${laboratorioNombre}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${tipoNombre}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${presentacionNombre}</li>
                                   </ul>
                                 </div>
                                 <div class="col-5 text-center">
@@ -461,13 +472,15 @@
                             </div>
                             <div class="card-footer">
                               <div class="text-right">
-                                <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${producto.id}" onclick="actualizarAccionFormulario(this)">
+                                <a href="#" class="btn btn-sm btn-info mt-1" data-toggle="modal" data-target="#cambiarImagenModal" id="cambiarImagen" data-id="${producto.imagen}" data-id2="${producto.id}" onclick="mostrarImagen(this)">
+                                <i class="bi bi-card-image"></i> Imagen
+                            </a>
+                                <a href="#" class="btn btn-sm btn-danger mt-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${producto.id}" onclick="actualizarAccionFormulario(this)">
                                     <i class="bi bi-trash"></i> Eliminar
                                 </a>
-                                <a href="" class="btn btn-sm btn-info mt-1" id="perfil" data-id="${producto.id}">
-                                <i class="bi bi-info-circle"></i> Más info
+                                <a href="" class="btn btn-sm btn-warning mt-1" id="perfil" data-id="${producto.id}">
+                                    <i class="bi bi-pencil-square"></i> Editar
                             </a>
-                               
                               </div>
                             </div>
                           </div>
@@ -498,6 +511,34 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Modal para cambiar imagen del producto -->
+                        <div class="modal fade" id="cambiarImagenModal" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form action="{{ route('actualizarImagen') }}" method="post" enctype="multipart/form-data">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="producto_id" id="producto_id">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar imagen del producto</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3 text-center">
+                                                <img  src="{{ asset('') }}" class="img-fluid mb-3" style="width:250px" id="imagen_actual">
+                                                <input class="form-control" style="margin-top:20px" type="file" name="imagen" id="imagen_nueva">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         `;
 
                                 $('#productos').append(html);
@@ -519,6 +560,16 @@
             }
 
         });
+
+        function mostrarImagen(botonImagen) {
+            const id_producto = botonImagen.getAttribute("data-id2");
+            document.getElementById('producto_id').value = id_producto;
+            // console.log(id_producto)
+            const imagen_actual = botonImagen.getAttribute("data-id");
+            const img = document.getElementById("imagen_actual")
+            // formularioEliminar.action = "{{ route('borrarProducto', '') }}/" + idProducto;
+            img.src = "{{ asset('') }}" + imagen_actual;
+        }
 
         function actualizarAccionFormulario(botonEliminar) {
             // Obtener el valor del data-id del botón eliminar

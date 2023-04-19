@@ -79,4 +79,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/borrarPre/{presentacion}', [AtributoController::class, 'borrarPre'])->name('borrarPre');
     Route::post('editPre/{presentacion}', [AtributoController::class, 'updatePre'])->name('editPre');
 
+    Route::patch('/actualizarImagen', [ProductoController::class, 'actualizarImagen'])->name('actualizarImagen');
+
+
 });
