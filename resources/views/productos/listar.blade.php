@@ -441,7 +441,7 @@
 
                             respuesta.forEach(function(producto, indice) {
                                 let imagen = producto.imagen == null ?
-                                    "img/sinFoto.png" : producto
+                                    "img/productos/sinFoto.png" : producto
                                     .imagen;
                                 let presentacionNombre = presentaciones[indice]
                                 let laboratorioNombre = laboratorios[indice]
@@ -558,7 +558,6 @@
                     });
                 // })// change checkbox
             }
-
         });
 
         function mostrarImagen(botonImagen) {

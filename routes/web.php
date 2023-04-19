@@ -7,6 +7,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AtributoController;
 use App\Http\Controllers\CalendarioController;
+use App\Http\Controllers\ConfiguracionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,7 +80,13 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/borrarPre/{presentacion}', [AtributoController::class, 'borrarPre'])->name('borrarPre');
     Route::post('editPre/{presentacion}', [AtributoController::class, 'updatePre'])->name('editPre');
 
+    //configuracion
+    Route::get('/configuracion', ConfiguracionController::class)->name('configuracion');
+    Route::get('/listarImagenes', [ConfiguracionController::class, 'listarImagenes'])->name('listarImagenes');
+
+    //cambiarImagen
     Route::patch('/actualizarImagen', [ProductoController::class, 'actualizarImagen'])->name('actualizarImagen');
 
-
+    //subirImagen
+    Route::patch('/subirImagen', [ConfiguracionController::class, 'subirImagen'])->name('subirImagen');
 });

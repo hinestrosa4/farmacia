@@ -38,7 +38,7 @@ class ProductoController extends Controller
 
         if (request()->hasFile('imagen')) {
             $nombre_imagen = request()->file('imagen')->getClientOriginalName();
-            $datos['imagen'] = request()->file('imagen')->storeAs('img', $nombre_imagen);
+            $datos['imagen'] = request()->file('imagen')->storeAs('img/productos', $nombre_imagen);
         }
 
         Producto::create($datos);
@@ -53,7 +53,7 @@ class ProductoController extends Controller
         if ($request->hasFile('imagen')) {
             Storage::delete($producto->imagen); // Eliminar la imagen anterior
             $nombre_imagen = $request->file('imagen')->getClientOriginalName();
-            $ruta_imagen = $request->file('imagen')->storeAs('img', $nombre_imagen);
+            $ruta_imagen = $request->file('imagen')->storeAs('img/productos', $nombre_imagen);
             $producto->update(['imagen' => $ruta_imagen]);
         }
 

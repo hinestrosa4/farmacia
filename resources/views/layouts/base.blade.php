@@ -53,7 +53,7 @@
                             <div class="dropdown-divider"></div>
                             <a href="{{ route('datosPersonales', Auth::user()->id) }}" class="dropdown-item">Mi
                                 Perfil</a>
-                            <a href="" class="dropdown-item">Configuración</a>
+                            <a href="{{ route('configuracion') }}" class="dropdown-item">Configuración</a>
                             <div class="dropdown-divider"></div>
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
