@@ -131,6 +131,34 @@
         </script> --}}
     </div>
 
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar esta imagen?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" action="{{ route('eliminarImagen') }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" id="filenameModal" name="filename">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -153,14 +181,45 @@
         <section>
             <button data-toggle="modal" data-target="#cambiarImagenModal" class="btn btn-primary ml-3 mb-4">Agregar
                 imagenes</button>
+            @if (session()->has('message'))
+                <div class="alert alert-success text-center">
+                    {{ session()->get('message') }}
+                </div>
+            @endif
             <div class="image-gallery ml-3">
                 <div class="row">
                     @foreach (File::allFiles(public_path('img/productos')) as $image)
                         @if (in_array($image->getExtension(), ['jpg', 'jpeg', 'png', 'gif']))
                             <div class="col-md-3">
                                 <div class="image-container">
-                                    <img width="80%" src="{{ asset('img/productos/' . $image->getFilename()) }}"
+                                    <img width="75%" src="{{ asset('img/productos/' . $image->getFilename()) }}"
                                         alt="{{ $image->getFilename() }}">
+
+                                    <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal"
+                                        data-id="{{ $image->getFilename() }}" onclick="enviarFilename(this)"
+                                        data-target="#confirmDeleteModal">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+
+                                    <script>
+                                        function enviarFilename(boton) {
+                                            var inputModal = document.getElementById('filenameModal')
+                                            inputModal.value = boton.getAttribute("data-id")
+                                        }
+                                    </script>
+
+                                    {{-- <a class="btn btn-danger btn-sm delete-image-btn"
+                                        data-filename="{{ $image->getFilename() }}" href="{{ route('eliminarImagen') }}"
+                                        onclick="event.preventDefault(); document.getElementById('eliminarImagen-form').submit();">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+
+                                    <form id="eliminarImagen-form" action="{{ route('eliminarImagen') }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="filename" value="{{ $image->getFilename() }}">
+                                    </form> --}}
                                 </div>
                             </div>
                         @endif

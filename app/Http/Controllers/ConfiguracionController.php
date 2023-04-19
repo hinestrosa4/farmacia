@@ -49,6 +49,21 @@ class ConfiguracionController extends Controller
             $imagen->move(public_path('img/productos'), $nombreArchivo);
         }
 
-        return redirect()->back()->with('success', 'Imagen(es) actualizada(s) correctamente.');
+        return redirect()->back()->with('message', 'Imagen(es) actualizada(s) correctamente.');
+    }
+
+    public function eliminarImagen(Request $request)
+    {
+        // Obtener el nombre de archivo de la imagen a eliminar
+        $filename = $request->input('filename');
+
+        // Eliminar la imagen de la ruta especificada
+        $rutaImagen = public_path('img/productos/' . $filename);
+        if (file_exists($rutaImagen)) {
+            unlink($rutaImagen);
+        }
+
+        // Redirigir de vuelta a la página anterior con un mensaje de éxito
+        return redirect()->back()->with('success', 'La imagen ha sido eliminada correctamente.');
     }
 }

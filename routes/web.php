@@ -89,4 +89,7 @@ Route::middleware(['auth'])->group(function () {
 
     //subirImagen
     Route::patch('/subirImagen', [ConfiguracionController::class, 'subirImagen'])->name('subirImagen');
+
+    //eliminarImagen
+    Route::patch('/eliminarImagen', [ConfiguracionController::class, 'eliminarImagen'])->name('eliminarImagen');
 });
