@@ -46,6 +46,18 @@ class ProductoController extends Controller
         return redirect()->route('listaProductos');
     }
 
+    public function updateProducto($id)
+    {
+        $producto = Producto::find($id);
+        $datos = request()->validate([
+            'nombre' => 'required',
+        ]);
+
+        $producto->update($datos);
+        session()->flash('message', 'El producto ha sido modificado correctamente');
+        return redirect()->route('listaProductos');
+    }
+
     public function actualizarImagen(Request $request)
     {
         $producto = Producto::findOrFail($request->producto_id);
@@ -56,18 +68,15 @@ class ProductoController extends Controller
             $ruta_imagen = $request->file('imagen')->storeAs('img/productos', $nombre_imagen);
             $producto->update(['imagen' => $ruta_imagen]);
         }
-
         // Si no se cargó una nueva imagen, mantener la imagen actual
         else {
-            $ruta_imagen = $producto->imagen;
+            $ruta_imagen = "img/productos/sinFoto.png";
+            $producto->update(['imagen' => $ruta_imagen]);
         }
 
         session()->flash('message', 'La imagen del producto se ha actualizado correctamente');
         return redirect()->route('listaProductos');
     }
-
-
-
 
     public function listar()
     {

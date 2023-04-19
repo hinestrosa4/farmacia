@@ -421,7 +421,6 @@
                     consulta = "todos";
                 }
 
-
                 // $('#mostrarBorrados').change(function() {
                 $.ajax({
                         url: 'buscar-productos.php',
@@ -454,7 +453,10 @@
                             </div>
                             <div class="card-body pt-0">
                               <div class="row">
-                                <div class="col-7">
+                                <div class="col-12">
+                                    <div class="text-center">
+                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
+                                    </div>
                                   <h2 class=""><b>${producto.nombre}</b></h2>
                                   <h5>${producto.precio} €</h5>
                                   <ul class="ml-2 fa-ul">
@@ -464,9 +466,6 @@
                                     <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${tipoNombre}</li>
                                     <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${presentacionNombre}</li>
                                   </ul>
-                                </div>
-                                <div class="col-5 text-center">
-                                    <img width=100% style="margin-top:20px" src="${imagen}" class="img" alt="Product Image">
                                 </div>
                               </div>
                             </div>
@@ -540,7 +539,6 @@
                             </div>
                         </div>
                         `;
-
                                 $('#productos').append(html);
                             }); //foreach
                             // } //if

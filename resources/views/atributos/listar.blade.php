@@ -448,7 +448,7 @@
                         </div>
                         <div class="card-body">
                             <form id="formeditPre" class="g-3 needs-validation" method="POST"
-                                action="{{ route('editTipo', '') }}">
+                                action="{{ route('editPre', '') }}">
                                 @csrf
                                 <h1>Modificar presentación</h1>
                                 <br>

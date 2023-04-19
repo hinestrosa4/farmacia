@@ -43,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/listaProductos', [ProductoController::class, 'listar'])->name('listaProductos');
     Route::delete('/borrarProducto/{producto}', [ProductoController::class, 'borrarProducto'])->name('borrarProducto');
     Route::post('createProduct', [ProductoController::class, 'store'])->name('createProduct');
+    Route::post('editProducto/{producto}', [ProductoController::class, 'updateProducto'])->name('editProducto');
 
     //Usuario
     Route::get('/datosPersonales/{id}', UsuarioController::class)->name('datosPersonales');
@@ -52,6 +53,12 @@ Route::middleware(['auth'])->group(function () {
 
     //Listado de usuarios
     Route::get('/gestionUsuario', [UsuarioController::class, 'gestionUsuarioView'])->name('gestionUsuario');
+
+    //listado de usuarios borrados
+    Route::get('/gestionUsuarioBaja', [UsuarioController::class, 'gestionUsuarioBaja'])->name('gestionUsuarioBaja');
+
+    //alta usuario
+    Route::delete('/altaUsuario/{usuario}', [UsuarioController::class, 'altaUsuario'])->name('altaUsuario');
 
     //borrar usuario
     Route::delete('/borrarUsuario/{usuario}', [UsuarioController::class, 'borrarUsuario'])->name('borrarUsuario');

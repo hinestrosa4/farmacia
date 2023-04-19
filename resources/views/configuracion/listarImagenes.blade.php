@@ -158,7 +158,6 @@
         </div>
     </div>
 
-
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -167,6 +166,8 @@
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Configuración de imagenes</h1>
+                        <br>
+                        <h3>Productos</h3>
                     </div>
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-sm-right">

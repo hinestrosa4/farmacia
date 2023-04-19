@@ -43,12 +43,11 @@ class ConfiguracionController extends Controller
         // Recorrer el arreglo de imágenes para guardar cada una
         foreach ($imagenes as $imagen) {
             // Generar un nombre único para el archivo de imagen
-            $nombreArchivo = time() . '_' . $imagen->getClientOriginalName();
+            $nombreArchivo = $imagen->getClientOriginalName();
 
             // Mover el archivo de imagen a la carpeta deseada
             $imagen->move(public_path('img/productos'), $nombreArchivo);
         }
-
         return redirect()->back()->with('message', 'Imagen(es) actualizada(s) correctamente.');
     }
 

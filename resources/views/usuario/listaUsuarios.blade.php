@@ -3,7 +3,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+<script src="https://kit.fontawesome.com/2e015df9b7.js" crossorigin="anonymous"></script>
 <style>
     #cuerpo {
         margin: 1em;
@@ -21,6 +21,15 @@
 
     table {
         text-align: center;
+    }
+
+    .status-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-left: 5px;
+        border-radius: 50%;
+        background-color: rgb(0, 224, 0);
     }
 </style>
 
@@ -44,13 +53,15 @@
                         <p><strong>¿Deseas continuar?</strong></p>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" style="width: 46px; height:38px" class="btn btn-secondary mr-3" data-dismiss="modal">No</button>
+                        <button type="button" style="width: 46px; height:38px" class="btn btn-secondary mr-3"
+                            data-dismiss="modal">No</button>
                         <form id="formAscender" class="g-3 needs-validation" method="POST"
                             action="{{ route('ascenderUsuario', '') }}">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="usuario_id" id="usuario_id" value="">
-                            <button type="submit" style="width: 46px" class="btn btn-primary" id="acceptPasswordButton">Sí</button>
+                            <button type="submit" style="width: 46px" class="btn btn-primary"
+                                id="acceptPasswordButton">Sí</button>
                         </form>
                     </div>
                 </div>
@@ -87,13 +98,15 @@
                         <p><strong>¿Deseas continuar?</strong></p>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" style="width: 46px; height:38px" class="btn btn-secondary mr-3" data-dismiss="modal">No</button>
+                        <button type="button" style="width: 46px; height:38px" class="btn btn-secondary mr-3"
+                            data-dismiss="modal">No</button>
                         <form id="formDescender" class="g-3 needs-validation" method="POST"
                             action="{{ route('descenderUsuario', '') }}">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="usuario_id_des" id="usuario_id_des" value="">
-                            <button type="submit" style="width: 46px" class="btn btn-primary" id="acceptPasswordButton2">Sí</button>
+                            <button type="submit" style="width: 46px" class="btn btn-primary"
+                                id="acceptPasswordButton2">Sí</button>
                         </form>
                     </div>
                 </div>
@@ -338,7 +351,7 @@
                     <div class="col-sm-6">
                         <h1>Gestión de usuarios</h1>
                         <button type="button" data-toggle="modal" data-target="#crearUsuario"
-                            class="btn bg-gradient-primary" style="margin-top: 20px">Crear Usuario</button>
+                            class="btn bg-gradient-primary" style="margin-top: 20px">Crear usuario</button>
                     </div>
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-right">
@@ -361,11 +374,13 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check form-switch" style="margin-left:32px; margin-top:5px">
-                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">Mostrar usuarios borrados</label>
+                    <div class="form-check form-switch d-flex"
+                        style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
+                        <div class="ml-auto">
+                            <a type="button" href="{{ route('gestionUsuarioBaja') }}" class="btn bg-gradient-danger"><i
+                                    class="fa-sharp fa-solid fa-user-xmark"></i>  Usuarios de baja</a>
+                        </div>
                     </div>
-
                     <br>
                     @if (session()->has('message'))
                         <div class="alert alert-success text-center">
@@ -464,7 +479,8 @@
                                     <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> <strong>Dirección:</strong> ${direccion}</li>
                                     <li></li>
                                     <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> <strong>Teléfono:</strong> ${telefono}</li>
-                                  </ul>
+                                    <li class="small"><span class="fa-li"><i class="fas fa-user"></i></span> <strong>Estado:</strong> <span class="status-indicator"></span></li>
+                                    </ul>
                                 </div>
                                 <div class="col-5 text-center">
                             ${imagen}
@@ -474,10 +490,10 @@
                             <div class="card-footer">
                               <div class="text-right">
                                 <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${usuario.id}" onclick="actualizarAccionFormulario(this)">
-                                    <i class="bi bi-trash"></i> Eliminar
+                                    <i class="bi bi-x-circle"></i> Baja
                                 </a>
                                 <a href="{{ route('datosPersonales', '') }}/${usuario.id}" class="btn btn-sm btn-info mt-1" id="perfil" data-id="${usuario.id}">
-                                <i class="fas fa-user"></i> Ver perfil
+                                <i class="fas fa-user"></i> Perfil
                             </a>
                                 ${ascender}
                                 ${descender}
@@ -498,14 +514,14 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        ¿Estás seguro de que deseas eliminar a este usuario?
+                                        ¿Estás seguro de que deseas dar de baja a este usuario?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                         <form id="deleteForm" action="{{ route('borrarUsuario', '') }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                        <button type="submit" class="btn btn-danger">Dar de Baja</button>
                                     </form>
                                     </div>
                                 </div>

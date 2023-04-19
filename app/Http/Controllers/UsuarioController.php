@@ -28,6 +28,12 @@ class UsuarioController extends Controller
         return view('usuario.listaUsuarios', compact('user'));
     }
 
+    public function  gestionUsuarioBaja(Request $request)
+    {
+        $user = $request->user();
+        return view('usuario.listaUsuariosBaja', compact('user'));
+    }
+
     public function store()
     {
         $datos = request()->validate([
@@ -127,6 +133,15 @@ class UsuarioController extends Controller
         session()->flash('message', 'El usuario ha sido borrada correctamente.');
         return redirect()->route('gestionUsuario');
     }
+
+    public function altaUsuario($id)
+    {
+        $usuario = Usuario::withTrashed()->findOrFail($id);
+        $usuario->restore();
+        session()->flash('message', 'El usuario ha sido dado de alta correctamente.');
+        return redirect()->route('gestionUsuarioBaja');
+    }
+    
 }
 
     //    public function listar()
