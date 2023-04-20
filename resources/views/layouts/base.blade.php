@@ -148,6 +148,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('listaProveedores') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <p class="ml-1">
+                                    Gestión de proveedores
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('gestionAtributos') }}" class="nav-link">
                                 <i class="bi bi-inboxes"></i>
                                 <p class="ml-1">

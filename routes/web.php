@@ -8,6 +8,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AtributoController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ConfiguracionController;
+use App\Http\Controllers\ProveedorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/detallesProducto/{id}', [ProductoController::class, 'detallesProducto'])->name('detallesProducto');
     Route::put('detallesProductoUpdate/{id}', [ProductoController::class, 'update'])->name('detallesProductoUpdate');
     Route::delete('/altaProducto/{producto}', [ProductoController::class, 'altaProducto'])->name('altaProducto');
+
+    //Proveedor
+    Route::get('/listaProveedores', ProveedorController::class)->name('listaProveedores');
+    Route::get('/perfilProveedor/{id}', [ProveedorController::class, 'perfilProveedor'])->name('perfilProveedor');
+    Route::delete('/borrarProveedor/{proveedor}', [ProveedorController::class, 'borrarProveedor'])->name('borrarProveedor');
+    Route::post('createProveedor', [ProveedorController::class, 'store'])->name('createProveedor');
 
     //Usuario
     Route::get('/datosPersonales/{id}', UsuarioController::class)->name('datosPersonales');
