@@ -41,11 +41,13 @@ Route::middleware(['auth'])->group(function () {
 
     //Producto
     Route::get('/listaProductos', [ProductoController::class, 'listar'])->name('listaProductos');
+    Route::get('/listaProductosBaja', [ProductoController::class, 'listarBaja'])->name('listaProductosBaja');
     Route::delete('/borrarProducto/{producto}', [ProductoController::class, 'borrarProducto'])->name('borrarProducto');
     Route::post('createProduct', [ProductoController::class, 'store'])->name('createProduct');
     Route::post('editProducto/{producto}', [ProductoController::class, 'updateProducto'])->name('editProducto');
     Route::get('/detallesProducto/{id}', [ProductoController::class, 'detallesProducto'])->name('detallesProducto');
     Route::put('detallesProductoUpdate/{id}', [ProductoController::class, 'update'])->name('detallesProductoUpdate');
+    Route::delete('/altaProducto/{producto}', [ProductoController::class, 'altaProducto'])->name('altaProducto');
 
     //Usuario
     Route::get('/datosPersonales/{id}', UsuarioController::class)->name('datosPersonales');

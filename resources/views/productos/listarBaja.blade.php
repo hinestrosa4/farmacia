@@ -339,10 +339,7 @@
                 <div class="row mb-2 mr-6">
                     <div class="col-sm-6">
                         <h1>Gestión de productos</h1>
-                        @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                            <button type="button" data-toggle="modal" data-target="#crearproducto"
-                                class="btn bg-gradient-primary" style="margin-top: 20px">Crear producto</button>
-                        @endif
+
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-right">
@@ -368,8 +365,8 @@
                     <div class="form-check form-switch d-flex"
                         style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
                         <div class="ml-auto">
-                            <a type="button" href="{{ route('listaProductosBaja') }}" class="btn bg-gradient-danger"><i
-                                    class="bi bi-box-seam-fill"></i> Poductos eliminados</a>
+                            <a type="button" href="{{ route('listaProductos') }}" class="btn bg-gradient-success"><i
+                                    class="bi bi-box-seam-fill"></i> Poductos activos</a>
                         </div>
                     </div>
 
@@ -428,7 +425,7 @@
 
                 // $('#mostrarBorrados').change(function() {
                 $.ajax({
-                        url: 'buscar-productos.php',
+                        url: 'buscar-productos-baja.php',
                         type: 'POST',
                         dataType: 'json',
                         data: {
@@ -476,75 +473,42 @@
                             </div>
                             <div class="card-footer">
                               <div class="text-right">
-                                <a href="#" class="btn btn-sm btn-info mt-1" data-toggle="modal" data-target="#cambiarImagenModal" id="cambiarImagen" data-id="${producto.imagen}" data-id2="${producto.id}" onclick="mostrarImagen(this)">
-                                <i class="bi bi-card-image"></i> Imagen
-                            </a>
+                               
                             @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                <a href="#" class="btn btn-sm btn-danger mt-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${producto.id}" onclick="actualizarAccionFormulario(this)">
-                                    <i class="bi bi-trash"></i> Eliminar
+                            <a href="#" class="btn btn-sm btn-success mt-1 mr-1" data-toggle="modal" data-target="#confirmAltaModal" data-id="${producto.id}" onclick="actualizarAccionFormulario(this)">
+                                    <i class="bi bi-check2-circle"></i> Restaurar
                                 </a>
-                                <a href="{{ route('detallesProducto', '') }}/${producto.id}" class="btn btn-sm btn-warning mt-1">
-                                <i class="bi bi-pencil-square"></i> Editar
                             </a>
                             @endif
                               </div>
                             </div>
                           </div>
-                        </div>
-                        
-                        <!-- Modal de confirmación de eliminación -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
+                        </div>        
+                        <!-- Modal de confirmación de alta -->
+                        <div class="modal fade" id="confirmAltaModal" tabindex="-1" role="dialog"
                             aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                                        <h5 class="modal-title" id="confirmAltaModalLabel">Restaurar producto</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        ¿Estás seguro de que deseas eliminar a este producto?
+                                        ¿Estás seguro de que deseas restaurar este producto?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="" method="POST">
+                                        <form id="altaForm" action="{{ route('altaProducto', '') }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                        <button type="submit" class="btn btn-success">Restaurar</button>
                                     </form>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Modal para cambiar imagen del producto -->
-                        <div class="modal fade" id="cambiarImagenModal" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form action="{{ route('actualizarImagen') }}" method="post" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="producto_id" id="producto_id">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar imagen del producto</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3 text-center">
-                                                <img  src="{{ asset('') }}" class="img-fluid mb-3" style="width:250px" id="imagen_actual">
-                                                <input class="form-control" style="margin-top:20px" type="file" name="imagen" id="imagen_nueva">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        </div>  
                         `;
                                 $('#productos').append(html);
                             }); //foreach
@@ -565,25 +529,15 @@
             }
         });
 
-        function mostrarImagen(botonImagen) {
-            const id_producto = botonImagen.getAttribute("data-id2");
-            document.getElementById('producto_id').value = id_producto;
-            // console.log(id_producto)
-            const imagen_actual = botonImagen.getAttribute("data-id");
-            const img = document.getElementById("imagen_actual")
-            // formularioEliminar.action = "{{ route('borrarProducto', '') }}/" + idProducto;
-            img.src = "{{ asset('') }}" + imagen_actual;
-        }
-
         function actualizarAccionFormulario(botonEliminar) {
             // Obtener el valor del data-id del botón eliminar
             const idProducto = botonEliminar.getAttribute("data-id");
 
             // Obtener el elemento form por su id
-            const formularioEliminar = document.getElementById("deleteForm");
+            const formularioEliminar = document.getElementById("altaForm");
 
             // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
-            formularioEliminar.action = "{{ route('borrarProducto', '') }}/" + idProducto;
+            formularioEliminar.action = "{{ route('altaProducto', '') }}/" + idProducto;
         }
     </script>
 @endsection

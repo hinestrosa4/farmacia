@@ -88,6 +88,24 @@ class ProductoController extends Controller
         return view('productos.listar', compact('productos', 'usuario', 'laboratorios', 'tipos', 'presentaciones'));
     }
 
+    public function altaProducto($id)
+    {
+        $producto = Producto::withTrashed()->findOrFail($id);
+        $producto->restore();
+        session()->flash('message', 'El producto ha sido dado de alta correctamente.');
+        return redirect()->route('listaProductosBaja');
+    }
+
+    public function listarBaja()
+    {
+        $laboratorios = Laboratorio::all();
+        $tipos = Tipo::all();
+        $presentaciones = Presentacion::all();
+        $productos = Producto::orderBy('id', 'asc')->get();
+        $usuario = Usuario::orderBy('id', 'asc')->get();
+        return view('productos.listarBaja', compact('productos', 'usuario', 'laboratorios', 'tipos', 'presentaciones'));
+    }
+
     public function borrarProducto(Producto $producto)
     {
         $producto->delete();

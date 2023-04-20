@@ -50,7 +50,6 @@
                         <ol class="breadcrumb float-right">
                             <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
                             <li class="breadcrumb-item active">Gestión de usuario</li>
-                            <li class="breadcrumb-item active">Usuarios de baja</li>
                         </ol>
                     </div>
                 </div>

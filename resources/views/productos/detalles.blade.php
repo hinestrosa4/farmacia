@@ -32,10 +32,11 @@
                     <div class="col-sm-6">
                         <h1>Detalles del producto</h1>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
-                            <li class="breadcrumb-item active">Detalles del producto</li>
+                            <li class="breadcrumb-item active"><a href="{{ route('listaProductos') }}">Gestión de productos</a></li>
+                            <li class="breadcrumb-item active">Detalles</li>
                         </ol>
                     </div>
                 </div>

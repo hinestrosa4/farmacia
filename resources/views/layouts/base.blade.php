@@ -141,7 +141,7 @@
                         <li class="nav-header">ALMACEN</li>
                         <li class="nav-item">
                             <a href="{{ route('listaProductos') }}" class="nav-link">
-                                <i class="bi bi-inboxes"></i>
+                                <i class="bi bi-boxes"></i>
                                 <p class="ml-1">
                                     Gestión de productos
                                 </p>
@@ -149,7 +149,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('gestionAtributos') }}" class="nav-link">
-                                <i class="bi bi-boxes"></i>
+                                <i class="bi bi-inboxes"></i>
                                 <p class="ml-1">
                                     Gestión de atributos
                                 </p>
