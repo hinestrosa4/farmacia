@@ -338,7 +338,7 @@
             <div class="container-fluid">
                 <div class="row mb-2 mr-6">
                     <div class="col-sm-6">
-                        <h1>Gestión de productos</h1>
+                        <h1>Productos de baja</h1>
 
                     </div>
                     <div class="col-sm-5">

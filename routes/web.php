@@ -55,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/perfilProveedor/{id}', [ProveedorController::class, 'perfilProveedor'])->name('perfilProveedor');
     Route::delete('/borrarProveedor/{proveedor}', [ProveedorController::class, 'borrarProveedor'])->name('borrarProveedor');
     Route::post('createProveedor', [ProveedorController::class, 'store'])->name('createProveedor');
+    Route::get('/listaProveedoresBaja', [ProveedorController::class, 'listaProveedoresBaja'])->name('listaProveedoresBaja');
+    Route::delete('/altaProveedor/{proveedor}', [ProveedorController::class, 'altaProveedor'])->name('altaProveedor');
 
     //Usuario
     Route::get('/datosPersonales/{id}', UsuarioController::class)->name('datosPersonales');

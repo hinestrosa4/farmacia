@@ -227,10 +227,10 @@
                         </div>
                     </div>
                     <div class="form-check form-switch d-flex" style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
-                        {{-- <div class="ml-auto">
-                            <a type="button" href="{{ route('gestionUsuarioBaja') }}" class="btn bg-gradient-danger"><i
+                        <div class="ml-auto">
+                            <a type="button" href="{{ route('listaProveedoresBaja') }}" class="btn bg-gradient-danger"><i
                                     class="fa-sharp fa-solid fa-user-xmark"></i> Proveedores de baja</a>
-                        </div> --}}
+                        </div>
                     </div>
                     <br>
                     @if (session()->has('message'))

@@ -44,10 +44,24 @@ class ProveedorController extends Controller
         return view('proveedor.perfilProveedor', compact('proveedor'));
     }
     
+    public function listaProveedoresBaja()
+    {
+        $proveedor = request()->user();
+        return view('proveedor.listaProveedoresBaja', compact('proveedor'));
+    }
+    
     public function borrarProveedor(Proveedor $proveedor)
     {
         $proveedor->delete();
         session()->flash('message', 'El proveedor ha sido borrada correctamente.');
         return redirect()->route('listaProveedores');
+    }
+
+    public function altaProveedor($id)
+    {
+        $proveedor = Proveedor::withTrashed()->findOrFail($id);
+        $proveedor->restore();
+        session()->flash('message', 'El proveedor ha sido dado de alta correctamente.');
+        return redirect()->route('listaProveedoresBaja');
     }
 }
