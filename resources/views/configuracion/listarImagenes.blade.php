@@ -180,8 +180,10 @@
             </div>
         </section>
         <section>
-            <button data-toggle="modal" data-target="#cambiarImagenModal" class="btn btn-primary ml-3 mb-4">Agregar
-                imagenes</button>
+            @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
+                <button data-toggle="modal" data-target="#cambiarImagenModal" class="btn btn-primary ml-3 mb-4">Agregar
+                    imagenes</button>
+            @endif
             @if (session()->has('message'))
                 <div class="alert alert-success text-center">
                     {{ session()->get('message') }}
@@ -195,32 +197,19 @@
                                 <div class="image-container">
                                     <img width="75%" src="{{ asset('img/productos/' . $image->getFilename()) }}"
                                         alt="{{ $image->getFilename() }}">
-
-                                    <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal"
-                                        data-id="{{ $image->getFilename() }}" onclick="enviarFilename(this)"
-                                        data-target="#confirmDeleteModal">
-                                        <i class="fas fa-times"></i>
-                                    </a>
-
+                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
+                                        <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal"
+                                            data-id="{{ $image->getFilename() }}" onclick="enviarFilename(this)"
+                                            data-target="#confirmDeleteModal">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                    @endif
                                     <script>
                                         function enviarFilename(boton) {
                                             var inputModal = document.getElementById('filenameModal')
                                             inputModal.value = boton.getAttribute("data-id")
                                         }
                                     </script>
-
-                                    {{-- <a class="btn btn-danger btn-sm delete-image-btn"
-                                        data-filename="{{ $image->getFilename() }}" href="{{ route('eliminarImagen') }}"
-                                        onclick="event.preventDefault(); document.getElementById('eliminarImagen-form').submit();">
-                                        <i class="fas fa-times"></i>
-                                    </a>
-
-                                    <form id="eliminarImagen-form" action="{{ route('eliminarImagen') }}" method="POST"
-                                        style="display: none;">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="filename" value="{{ $image->getFilename() }}">
-                                    </form> --}}
                                 </div>
                             </div>
                         @endif

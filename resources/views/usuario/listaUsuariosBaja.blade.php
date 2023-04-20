@@ -46,7 +46,7 @@
                         {{-- <button type="button" data-toggle="modal" data-target="#crearUsuario"
                             class="btn bg-gradient-primary" style="margin-top: 20px">Crear usuario</button> --}}
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <ol class="breadcrumb float-right">
                             <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
                             <li class="breadcrumb-item active">Gestión de usuario</li>
@@ -183,9 +183,11 @@
                             </div>
                             <div class="card-footer" >
                               <div class="text-right">
+                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
                                 <a href="#" class="btn btn-sm btn-success mt-1 mr-1" data-toggle="modal" data-target="#confirmAltaModal" data-id="${usuario.id}" onclick="actualizarAccionFormulario(this)">
                                     <i class="bi bi-check2-circle"></i> Alta
                                 </a>
+                                @endif
                               </div>
                             </div>
                           </div>

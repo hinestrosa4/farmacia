@@ -94,4 +94,34 @@ class ProductoController extends Controller
         session()->flash('message', 'El producto ha sido borrada correctamente.');
         return redirect()->route('listaProductos');
     }
+
+    public function detallesProducto($id)
+    {
+        $laboratorios = Laboratorio::all();
+        $tipos = Tipo::all();
+        $presentaciones = Presentacion::all();
+        $producto = Producto::find($id);
+        return view('productos.detalles', compact('producto', 'laboratorios', 'tipos', 'presentaciones'));
+    }
+
+    public function update($id)
+    {
+        $laboratorios = Laboratorio::all();
+        $tipos = Tipo::all();
+        $presentaciones = Presentacion::all();
+        $producto = Producto::find($id);
+        $datos = request()->validate([
+            'nombre' => 'required',
+            'concentracion' => 'required',
+            'adicional' => 'required',
+            'precio' => 'required',
+            'producto_lab' => '',
+            'producto_tipo' => '',
+            'producto_pre' => '',
+        ]);
+        // dd($datos);
+        $producto->update($datos);
+        session()->flash('message', 'El producto ha sido modificado correctamente');
+        return redirect()->route('detallesProducto', [$id, 'laboratorios' => $laboratorios, 'tipos' => $tipos, 'presentaciones' => $presentaciones]);
+    }
 }

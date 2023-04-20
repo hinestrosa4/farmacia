@@ -44,6 +44,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/borrarProducto/{producto}', [ProductoController::class, 'borrarProducto'])->name('borrarProducto');
     Route::post('createProduct', [ProductoController::class, 'store'])->name('createProduct');
     Route::post('editProducto/{producto}', [ProductoController::class, 'updateProducto'])->name('editProducto');
+    Route::get('/detallesProducto/{id}', [ProductoController::class, 'detallesProducto'])->name('detallesProducto');
+    Route::put('detallesProductoUpdate/{id}', [ProductoController::class, 'update'])->name('detallesProductoUpdate');
 
     //Usuario
     Route::get('/datosPersonales/{id}', UsuarioController::class)->name('datosPersonales');

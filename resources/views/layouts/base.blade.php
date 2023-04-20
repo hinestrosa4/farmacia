@@ -89,6 +89,17 @@
                             <a href="{{ route('datosPersonales', Auth::user()->id) }}"
                                 class="d-block">{{ Auth::user()->apellidos }},
                                 {{ Auth::user()->nombre }}</a>
+                            <span>
+                                @if (Auth::user()->tipo == 1)
+                                    <span style="color:rgb(190, 255, 164)">Administrador</span>
+                                @elseif (Auth::user()->tipo == 2)
+                                    <span style="color:rgb(184, 243, 160)">Farmacéutico</span>
+                                @elseif (Auth::user()->tipo == 3)
+                                    <span style="color:rgb(158, 212, 137)">Ténico</span>
+                                @else
+                                    <span style="color:rgb(160, 214, 139)">Auxiliar</span>
+                                @endif
+                            </span>
                         </div>
                     </a>
                 </div>

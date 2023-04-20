@@ -339,8 +339,10 @@
                 <div class="row mb-2 mr-6">
                     <div class="col-sm-6">
                         <h1>Gestión de productos</h1>
-                        <button type="button" data-toggle="modal" data-target="#crearproducto"
-                            class="btn bg-gradient-primary" style="margin-top: 20px">Crear producto</button>
+                        @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
+                            <button type="button" data-toggle="modal" data-target="#crearproducto"
+                                class="btn bg-gradient-primary" style="margin-top: 20px">Crear producto</button>
+                        @endif
                     </div>
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-right">
@@ -474,12 +476,14 @@
                                 <a href="#" class="btn btn-sm btn-info mt-1" data-toggle="modal" data-target="#cambiarImagenModal" id="cambiarImagen" data-id="${producto.imagen}" data-id2="${producto.id}" onclick="mostrarImagen(this)">
                                 <i class="bi bi-card-image"></i> Imagen
                             </a>
+                            @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
                                 <a href="#" class="btn btn-sm btn-danger mt-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${producto.id}" onclick="actualizarAccionFormulario(this)">
                                     <i class="bi bi-trash"></i> Eliminar
                                 </a>
-                                <a href="" class="btn btn-sm btn-warning mt-1" id="perfil" data-id="${producto.id}">
-                                    <i class="bi bi-pencil-square"></i> Editar
+                                <a href="{{ route('detallesProducto', '') }}/${producto.id}" class="btn btn-sm btn-warning mt-1">
+                                <i class="bi bi-pencil-square"></i> Editar
                             </a>
+                            @endif
                               </div>
                             </div>
                           </div>
@@ -574,12 +578,9 @@
 
             // Obtener el elemento form por su id
             const formularioEliminar = document.getElementById("deleteForm");
-            // const verPerfil = document.getElementById("perfil");
 
             // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
             formularioEliminar.action = "{{ route('borrarProducto', '') }}/" + idProducto;
-            // verPerfil.href = "{{ route('datosPersonales', '') }}/" + idProducto;
-
         }
     </script>
 @endsection

@@ -350,10 +350,12 @@
                 <div class="row mb-2 mr-6">
                     <div class="col-sm-6">
                         <h1>Gestión de usuarios</h1>
-                        <button type="button" data-toggle="modal" data-target="#crearUsuario"
-                            class="btn bg-gradient-primary" style="margin-top: 20px">Crear usuario</button>
+                        @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
+                            <button type="button" data-toggle="modal" data-target="#crearUsuario"
+                                class="btn bg-gradient-primary" style="margin-top: 20px">Crear usuario</button>
+                        @endif
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                         <ol class="breadcrumb float-right">
                             <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
                             <li class="breadcrumb-item active">Gestión de usuarios</li>
@@ -378,7 +380,7 @@
                         style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
                         <div class="ml-auto">
                             <a type="button" href="{{ route('gestionUsuarioBaja') }}" class="btn bg-gradient-danger"><i
-                                    class="fa-sharp fa-solid fa-user-xmark"></i>  Usuarios de baja</a>
+                                    class="fa-sharp fa-solid fa-user-xmark"></i> Usuarios de baja</a>
                         </div>
                     </div>
                     <br>
@@ -489,14 +491,18 @@
                             </div>
                             <div class="card-footer">
                               <div class="text-right">
+                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
                                 <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${usuario.id}" onclick="actualizarAccionFormulario(this)">
                                     <i class="bi bi-x-circle"></i> Baja
                                 </a>
                                 <a href="{{ route('datosPersonales', '') }}/${usuario.id}" class="btn btn-sm btn-info mt-1" id="perfil" data-id="${usuario.id}">
-                                <i class="fas fa-user"></i> Perfil
-                            </a>
+                                    <i class="fas fa-user"></i> Perfil
+                                    </a>
+                                @endif
+                            @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
                                 ${ascender}
                                 ${descender}
+                            @endif
                               </div>
                             </div>
                           </div>
