@@ -92,8 +92,15 @@ class ProductoController extends Controller
     {
         $producto = Producto::withTrashed()->findOrFail($id);
         $producto->restore();
-        session()->flash('message', 'El producto ha sido dado de alta correctamente.');
+        session()->flash('message', 'El producto ha sido restaurado correctamente.');
         return redirect()->route('listaProductosBaja');
+    }
+
+    public function borrarProducto(Producto $producto)
+    {
+        $producto->delete();
+        session()->flash('message', 'El producto ha sido borrada correctamente.');
+        return redirect()->route('listaProductos');
     }
 
     public function listarBaja()
@@ -106,12 +113,6 @@ class ProductoController extends Controller
         return view('productos.listarBaja', compact('productos', 'usuario', 'laboratorios', 'tipos', 'presentaciones'));
     }
 
-    public function borrarProducto(Producto $producto)
-    {
-        $producto->delete();
-        session()->flash('message', 'El producto ha sido borrada correctamente.');
-        return redirect()->route('listaProductos');
-    }
 
     public function detallesProducto($id)
     {

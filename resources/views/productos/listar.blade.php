@@ -372,7 +372,6 @@
                                     class="bi bi-box-seam-fill"></i> Poductos eliminados</a>
                         </div>
                     </div>
-
                     <br>
                     @if (session()->has('message'))
                         <div class="alert alert-success text-center">
@@ -508,7 +507,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="" method="POST">
+                                        <form id="deleteForm" action="{{ route('borrarProducto', '') }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Eliminar</button>

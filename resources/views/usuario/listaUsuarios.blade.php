@@ -437,6 +437,7 @@
                             // Agrega los nuevos resultados al cuerpo del card
                             // if (!this.checked) {
                             respuesta.forEach(function(usuario) {
+                                var u = "{{ Auth::user()->nombre }}"
                                 let tipo = usuario.tipo;
                                 let sexo = usuario.sexo;
                                 let direccion = usuario.direccion == null ?
@@ -454,6 +455,10 @@
                                 let descender = usuario.tipo == 4 ? "" : `<a href="#" data-id="${usuario.id}" id="descendButton"  class="btn btn-sm btn-secondary mt-1" data-toggle="modal" data-target="#descenderModal">
                                 <i class="bi bi-sort-down"></i>
                                 Descender
+                                </a>`;
+
+                                let condicionBaja = u == usuario.nombre ? "" : ` <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${usuario.id}" onclick="actualizarAccionFormulario(this)">
+                                    <i class="bi bi-x-circle"></i> Baja
                                 </a>`;
 
                                 let rol = tipo == 1 ? 'Administrador' :
@@ -491,14 +496,11 @@
                             </div>
                             <div class="card-footer">
                               <div class="text-right">
-                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${usuario.id}" onclick="actualizarAccionFormulario(this)">
-                                    <i class="bi bi-x-circle"></i> Baja
-                                </a>
+                                ${condicionBaja}
+                               
                                 <a href="{{ route('datosPersonales', '') }}/${usuario.id}" class="btn btn-sm btn-info mt-1" id="perfil" data-id="${usuario.id}">
                                     <i class="fas fa-user"></i> Perfil
                                     </a>
-                                @endif
                             @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
                                 ${ascender}
                                 ${descender}
