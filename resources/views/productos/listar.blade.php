@@ -453,7 +453,7 @@
                                 let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                           <div class="card bg-light d-flex flex-fill">
                             <div class="card-header text-muted border-bottom-0">
-                              
+                                <i class="bi bi-boxes"></i> ${producto.stock}
                             </div>
                             <div class="card-body pt-0">
                               <div class="row">
@@ -486,6 +486,9 @@
                                 <i class="bi bi-pencil-square"></i> Editar
                             </a>
                             @endif
+                            <a href="#" class="btn btn-sm btn-primary mt-1" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                                <i class="bi bi-cart-plus-fill"></i> Añadir
+                            </a>
                               </div>
                             </div>
                           </div>
@@ -563,6 +566,25 @@
                 // })// change checkbox
             }
         });
+
+        function addCarrito(btnAdd) {
+            event.preventDefault();
+            const JSONproducto = btnAdd.getAttribute("data-info")
+            const presentacionNombre = btnAdd.getAttribute("data-id")
+            producto = JSON.parse(JSONproducto)
+            // console.log(producto);
+            localStorage.setItem('carrito', producto)
+            console.log(JSON.stringify(localStorage.getItem('carrito')));
+            $('#cestaProductos').append("<tr><td>" + producto.nombre + "</td><td>" + producto
+                .concentracion + "</td><td>" +
+                producto.adicional + "</td><td>" + presentacionNombre + "</td><td>" + producto.precio +
+                "€</td><td><button class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>");
+            $(document).on('click', '.borrar', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                $(this).closest('tr').remove();
+            });
+        }
 
         function mostrarImagen(botonImagen) {
             const id_producto = botonImagen.getAttribute("data-id2");

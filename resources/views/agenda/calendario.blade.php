@@ -29,8 +29,34 @@
                 </li>
             </ul>
 
-            <!-- Left navbar links -->
+            <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <div class="dropdown">
+                        <div class="image mr-4" data-toggle="dropdown">
+                            <img src="{{ asset('img/carrito.png') }}" class="img" alt="{{ Auth::user()->nombre }}"
+                                width="40px">
+                        </div>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <h4 class="text-center">Carrito de la compra</h4>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-container">
+                                <table id="cestaProductos" class="table">
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Concentración</th>
+                                        <th>Adicional</th>
+                                        <th>Presentación</th>
+                                        <th>Precio</th>
+                                        <th>Eliminar</th>
+                                    </tr>
+                                </table>
+                                <button class="btn btn-danger" style="width: 100%" id="vaciarCarrito">Vaciar
+                                    carrito</button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
                 <li class="nav-item dropdown">
                     <div class="dropdown">
                         <div class="image mr-4" data-toggle="dropdown">

@@ -1,4 +1,4 @@
-@section('title', 'Gestión de proveedores')
+@section('title', 'Gestión de lotes')
 @extends('layouts.base')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -35,15 +35,15 @@
 
 @section('menu')
 
-    <!-- Modal para crear un proveedor -->
-    <div class="modal fade" id="crearProveedor" tabindex="-1" role="dialog" aria-labelledby="crearProveedor-label"
-        data-backdrop="static" data-keyboard="false">
+    <!-- Modal para crear un lote -->
+    <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label" data-backdrop="static"
+        data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="card card-success">
                     <div class="card-header">
                         <h3 class="card-title">
-                            Crear proveedor
+                            Crear lote
                         </h3>
 
                         <button data-dismiss="modal" aria-label="close" class="close">
@@ -51,21 +51,32 @@
                         </button>
                     </div>
                     <div class="card-body">
-                        <form id="form" class="g-3 needs-validation" method="POST"
-                            action="{{ route('createProveedor') }}">
+                        <form id="form" class="g-3 needs-validation" method="POST" action="{{ route('createUser') }}">
                             @csrf
-                            <h1>Crear proveedor</h1>
+                            <h1>Crear lote</h1>
                             <br>
                             <div class="">
                                 <label for="validationCustom01" class="form-label">Nombre</label>
                                 <input type="text" name="nombre" class="form-control" id="nombre"
-                                    value="{{ old('nombre') }}" placeholder="Introduzca el nombre">
+                                    value="{{ old('nombre') }}" placeholder="Introduzca su nombre">
                             </div>
                             <br>
                             <div class="">
-                                <label for="validationCustom02" class="form-label">Teléfono</label>
-                                <input type="text" name="telefono" class="form-control" id="telefono"
-                                    value="{{ old('telefono') }}" placeholder="Introduzca el telefono">
+                                <label for="validationCustom02" class="form-label">Apellidos</label>
+                                <input type="text" name="apellidos" class="form-control" id="apellidos"
+                                    value="{{ old('apellidos') }}" placeholder="Introduzca sus apellidos">
+                            </div>
+                            <br>
+                            <div class="">
+                                <label for="validationCustom02" class="form-label">Fecha de nacimiento</label>
+                                <input type="date" name="fecha_nacimiento" class="form-control" id="fecha_nacimiento"
+                                    value="{{ old('fecha_nacimiento') }}" placeholder="Introduzca su fecha de nacimiento">
+                            </div>
+                            <br>
+                            <div class="">
+                                <label for="validationCustom01" class="form-label">DNI</label>
+                                <input type="text" name="dni" class="form-control" id="dni"
+                                    value="{{ old('dni') }}" placeholder="Introduzca su DNI">
                             </div>
                             <br>
                             <div class="">
@@ -79,13 +90,27 @@
                             </div>
                             <br>
                             <div class="">
-                                <label for="validationCustom02" class="form-label">Dirección</label>
-                                <input type="text" name="direccion" class="form-control" id="direccion"
-                                    value="{{ old('direccion') }}" placeholder="Introduzca la dirección">
+                                <label for="validationCustom01" class="form-label">Contraseña</label>
+                                <input type="password" name="password" class="form-control" id="password"
+                                    value="{{ old('password') }}" placeholder="Introduzca su clave">
+                            </div>
+                            <br>
+                            <div>
+                                <label for="validationCustom01" class="form-label">Tipo</label>
+                                <select class="form-control" name="tipo">
+                                    <option value="2" {{ old('tipo') == 'farmaceutico' ? 'selected' : '' }}>
+                                        Farmacéutico</option>
+                                    <option value="3" {{ old('tipo') == 'tecnico' ? 'selected' : '' }}>Técnico
+                                    </option>
+                                    <option value="4" {{ old('tipo') == 'auxiliar' ? 'selected' : '' }}>Auxiliar
+                                    </option>
+                                    <option value="1" {{ old('tipo') == 'administrador' ? 'selected' : '' }}>
+                                        Administrador</option>
+                                </select>
                             </div>
                             <br>
                             <div class="col-12">
-                                <button id="btnSubmit" class="btn btn-success" type="submit">Crear proveedor</button>
+                                <button id="btnSubmit" class="btn btn-success" type="submit">Crear usuario</button>
                             </div>
                         </form>
 
@@ -106,34 +131,47 @@
                                         $("#nombre").addClass("is-valid");
                                     }
 
-                                    // // Validar el campo de direccion
-                                    if ($("#direccion").val() == "") {
-                                        $("#direccion").addClass("is-invalid");
-                                        $("#direccion").parent().find(".invalid-feedback")
+                                    // Validar el campo de apellidos
+                                    if ($("#apellidos").val() == "") {
+                                        $("#apellidos").addClass("is-invalid");
+                                        $("#apellidos").parent().find(".invalid-feedback")
                                             .remove(); // eliminar cualquier div existente
-                                        $("#direccion").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce una direccion.</div>");
+                                        $("#apellidos").parent().append(
+                                            "<div class='invalid-feedback'>Por favor, introduce tus apellidos.</div>");
                                     } else {
-                                        $("#direccion").removeClass("is-invalid");
-                                        $("#direccion").addClass("is-valid");
+                                        $("#apellidos").removeClass("is-invalid");
+                                        $("#apellidos").addClass("is-valid");
                                     }
 
-                                    // Validar el campo de telefono
-                                    if ($("#telefono").val() == "") {
-                                        $("#telefono").addClass("is-invalid");
-                                        $("#telefono").parent().find(".invalid-feedback").remove();
-                                        $("#telefono").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce tu teléfono.</div>"
-                                        );
-                                    } else if (!isValidPhoneNumber($("#telefono").val())) {
-                                        $("#telefono").addClass("is-invalid");
-                                        $("#telefono").parent().find(".invalid-feedback").remove();
-                                        $("#telefono").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce un teléfono válido.</div>"
+
+                                    // Validar el campo de fecha de nacimiento
+                                    if ($("#fecha_nacimiento").val() == "") {
+                                        $("#fecha_nacimiento").addClass("is-invalid");
+                                        $("#fecha_nacimiento").parent().find(".invalid-feedback")
+                                            .remove(); // eliminar cualquier div existente
+                                        $("#fecha_nacimiento").parent().append(
+                                            "<div class='invalid-feedback'>Por favor, introduce tu fecha de nacimiento.</div>"
                                         );
                                     } else {
-                                        $("#telefono").removeClass("is-invalid");
-                                        $("#telefono").addClass("is-valid");
+                                        $("#fecha_nacimiento").removeClass("is-invalid");
+                                        $("#fecha_nacimiento").addClass("is-valid");
+                                    }
+
+                                    // Validar el campo de DNI
+                                    if ($("#dni").val() == "") {
+                                        $("#dni").addClass("is-invalid");
+                                        $("#dni").parent().find(".invalid-feedback").remove();
+                                        $("#dni").parent().append(
+                                            "<div class='invalid-feedback'>Por favor, introduce tu DNI.</div>");
+                                    } else if (!validarDNI($("#dni").val())) {
+                                        $("#dni").addClass("is-invalid");
+                                        $("#dni").parent().find(".invalid-feedback").remove();
+                                        $("#dni").parent().append(
+                                            "<div class='invalid-feedback'>Por favor, introduce un dni válido.</div>"
+                                        );
+                                    } else {
+                                        $("#dni").removeClass("is-invalid");
+                                        $("#dni").addClass("is-valid");
                                     }
 
                                     // Validar el campo de correo electrónico
@@ -154,6 +192,30 @@
                                         $("#email").addClass("is-valid");
                                     }
 
+                                    // Validar el campo de contraseña
+                                    if ($("#password").val() == "") {
+                                        $("#password").addClass("is-invalid");
+                                        $("#password").parent().find(".invalid-feedback").remove();
+
+                                        $("#password").parent().append(
+                                            "<div class='invalid-feedback'>Por favor, introduce tu contraseña.</div>");
+                                    } else {
+                                        $("#password").removeClass("is-invalid");
+                                        $("#password").addClass("is-valid");
+                                    }
+
+                                    // Validar el campo de tipo
+                                    if ($("#tipo").val() == "") {
+                                        $("#tipo").addClass("is-invalid");
+                                        $("#tipo").parent().find(".invalid-feedback").remove();
+
+                                        $("#tipo").parent().append(
+                                            "<div class='invalid-feedback'>Por favor, selecciona un tipo.</div>");
+                                    } else {
+                                        $("#tipo").removeClass("is-invalid");
+                                        $("#tipo").addClass("is-valid");
+                                    }
+
                                     // Enviar el formulario si todos los campos son válidos
                                     if ($(".is-invalid").length == 0) {
                                         $("#form").unbind("submit").submit();
@@ -164,11 +226,6 @@
                             function isValidEmail(email) {
                                 const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                                 return regex.test(email);
-                            }
-
-                            function isValidPhoneNumber(phoneNumber) {
-                                const regex = /^(\+?\d{1,3}[- ]?)?\d{9}$/;
-                                return regex.test(phoneNumber);
                             }
 
                             function validarDNI(dni) {
@@ -199,16 +256,16 @@
             <div class="container-fluid">
                 <div class="row mb-2 mr-6">
                     <div class="col-sm-6">
-                        <h1>Gestión de proveedores</h1>
+                        <h1>Gestión de lotes</h1>
                         @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                            <button type="button" data-toggle="modal" data-target="#crearProveedor"
-                                class="btn bg-gradient-primary" style="margin-top: 20px">Crear un proveedor</button>
+                            <button type="button" data-toggle="modal" data-target="#crearLote"
+                                class="btn bg-gradient-primary" style="margin-top: 20px">Crear lote</button>
                         @endif
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-right">
                             <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
-                            <li class="breadcrumb-item active">Gestión de proveedores</li>
+                            <li class="breadcrumb-item active">Gestión de lotes</li>
                         </ol>
                     </div>
                 </div>
@@ -218,19 +275,19 @@
             <div class="cotainer-fluid">
                 <div class="card card-warning">
                     <div class="card-header">
-                        <h3 class="card-title">Buscar proveedor</h3>
+                        <h3 class="card-title">Buscar lote</h3>
                         <div class="input-group">
-                            <input type="text" id="buscar" placeholder="Introduzca nombre de un proveedor"
+                            <input type="text" id="buscar" placeholder="Introduzca nombre de un lote"
                                 class="form-control float-left">
                             <div class="input-group-append"><button class="btn btn-default"><i
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check form-switch d-flex" style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
+                    <div class="form-check form-switch d-flex"
+                        style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
                         <div class="ml-auto">
-                            <a type="button" href="{{ route('listaProveedoresBaja') }}"
-                                class="btn bg-gradient-danger"><i class="fa-sharp fa-solid fa-user-xmark"></i> Proveedores
-                                de baja</a>
+                            <a type="button" href="{{ route('gestionUsuarioBaja') }}" class="btn bg-gradient-danger"><i
+                                    class="bi bi-archive-fill"></i> Lotes eliminados</a>
                         </div>
                     </div>
                     <br>
@@ -239,8 +296,25 @@
                             {{ session()->get('message') }}
                     @endif
                 </div>
+                <?php
+                $productos = [];
+                $productosImagen = [];
+                $proveedores = [];
+                ?>
+                @foreach ($lotes as $lote)
+                    <?php
+                    $productos[] = $lote->producto->nombre;
+                    $productos_json = json_encode($productos);
+
+                    $productosImagen[] = $lote->producto->imagen;
+                    $productos_imagen_json = json_encode($productosImagen);
+
+                    $laboratorios[] = $lote->proveedor->nombre;
+                    $proveedores_json = json_encode($proveedores);
+                    ?>
+                @endforeach
                 <div class="card-body">
-                    <div id="usuarios" class="row d-flex align-items-stretch">
+                    <div id="lotes" class="row d-flex align-items-stretch">
 
                     </div>
                 </div>
@@ -254,6 +328,8 @@
 
     <script>
         $(document).ready(function() {
+            var productos = <?php echo $productos_json; ?>;
+            var productos_imagen = <?php echo $productos_imagen_json; ?>;
 
             // verifica si el campo de búsqueda está vacío
             if ($('#buscar').val() == "") {
@@ -272,7 +348,7 @@
                 }
                 // $('#mostrarBorrados').change(function() {
                 $.ajax({
-                        url: 'buscar-proveedor.php',
+                        url: 'buscar-lotes.php',
                         type: 'POST',
                         dataType: 'json',
                         data: {
@@ -283,18 +359,19 @@
                     .done(function(respuesta) {
                         if (respuesta.length > 0) {
                             // Borra los resultados anteriores
-                            $('#usuarios').empty();
+                            $('#lotes').empty();
                             // Agrega los nuevos resultados al cuerpo del card
                             // if (!this.checked) {
-                            respuesta.forEach(function(proveedor) {
-                                let direccion = proveedor.direccion == null ?
-                                    "sin definir" : proveedor
-                                    .direccion;
-                                let telefono = proveedor.telefono == null ?
-                                    "sin definir" : proveedor
-                                    .telefono;
-                                let imagen =
-                                    '<img width=90px src="img/avatarProveedor.png" class="img-circle elevation-2" alt="Proveedor Image">';
+                            respuesta.forEach(function(lote, indice) {
+
+                                let productoNombre = productos[indice]
+
+                                let imagen = productos_imagen[indice] == null ?
+                                    "img/productos/sinFoto.png" : productos_imagen[indice];
+
+                                let d= lote.vencimiento.substring(8)
+                                let m = lote.vencimiento.substring(7,5)
+                                let y = lote.vencimiento.substring(0,4)
 
                                 let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                           <div class="card bg-light d-flex flex-fill">
@@ -303,30 +380,28 @@
                             <div class="card-body pt-0">
                               <div class="row">
                                 <div class="col-7">
-                                  <h2 class="lead"><b>${proveedor.nombre}</b></h2>
+                                  <h2 class="lead"><b>Lote de ${productoNombre}</b></h2>
                                   <br>
                                   <ul class="ml-2 fa-ul">
-                                    <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> <strong>Dirección:</strong> ${direccion}</li>
+                                    <li class="small"><span class="fa-li"><i class="fa-solid fa-key"></i></span> <strong>Identificador:</strong> ${lote.id}</li>
+                                    <li class="small"><span class="fa-li"><i class="fa-solid fa-boxes-stacked"></i></span> <strong>Stock:</strong> ${lote.stock}</li>
                                     <li></li>
-                                    <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> <strong>Teléfono:</strong> ${telefono}</li>
-                                    <li class="small"><span class="fa-li"><i class="fas fa-user"></i></span> <strong>Estado:</strong> <span class="status-indicator"></span></li>
+                                    <li class="small"><span class="fa-li"><i class="fa-regular fa-calendar fa-lg"></i></span> <strong>Vencimiento:</strong> ${d}/${m}/${y}</li>
                                     </ul>
                                 </div>
                                 <div class="col-5 text-center">
-                                    ${imagen}                                
+                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
                                 </div>
                               </div>
                             </div>
                             <div class="card-footer">
                               <div class="text-right">
-                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${proveedor.id}" onclick="actualizarAccionFormulario(this)">
-                                    <i class="bi bi-x-circle"></i> Baja
+                                <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${lote.id}" onclick="actualizarAccionFormulario(this)">
+                                    <i class="bi bi-trash"></i> Eliminar
                                 </a>
-                                <a href="{{ route('perfilProveedor', '') }}/${proveedor.id}" class="btn btn-sm btn-info mt-1" id="perfil" data-id="${proveedor.id}">
-                                    <i class="fas fa-user"></i> Perfil
+                            <a href="{{ route('datosPersonales', '') }}/${lote.id}" class="btn btn-sm btn-warning mt-1" id="editar" data-id="${lote.id}">
+                                <i class="bi bi-pencil-square"></i> Editar
                                     </a>
-                                @endif
                               </div>
                             </div>
                           </div>
@@ -344,21 +419,21 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        ¿Estás seguro de que deseas dar de baja a este proveedor?
+                                        ¿Estás seguro de que deseas eliminar este lote?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="{{ route('borrarProveedor', '') }}" method="POST">
+                                        <form id="deleteForm" action="{{ route('borrarLote', '') }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Dar de Baja</button>
+                                        <button type="submit" class="btn btn-danger">Eliminar lote</button>
                                     </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         `;
-                                $('#usuarios').append(html);
+                                $('#lotes').append(html);
                             }); //foreach
                             // } //if
                             // else {
@@ -366,7 +441,7 @@
                             // }
                         } else {
                             // Si no se encontraron resultados, muestra un mensaje de error
-                            $('#usuarios').html(
+                            $('#lotes').html(
                                 '<p class="text-danger">No se encontraron resultados</p>');
                         }
                     })
@@ -380,16 +455,15 @@
 
         function actualizarAccionFormulario(botonEliminar) {
             // Obtener el valor del data-id del botón eliminar
-            const idProveedor = botonEliminar.getAttribute("data-id");
+            const idLote = botonEliminar.getAttribute("data-id");
 
             // Obtener el elemento form por su id
             const formularioEliminar = document.getElementById("deleteForm");
-            const verPerfil = document.getElementById("perfil");
+            const editar = document.getElementById("editar");
 
             // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
-            formularioEliminar.action = "{{ route('borrarProveedor', '') }}/" + idProveedor;
-            verPerfil.href = "{{ route('perfilProveedor', '') }}/" + idProveedor;
-
+            formularioEliminar.action = "{{ route('borrarLote', '') }}/" + idLote;
+            editar.href = "{{ route('datosPersonales', '') }}/" + idLote;
         }
     </script>
 @endsection

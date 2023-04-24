@@ -5,6 +5,9 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
 <style>
     #cuerpo {
@@ -378,7 +381,7 @@
                     <div class="card card-success">
                         <div class="card-header">
                             <h3 class="card-title">
-                                Crear presentacion
+                                Crear presentación
                             </h3>
 
                             <button data-dismiss="modal" aria-label="close" class="close">
@@ -389,7 +392,7 @@
                             <form id="formpresentacion" class="g-3 needs-validation" method="POST"
                                 action="{{ route('createPresentacion') }}">
                                 @csrf
-                                <h1>Crear presentacion</h1>
+                                <h1>Crear presentación</h1>
                                 <br>
                                 <div class="">
                                     <label for="validationCustom01" class="form-label">Presentacion</label>
@@ -609,6 +612,7 @@
                                                         </tbody>
                                                     </table>
 
+
                                                     {{-- <div id="table-nav">
                                                         <div class="btn-group" role="group"
                                                             aria-label="Navegación de tabla">
@@ -772,6 +776,10 @@
     <!-- /.content-wrapper -->
 
     <script>
+        $(document).ready(function() {
+            $('#tabla-laboratorios').DataTable();
+        });
+
         function datoAntiguo(old) {
             var olddata = old.parentNode.parentNode.querySelector('.nombreLab').innerHTML;
             document.getElementById('newnombre').value = olddata
