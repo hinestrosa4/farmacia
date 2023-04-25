@@ -308,7 +308,7 @@
                                 <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${lote.id}" onclick="actualizarAccionFormulario(this)">
                                     <i class="bi bi-trash"></i> Eliminar
                                 </a>
-                            <a href="{{ route('datosPersonales', '') }}/${lote.id}" class="btn btn-sm btn-warning mt-1" id="editar" data-id="${lote.id}">
+                            <a href="{{ route('editarLote', '') }}/${lote.id}" class="btn btn-sm btn-warning mt-1" id="editar" data-id="${lote.id}">
                                 <i class="bi bi-pencil-square"></i> Editar
                                     </a>
                               </div>
@@ -372,7 +372,7 @@
 
             // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
             formularioEliminar.action = "{{ route('borrarLote', '') }}/" + idLote;
-            editar.href = "{{ route('datosPersonales', '') }}/" + idLote;
+            editar.href = "{{ route('editarLote', '') }}/" + idLote;
         }
     </script>
 @endsection

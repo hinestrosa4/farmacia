@@ -55,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/listaLotes', LoteController::class)->name('listaLotes');
     Route::delete('/borrarLote/{lote}', [LoteController::class, 'borrarLote'])->name('borrarLote');
     Route::post('createLote', [LoteController::class, 'store'])->name('createLote');
+    Route::get('/editarLote/{id}', [LoteController::class, 'editarLote'])->name('editarLote');
+    Route::put('editarLoteUpdate/{id}', [LoteController::class, 'update'])->name('editarLoteUpdate');
 
     //Proveedor
     Route::get('/listaProveedores', ProveedorController::class)->name('listaProveedores');

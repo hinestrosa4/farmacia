@@ -39,6 +39,32 @@ class LoteController extends Controller
         return redirect()->route('listaLotes');
     }
 
+    public function editarLote($id)
+    {
+        $lote = Lote::find($id);
+        $productos = Producto::all();
+        $proveedores = Proveedor::all();
+        // dd($lote);
+        return view('lotes.editarLote', compact('lote', 'productos', 'proveedores'));
+    }
+
+    public function update($id)
+    {
+        $proveedores = Proveedor::all();
+        $productos = Producto::all();
+        $lote = Lote::find($id);
+        $datos = request()->validate([
+            'stock' => 'required',
+            'vencimiento' => 'required',
+            'lote_id_prov' => '',
+            'lote_id_prod' => '',
+        ]);
+        // dd($datos);
+        $lote->update($datos);
+        session()->flash('message', 'El producto ha sido modificado correctamente');
+        return redirect()->route('listaLotes', [$id, 'proveedores' => $proveedores, 'productos' => $productos]);
+    }
+
     public function borrarLote(Lote $lote)
     {
         $lote->delete();
