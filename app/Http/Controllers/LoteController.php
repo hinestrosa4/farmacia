@@ -8,7 +8,7 @@ use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class LotesController extends Controller
+class LoteController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -22,7 +22,21 @@ class LotesController extends Controller
         $productos = Producto::all();
         $proveedores = Proveedor::all();
         // dd($lotes);
-        return view('lotes.listaLotes', compact('lotes'));
+        return view('lotes.listaLotes', compact('lotes', 'productos', 'proveedores'));
+    }
+
+    public function store()
+    {
+        $datos = request()->validate([
+            'stock' => '',
+            'vencimiento' => '',
+            'lote_id_prod' => '',
+            'lote_id_prov' => '',
+        ]);
+
+        Lote::create($datos);
+        session()->flash('message', 'El lote se ha creado correctamente');
+        return redirect()->route('listaLotes');
     }
 
     public function borrarLote(Lote $lote)

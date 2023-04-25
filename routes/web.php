@@ -9,7 +9,7 @@ use App\Http\Controllers\AtributoController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ProveedorController;
-use App\Http\Controllers\LotesController;
+use App\Http\Controllers\LoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,8 +52,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/altaProducto/{producto}', [ProductoController::class, 'altaProducto'])->name('altaProducto');
 
     //Lotes
-    Route::get('/listaLotes', LotesController::class)->name('listaLotes');
-    Route::delete('/borrarLote/{lote}', [LotesController::class, 'borrarLote'])->name('borrarLote');
+    Route::get('/listaLotes', LoteController::class)->name('listaLotes');
+    Route::delete('/borrarLote/{lote}', [LoteController::class, 'borrarLote'])->name('borrarLote');
+    Route::post('createLote', [LoteController::class, 'store'])->name('createLote');
 
     //Proveedor
     Route::get('/listaProveedores', ProveedorController::class)->name('listaProveedores');

@@ -51,66 +51,48 @@
                         </button>
                     </div>
                     <div class="card-body">
-                        <form id="form" class="g-3 needs-validation" method="POST" action="{{ route('createUser') }}">
+                        <form id="form" class="g-3 needs-validation" method="POST" action="{{ route('createLote') }}">
                             @csrf
                             <h1>Crear lote</h1>
                             <br>
                             <div class="">
-                                <label for="validationCustom01" class="form-label">Nombre</label>
-                                <input type="text" name="nombre" class="form-control" id="nombre"
-                                    value="{{ old('nombre') }}" placeholder="Introduzca su nombre">
+                                <label for="validationCustom01" class="form-label">Stock</label>
+                                <input type="number" name="stock" class="form-control" id="stock"
+                                    value="{{ old('stock') }}" placeholder="Introduzca un stock">
                             </div>
                             <br>
-                            <div class="">
-                                <label for="validationCustom02" class="form-label">Apellidos</label>
-                                <input type="text" name="apellidos" class="form-control" id="apellidos"
-                                    value="{{ old('apellidos') }}" placeholder="Introduzca sus apellidos">
+                         <div class="">
+                                <label for="validationCustom02" class="form-label">Fecha de vencimiento</label>
+                                <input type="date" name="vencimiento" class="form-control" id="vencimiento"
+                                    value="{{ old('vencimiento') }}" placeholder="Introduzca una fecha de vencimiento">
                             </div>
-                            <br>
-                            <div class="">
-                                <label for="validationCustom02" class="form-label">Fecha de nacimiento</label>
-                                <input type="date" name="fecha_nacimiento" class="form-control" id="fecha_nacimiento"
-                                    value="{{ old('fecha_nacimiento') }}" placeholder="Introduzca su fecha de nacimiento">
-                            </div>
-                            <br>
-                            <div class="">
-                                <label for="validationCustom01" class="form-label">DNI</label>
-                                <input type="text" name="dni" class="form-control" id="dni"
-                                    value="{{ old('dni') }}" placeholder="Introduzca su DNI">
-                            </div>
-                            <br>
-                            <div class="">
-                                <label for="validationCustomUsername" class="form-label">Correo electrónico</label>
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                    <input type="text" name="email" class="form-control" id="email"
-                                        value="{{ old('email') }}" placeholder="Correo electrónico"
-                                        aria-describedby="inputGroupPrepend">
-                                </div>
-                            </div>
-                            <br>
-                            <div class="">
-                                <label for="validationCustom01" class="form-label">Contraseña</label>
-                                <input type="password" name="password" class="form-control" id="password"
-                                    value="{{ old('password') }}" placeholder="Introduzca su clave">
+                            <br>   
+                            <div>
+                                <label for="validationCustom01" class="form-label">Producto</label>
+                                <select class="form-control" name="lote_id_prod">
+                                    @foreach ($productos as $producto)
+                                        <option value={{ $producto->id }}
+                                            {{ old('producto') == $producto->nombre ? 'selected' : '' }}>
+                                            {{ $producto->nombre }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <br>
                             <div>
-                                <label for="validationCustom01" class="form-label">Tipo</label>
-                                <select class="form-control" name="tipo">
-                                    <option value="2" {{ old('tipo') == 'farmaceutico' ? 'selected' : '' }}>
-                                        Farmacéutico</option>
-                                    <option value="3" {{ old('tipo') == 'tecnico' ? 'selected' : '' }}>Técnico
-                                    </option>
-                                    <option value="4" {{ old('tipo') == 'auxiliar' ? 'selected' : '' }}>Auxiliar
-                                    </option>
-                                    <option value="1" {{ old('tipo') == 'administrador' ? 'selected' : '' }}>
-                                        Administrador</option>
+                                <label for="validationCustom01" class="form-label">Proveedor</label>
+                                <select class="form-control" name="lote_id_prov">
+                                    @foreach ($proveedores as $proveedor)
+                                        <option value={{ $proveedor->id }}
+                                            {{ old('proveedor') == $proveedor->nombre ? 'selected' : '' }}>
+                                            {{ $proveedor->nombre }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                             <br>
                             <div class="col-12">
-                                <button id="btnSubmit" class="btn btn-success" type="submit">Crear usuario</button>
+                                <button id="btnSubmit" class="btn btn-success" type="submit">Crear lote</button>
                             </div>
                         </form>
 
@@ -119,103 +101,30 @@
                                 $("#form").submit(function(event) {
                                     // Prevenir la acción predeterminada del formulario
                                     event.preventDefault();
-                                    // Validar el campo de nombre
-                                    if ($("#nombre").val() == "") {
-                                        $("#nombre").addClass("is-invalid");
-                                        $("#nombre").parent().find(".invalid-feedback")
+                                    // Validar el campo de stock
+                                    if ($("#stock").val() == "") {
+                                        $("#stock").addClass("is-invalid");
+                                        $("#stock").parent().find(".invalid-feedback")
                                             .remove(); // eliminar cualquier div existente
-                                        $("#nombre").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce tu nombre.</div>");
+                                        $("#stock").parent().append(
+                                            "<div class='invalid-feedback'>Por favor, introduce un stock.</div>");
                                     } else {
-                                        $("#nombre").removeClass("is-invalid");
-                                        $("#nombre").addClass("is-valid");
+                                        $("#stock").removeClass("is-invalid");
+                                        $("#stock").addClass("is-valid");
                                     }
 
-                                    // Validar el campo de apellidos
-                                    if ($("#apellidos").val() == "") {
-                                        $("#apellidos").addClass("is-invalid");
-                                        $("#apellidos").parent().find(".invalid-feedback")
+                                    // Validar el campo de vencimiento
+                                    if ($("#vencimiento").val() == "") {
+                                        $("#vencimiento").addClass("is-invalid");
+                                        $("#vencimiento").parent().find(".invalid-feedback")
                                             .remove(); // eliminar cualquier div existente
-                                        $("#apellidos").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce tus apellidos.</div>");
+                                        $("#vencimiento").parent().append(
+                                            "<div class='invalid-feedback'>Por favor, introduce una fecha de vencimiento.</div>");
                                     } else {
-                                        $("#apellidos").removeClass("is-invalid");
-                                        $("#apellidos").addClass("is-valid");
+                                        $("#vencimiento").removeClass("is-invalid");
+                                        $("#vencimiento").addClass("is-valid");
                                     }
-
-
-                                    // Validar el campo de fecha de nacimiento
-                                    if ($("#fecha_nacimiento").val() == "") {
-                                        $("#fecha_nacimiento").addClass("is-invalid");
-                                        $("#fecha_nacimiento").parent().find(".invalid-feedback")
-                                            .remove(); // eliminar cualquier div existente
-                                        $("#fecha_nacimiento").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce tu fecha de nacimiento.</div>"
-                                        );
-                                    } else {
-                                        $("#fecha_nacimiento").removeClass("is-invalid");
-                                        $("#fecha_nacimiento").addClass("is-valid");
-                                    }
-
-                                    // Validar el campo de DNI
-                                    if ($("#dni").val() == "") {
-                                        $("#dni").addClass("is-invalid");
-                                        $("#dni").parent().find(".invalid-feedback").remove();
-                                        $("#dni").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce tu DNI.</div>");
-                                    } else if (!validarDNI($("#dni").val())) {
-                                        $("#dni").addClass("is-invalid");
-                                        $("#dni").parent().find(".invalid-feedback").remove();
-                                        $("#dni").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce un dni válido.</div>"
-                                        );
-                                    } else {
-                                        $("#dni").removeClass("is-invalid");
-                                        $("#dni").addClass("is-valid");
-                                    }
-
-                                    // Validar el campo de correo electrónico
-                                    if ($("#email").val() == "") {
-                                        $("#email").addClass("is-invalid");
-                                        $("#email").parent().find(".invalid-feedback").remove();
-                                        $("#email").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce tu correo electrónico.</div>"
-                                        );
-                                    } else if (!isValidEmail($("#email").val())) {
-                                        $("#email").addClass("is-invalid");
-                                        $("#email").parent().find(".invalid-feedback").remove();
-                                        $("#email").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce un correo electrónico válido.</div>"
-                                        );
-                                    } else {
-                                        $("#email").removeClass("is-invalid");
-                                        $("#email").addClass("is-valid");
-                                    }
-
-                                    // Validar el campo de contraseña
-                                    if ($("#password").val() == "") {
-                                        $("#password").addClass("is-invalid");
-                                        $("#password").parent().find(".invalid-feedback").remove();
-
-                                        $("#password").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce tu contraseña.</div>");
-                                    } else {
-                                        $("#password").removeClass("is-invalid");
-                                        $("#password").addClass("is-valid");
-                                    }
-
-                                    // Validar el campo de tipo
-                                    if ($("#tipo").val() == "") {
-                                        $("#tipo").addClass("is-invalid");
-                                        $("#tipo").parent().find(".invalid-feedback").remove();
-
-                                        $("#tipo").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, selecciona un tipo.</div>");
-                                    } else {
-                                        $("#tipo").removeClass("is-invalid");
-                                        $("#tipo").addClass("is-valid");
-                                    }
-
+                                  
                                     // Enviar el formulario si todos los campos son válidos
                                     if ($(".is-invalid").length == 0) {
                                         $("#form").unbind("submit").submit();
