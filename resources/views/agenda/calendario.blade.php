@@ -24,9 +24,6 @@
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="{{ route('listaProductos') }}" class="nav-link">Inicio</a>
                 </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="" class="nav-link">Contact</a>
-                </li>
             </ul>
 
             <!-- Right navbar links -->
@@ -53,6 +50,8 @@
                                 </table>
                                 <button class="btn btn-danger" style="width: 100%" id="vaciarCarrito">Vaciar
                                     carrito</button>
+                                <button class="btn btn-primary" style="width: 100%" id="tramitarCompra">Tramitar
+                                    compra</button>
                             </div>
                         </div>
                     </div>
@@ -60,9 +59,9 @@
                 <li class="nav-item dropdown">
                     <div class="dropdown">
                         <div class="image mr-4" data-toggle="dropdown">
-                            <img src="@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatarUser.png') }}
+                            <img src="@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatares/avatarUser.png') }}
                             @elseif (Auth::user()->sexo == 'mujer')
-                            {{ asset('img/avatarUserMujer.png') }} @endif"
+                            {{ asset('img/avatares/avatarUserMujer.png') }} @endif"
                                 class="img-circle elevation-2" alt="{{ Auth::user()->nombre }}" width="40px">
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">
@@ -99,9 +98,9 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <a href="{{ route('datosPersonales', Auth::user()->id) }}">
                         <div class="image">
-                            <img src=@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatarUser.png') }}
+                            <img src=@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatares/avatarUser.png') }}
                                  @elseif (Auth::user()->sexo == 'mujer')
-                                 {{ asset('img/avatarUserMujer.png') }} @endif
+                                 {{ asset('img/avatares/avatarUserMujer.png') }} @endif
                                 class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
@@ -163,6 +162,14 @@
                                 <i class="bi bi-boxes"></i>
                                 <p class="ml-1">
                                     Gestión de productos
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('listaLotes') }}" class="nav-link">
+                                <i class="bi bi-archive-fill"></i>
+                                <p class="ml-1">
+                                    Gestión de lotes
                                 </p>
                             </a>
                         </li>
@@ -379,9 +386,24 @@
 
             var calendar = new Calendar(calendarEl, {
                 headerToolbar: {
-                    left: 'prev,next today',
+                    left: 'prev,next',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                locale: 'es',
+                firstDay: 1,
+                timeZone: 'local',
+                nowIndicator: true,
+                views: {
+                    dayGridMonth: {
+                        buttonText: 'Mes'
+                    },
+                    timeGridWeek: {
+                        buttonText: 'Semana'
+                    },
+                    timeGridDay: {
+                        buttonText: 'Día'
+                    },
                 },
                 themeSystem: 'bootstrap',
                 //Random default events
@@ -400,13 +422,6 @@
                         borderColor: 'rgb(40, 167, 69)',
                         allDay: true
                     },
-                    // {
-                    //     title: 'Meeting',
-                    //     start: new Date(y, m, d, 10, 30),
-                    //     allDay: false,
-                    //     backgroundColor: '#0073b7', //Blue
-                    //     borderColor: '#0073b7' //Blue
-                    // },
                     {
                         title: 'Consulta rápida de articulos',
                         start: new Date(y, m, 4),
@@ -477,7 +492,6 @@
 
                 }
             });
-            calendar.setOption('locale', 'es');
             calendar.render();
 
             /* ADDING EVENTS */

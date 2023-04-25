@@ -72,63 +72,6 @@
                 </div>
             </div>
         </div>
-        {{-- <script>
-            // Obtener el área de la zona de arrastre
-            var dropzone = document.getElementById('dropzone');
-
-            // Agregar los eventos de arrastre
-            dropzone.addEventListener('dragenter', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                dropzone.classList.add('dragover');
-            });
-            dropzone.addEventListener('dragover', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-            });
-            dropzone.addEventListener('dragleave', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                dropzone.classList.remove('dragover');
-            });
-
-            // Agregar el evento de soltar
-            dropzone.addEventListener('drop', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                dropzone.classList.remove('dragover');
-
-                // Obtener el archivo de imagen
-                var files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    var file = files[0];
-
-                    // Verificar si el archivo es una imagen
-                    if (file.type.match(/image.*/)) {
-                        var reader = new FileReader();
-
-                        // Cargar la imagen
-                        reader.onload = function(e2) {
-                            var img = document.createElement('img');
-                            img.src = e2.target.result;
-                            img.style.maxWidth = '100%';
-                            img.style.height = 'auto';
-                            dropzone.innerHTML = '';
-                            dropzone.appendChild(img);
-
-                            // Mostrar el campo de entrada de archivos
-                            var input = document.getElementById('image');
-                            input.style.display = 'block';
-                            input.files = files;
-                        };
-                        reader.readAsDataURL(file);
-                    } else {
-                        alert('El archivo seleccionado no es una imagen.');
-                    }
-                }
-
-            });
-        </script> --}}
     </div>
 
     <!-- Modal de confirmación de eliminación -->
@@ -197,13 +140,33 @@
                                 <div class="image-container">
                                     <img width="75%" src="{{ asset('img/productos/' . $image->getFilename()) }}"
                                         alt="{{ $image->getFilename() }}">
-                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
                                         <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal"
                                             data-id="{{ $image->getFilename() }}" onclick="enviarFilename(this)"
                                             data-target="#confirmDeleteModal">
                                             <i class="fas fa-times"></i>
                                         </a>
-                                    @endif
+                                    <script>
+                                        function enviarFilename(boton) {
+                                            var inputModal = document.getElementById('filenameModal')
+                                            inputModal.value = boton.getAttribute("data-id")
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                    <h3>Avatares</h3>
+                    @foreach (File::allFiles(public_path('img/avatares')) as $image)
+                        @if (in_array($image->getExtension(), ['jpg', 'jpeg', 'png', 'gif']))
+                            <div class="col-md-3">
+                                <div class="image-container">
+                                    <img width="75%" src="{{ asset('img/avatares/' . $image->getFilename()) }}"
+                                        alt="{{ $image->getFilename() }}">
+                                        <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal"
+                                            data-id="{{ $image->getFilename() }}" onclick="enviarFilename(this)"
+                                            data-target="#confirmDeleteModal">
+                                            <i class="fas fa-times"></i>
+                                        </a>
                                     <script>
                                         function enviarFilename(boton) {
                                             var inputModal = document.getElementById('filenameModal')

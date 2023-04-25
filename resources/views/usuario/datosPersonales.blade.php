@@ -51,9 +51,9 @@
                             <div class="card card-success card-outline">
                                 <div class="card-body box-profile">
                                     <div class="text-center">
-                                        <img src=@if ($user->sexo == 'hombre') {{ asset('img/avatarUser.png') }}
+                                        <img src=@if ($user->sexo == 'hombre') {{ asset('img/avatares/avatarUser.png') }}
                                             @elseif ($user->sexo == 'mujer')
-                                            {{ asset('img/avatarUserMujer.png') }} @endif
+                                            {{ asset('img/avatares/avatarUserMujer.png') }} @endif
                                             alt="" class="profile-user-img img-fluid img-circle">
                                     </div>
                                     <h3 class="profile-username text-center text-success">{{ $user->nombre }}
@@ -101,9 +101,9 @@
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="text-center" style="margin-top: 10px">
-                                                    <img src=@if ($user->sexo == 'hombre') {{ asset('img/avatarUser.png') }}
+                                                    <img src=@if ($user->sexo == 'hombre') {{ asset('img/avatares/avatarUser.png') }}
                                                         @elseif ($user->sexo == 'mujer')
-                                                        {{ asset('img/avatarUserMujer.png') }} @endif
+                                                        {{ asset('img/avatares/avatarUserMujer.png') }} @endif
                                                         alt="" class="profile-user-img img-fluid img-circle">
                                                     <h3 class="profile-username text-center">{{ $user->nombre }}
                                                 </div>

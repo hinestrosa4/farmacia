@@ -135,7 +135,7 @@
                                     "sin definir" : proveedor
                                     .telefono;
                                 let imagen =
-                                    '<img width=90px src="img/avatarProveedor.png" class="img-circle elevation-2" alt="Proveedor Image">';
+                                    '<img width=90px src="img/avatares/avatarProveedor.png" class="img-circle elevation-2" alt="Proveedor Image">';
 
                                 let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                           <div class="card bg-light d-flex flex-fill">

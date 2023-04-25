@@ -69,9 +69,9 @@
                 <li class="nav-item dropdown">
                     <div class="dropdown">
                         <div class="image mr-4" data-toggle="dropdown">
-                            <img src="@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatarUser.png') }}
+                            <img src="@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatares/avatarUser.png') }}
                             @elseif (Auth::user()->sexo == 'mujer')
-                            {{ asset('img/avatarUserMujer.png') }} @endif"
+                            {{ asset('img/avatares/avatarUserMujer.png') }} @endif"
                                 class="img-circle elevation-2" alt="{{ Auth::user()->nombre }}" width="40px">
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">
@@ -107,9 +107,9 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <a href="{{ route('datosPersonales', Auth::user()->id) }}">
                         <div class="image">
-                            <img src=@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatarUser.png') }}
+                            <img src=@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatares/avatarUser.png') }}
                                  @elseif (Auth::user()->sexo == 'mujer')
-                                 {{ asset('img/avatarUserMujer.png') }} @endif
+                                 {{ asset('img/avatares/avatarUserMujer.png') }} @endif
                                 class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">

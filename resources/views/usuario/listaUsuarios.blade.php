@@ -467,9 +467,9 @@
                                     tipo == 4 ? 'Auxiliar' : 'Desconocido';
 
                                 let imagen = sexo == "hombre" ?
-                                    '<img width=90px src="img/avatarUser.png" class="img-circle elevation-2" alt="User Image">' :
+                                    '<img width=90px src="img/avatares/avatarUser.png" class="img-circle elevation-2" alt="User Image">' :
                                     sexo == "mujer" ?
-                                    '<img width=90px src="img/avatarUserMujer.png" class="img-circle elevation-2" alt="User Image">' :
+                                    '<img width=90px src="img/avatares/avatarUserMujer.png" class="img-circle elevation-2" alt="User Image">' :
                                     "No definido";
 
                                 let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
