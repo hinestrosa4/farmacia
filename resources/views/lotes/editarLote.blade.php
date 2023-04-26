@@ -61,6 +61,12 @@
                                     <br>
                                     <ul class="list-group list-group-unbordered mb-3">
                                         <li class="list-group-item">
+                                            <b style="color:#0B7300">Stock</b>
+                                            <span class="float-right ml-4" style="color:rgb(26, 57, 255)">
+                                                {{ $lote->stock }}
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item">
                                             <b style="color:#0B7300">Vencimiento</b>
                                             <span class="float-right ml-4" style="color:rgb(26, 57, 255)">
                                                 {{ $lote->vencimiento }}

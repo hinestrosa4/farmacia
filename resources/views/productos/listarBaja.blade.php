@@ -464,9 +464,9 @@
                                   <ul class="ml-2 fa-ul">
                                     <li style="margin-left:-15px"><i class="fas fa-mortar-pestle"></i><strong> Concentración:</strong> ${producto.concentracion}</li>
                                     <li style="margin-left:-15px"<i class="fas fa-prescription-bottle-alt"></i><strong> Adicional:</strong> ${producto.adicional}</li>
-                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${laboratorioNombre}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${tipoNombre}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${presentacionNombre}</li>
+                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${producto.nombre_lab}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${producto.nombre_tipo}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${producto.nombre_pre}</li>
                                   </ul>
                                 </div>
                               </div>
@@ -477,7 +477,6 @@
                             @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
                             <a href="#" class="btn btn-sm btn-success mt-1 mr-1" data-toggle="modal" data-target="#confirmAltaModal" data-id="${producto.id}" onclick="actualizarAccionFormulario(this)">
                                     <i class="bi bi-check2-circle"></i> Restaurar
-                                </a>
                             </a>
                             @endif
                               </div>

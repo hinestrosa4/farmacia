@@ -61,12 +61,12 @@
                                     value="{{ old('stock') }}" placeholder="Introduzca un stock">
                             </div>
                             <br>
-                         <div class="">
+                            <div class="">
                                 <label for="validationCustom02" class="form-label">Fecha de vencimiento</label>
                                 <input type="date" name="vencimiento" class="form-control" id="vencimiento"
                                     value="{{ old('vencimiento') }}" placeholder="Introduzca una fecha de vencimiento">
                             </div>
-                            <br>   
+                            <br>
                             <div>
                                 <label for="validationCustom01" class="form-label">Producto</label>
                                 <select class="form-control" name="lote_id_prod">
@@ -119,12 +119,13 @@
                                         $("#vencimiento").parent().find(".invalid-feedback")
                                             .remove(); // eliminar cualquier div existente
                                         $("#vencimiento").parent().append(
-                                            "<div class='invalid-feedback'>Por favor, introduce una fecha de vencimiento.</div>");
+                                            "<div class='invalid-feedback'>Por favor, introduce una fecha de vencimiento.</div>"
+                                            );
                                     } else {
                                         $("#vencimiento").removeClass("is-invalid");
                                         $("#vencimiento").addClass("is-valid");
                                     }
-                                  
+
                                     // Enviar el formulario si todos los campos son válidos
                                     if ($(".is-invalid").length == 0) {
                                         $("#form").unbind("submit").submit();
@@ -192,11 +193,10 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check form-switch d-flex"
-                        style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
+                    <div class="form-check form-switch d-flex" style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
                         <div class="ml-auto">
-                            <a type="button" href="{{ route('gestionUsuarioBaja') }}" class="btn bg-gradient-danger"><i
-                                    class="bi bi-archive-fill"></i> Lotes eliminados</a>
+                            <a type="button" href="{{ route('gestionLotesEliminados') }}"
+                                class="btn bg-gradient-danger"><i class="bi bi-archive-fill"></i> Lotes eliminados</a>
                         </div>
                     </div>
                     <br>
@@ -205,23 +205,6 @@
                             {{ session()->get('message') }}
                     @endif
                 </div>
-                <?php
-                $productos = [];
-                $productosImagen = [];
-                $proveedores = [];
-                ?>
-                @foreach ($lotes as $lote)
-                    <?php
-                    $productos[] = $lote->producto->nombre;
-                    $productos_json = json_encode($productos);
-
-                    $productosImagen[] = $lote->producto->imagen;
-                    $productos_imagen_json = json_encode($productosImagen);
-
-                    $laboratorios[] = $lote->proveedor->nombre;
-                    $proveedores_json = json_encode($proveedores);
-                    ?>
-                @endforeach
                 <div class="card-body">
                     <div id="lotes" class="row d-flex align-items-stretch">
 
@@ -237,9 +220,6 @@
 
     <script>
         $(document).ready(function() {
-            var productos = <?php echo $productos_json; ?>;
-            var productos_imagen = <?php echo $productos_imagen_json; ?>;
-
             // verifica si el campo de búsqueda está vacío
             if ($('#buscar').val() == "") {
                 buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
@@ -273,14 +253,9 @@
                             // if (!this.checked) {
                             respuesta.forEach(function(lote, indice) {
 
-                                let productoNombre = productos[indice]
-
-                                let imagen = productos_imagen[indice] == null ?
-                                    "img/productos/sinFoto.png" : productos_imagen[indice];
-
-                                let d= lote.vencimiento.substring(8)
-                                let m = lote.vencimiento.substring(7,5)
-                                let y = lote.vencimiento.substring(0,4)
+                                let d = lote.vencimiento.substring(8)
+                                let m = lote.vencimiento.substring(7, 5)
+                                let y = lote.vencimiento.substring(0, 4)
 
                                 let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                           <div class="card bg-light d-flex flex-fill">
@@ -289,7 +264,7 @@
                             <div class="card-body pt-0">
                               <div class="row">
                                 <div class="col-7">
-                                  <h2 class="lead"><b>Lote de ${productoNombre}</b></h2>
+                                  <h2 class="lead"><b>Lote de ${lote.nombre}</b></h2>
                                   <br>
                                   <ul class="ml-2 fa-ul">
                                     <li class="small"><span class="fa-li"><i class="fa-solid fa-key"></i></span> <strong>Identificador:</strong> ${lote.id}</li>
@@ -299,7 +274,7 @@
                                     </ul>
                                 </div>
                                 <div class="col-5 text-center">
-                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
+                                    <img width=70% style="margin-bottom:20px" src="${lote.imagen}" class="img" alt="Product Image">
                                 </div>
                               </div>
                             </div>

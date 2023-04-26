@@ -71,4 +71,20 @@ class LoteController extends Controller
         session()->flash('message', 'El lote ha sido borrada correctamente.');
         return redirect()->route('listaLotes');
     }
+
+    public function  gestionLotesEliminados(Request $request)
+    {
+        $proveedores = Proveedor::all();
+        $productos = Producto::all();
+        $lotes = Lote::orderBy('id', 'asc')->get();
+        return view('lotes.listaLotesEliminados', compact('lotes', 'productos', 'proveedores'));
+    }
+
+    public function altaLote($id)
+    {
+        $lote = Lote::withTrashed()->findOrFail($id);
+        $lote->restore();
+        session()->flash('message', 'El lote ha sido restaurado correctamente.');
+        return redirect()->route('gestionLotesEliminados');
+    }
 }

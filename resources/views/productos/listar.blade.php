@@ -387,13 +387,14 @@
                     <?php
                     $presentaciones[] = $producto->presentacion->nombre;
                     $presentaciones_json = json_encode($presentaciones);
+
                     $laboratorios[] = $producto->laboratorio->nombre;
                     $laboratorios_json = json_encode($laboratorios);
+                    
                     $tipos[] = $producto->tipo->nombre;
                     $tipos_json = json_encode($tipos);
                     ?>
                 @endforeach
-
                 <div class="card-body">
                     <div id="productos" class="row d-flex align-items-stretch">
                     </div>
@@ -466,9 +467,9 @@
                                   <ul class="ml-2 fa-ul">
                                     <li style="margin-left:-15px"><i class="fas fa-mortar-pestle"></i><strong> Concentración:</strong> ${producto.concentracion}</li>
                                     <li style="margin-left:-15px"<i class="fas fa-prescription-bottle-alt"></i><strong> Adicional:</strong> ${producto.adicional}</li>
-                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${laboratorioNombre}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${tipoNombre}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${presentacionNombre}</li>
+                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${producto.nombre_lab}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${producto.nombre_tipo}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${producto.nombre_pre}</li>
                                   </ul>
                                 </div>
                               </div>
@@ -567,24 +568,47 @@
             }
         });
 
+        // Declarar variable global para el carrito
+        let carrito = [];
+        // Función para añadir un producto al carrito
         function addCarrito(btnAdd) {
             event.preventDefault();
             const JSONproducto = btnAdd.getAttribute("data-info")
             const presentacionNombre = btnAdd.getAttribute("data-id")
             producto = JSON.parse(JSONproducto)
-            // console.log(producto);
-            localStorage.setItem('carrito', producto)
-            console.log(JSON.stringify(localStorage.getItem('carrito')));
-            $('#cestaProductos').append("<tr><td>" + producto.nombre + "</td><td>" + producto
+
+            // Añadir el producto al carrito
+            carrito.push(producto);
+            console.log(carrito);
+
+            const index = carrito.length - 1;
+
+            $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre + "</td><td>" + producto
                 .concentracion + "</td><td>" +
                 producto.adicional + "</td><td>" + presentacionNombre + "</td><td>" + producto.precio +
                 "€</td><td><button class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>");
+            $('#vaciarCarrito').click(function() {
+                carrito = [];
+            });
+
             $(document).on('click', '.borrar', function(event) {
                 event.preventDefault();
                 event.stopPropagation();
+
+                // Obtener el índice del elemento que se debe eliminar
+                const index = $(this).closest('tr').data('index');
+
+                // Eliminar el elemento del array
+                carrito.splice(index, 1);
+
+                // Eliminar el elemento del DOM
                 $(this).closest('tr').remove();
+                console.log(carrito);
+
             });
         }
+
+
 
         function mostrarImagen(botonImagen) {
             const id_producto = botonImagen.getAttribute("data-id2");
