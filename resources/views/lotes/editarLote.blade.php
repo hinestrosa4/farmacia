@@ -69,7 +69,7 @@
                                         <li class="list-group-item">
                                             <b style="color:#0B7300">Vencimiento</b>
                                             <span class="float-right ml-4" style="color:rgb(26, 57, 255)">
-                                                {{ cambiarFormatoFecha($lote->vencimiento) }}
+                                                {{ DateTime::createFromFormat('Y-m-d', $lote->vencimiento)->format('d-m-Y') }}
                                             </span>
                                         </li>
                                         <li class="list-group-item">
@@ -100,9 +100,8 @@
                                             @method('PUT')
                                             <div class="col-md-4">
                                                 <label for="validationCustom02" class="form-label">Stock</label>
-                                                <input type="number" name="stock" class="form-control"
-                                                    id="stock" value="{{ old('stock') }}"
-                                                    placeholder="Introduzca un stock">
+                                                <input type="number" name="stock" class="form-control" id="stock"
+                                                    value="{{ old('stock') }}" placeholder="Introduzca un stock">
                                                 {!! $errors->first('stock', '<span style=color:red>:message</span>') !!}
                                             </div>
                                             <div class="col-md-4">
@@ -169,7 +168,7 @@
             $('#lote_id_prod').val(lote_id_prod);
             $('#lote_id_prov').val(lote_id_prov);
         });
-        
+
 
         $(document).on('click', '.borrar', function(event) {
             event.preventDefault();
@@ -211,7 +210,7 @@
             // Cargar el carrito desde el almacenamiento local
             if (localStorage.getItem("carrito")) {
                 carrito = JSON.parse(localStorage.getItem("carrito"));
-                
+
                 $('#contador').empty()
                 $('#contador').append(carrito.length)
 
@@ -227,7 +226,8 @@
                     );
                 }
             }
-        });    </script>
+        });
+    </script>
 
 
 @endsection
