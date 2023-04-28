@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
+use App\Models\Lote;
 use App\Http\Rules\Validaciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -37,10 +38,23 @@ class ProveedorController extends Controller
         //return view('formRegCliente');
     }
 
+    public function update($id)
+    {
+        $proveedor = Proveedor::find($id);
+        $datos = request()->validate([
+            'nombre' => 'required',
+            'direccion' => '',
+            'telefono' => 'required',
+        ]);
+        $proveedor->update($datos);
+        session()->flash('message', 'El proveedor ha sido modificado correctamente');
+        return redirect()->route('perfilProveedor', $id);
+    }
+
     public function perfilProveedor($id)
     {
         $proveedor = Proveedor::find($id);
-        dd($proveedor);
+        // dd($proveedor);
         return view('proveedor.perfilProveedor', compact('proveedor'));
     }
     

@@ -62,7 +62,7 @@ class LoteController extends Controller
         // dd($datos);
         $lote->update($datos);
         session()->flash('message', 'El producto ha sido modificado correctamente');
-        return redirect()->route('listaLotes', [$id, 'proveedores' => $proveedores, 'productos' => $productos]);
+        return redirect()->route('editarLote', $id);
     }
 
     public function borrarLote(Lote $lote)
