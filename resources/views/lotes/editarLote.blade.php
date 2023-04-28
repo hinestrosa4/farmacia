@@ -69,12 +69,12 @@
                                         <li class="list-group-item">
                                             <b style="color:#0B7300">Vencimiento</b>
                                             <span class="float-right ml-4" style="color:rgb(26, 57, 255)">
-                                                {{ $lote->vencimiento }}
+                                                {{ cambiarFormatoFecha($lote->vencimiento) }}
                                             </span>
                                         </li>
                                         <li class="list-group-item">
                                             <b style="color:#0B7300">Producto</b><span class="float-right"
-                                                style="color:rgb(26, 57, 255)">proveedor</span>
+                                                style="color:rgb(26, 57, 255)">{{ $lote->proveedor->nombre }}</span>
                                         </li>
                                     </ul>
                                     <button class="btn btn-block bg-gradient-danger" id="editarBtn">Editar</button>
@@ -169,7 +169,65 @@
             $('#lote_id_prod').val(lote_id_prod);
             $('#lote_id_prov').val(lote_id_prov);
         });
-    </script>
+        
+
+        $(document).on('click', '.borrar', function(event) {
+            event.preventDefault();
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            // Obtener el índice del elemento que se debe eliminar
+            const index = $(this).closest('tr').data('index');
+
+            // Eliminar el elemento del array
+            carrito.splice(index, 1);
+
+            // Eliminar el elemento del DOM
+            $(this).closest('tr').remove();
+
+            // Guardar el carrito actualizado en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            console.log(carrito);
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+            return false; // Evitar cualquier acción adicional
+        });
+
+
+        //vaciar carrito
+        $('#vaciarCarrito').click(function() {
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            $('#cestaProductos tr:not(:first)').remove();
+            carrito = [];
+            localStorage.removeItem('carrito');
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+        });
+
+
+        //añadir
+        // Declarar variable global para el carrito
+        let carrito = [];
+
+        $(document).ready(function() {
+            // Cargar el carrito desde el almacenamiento local
+            if (localStorage.getItem("carrito")) {
+                carrito = JSON.parse(localStorage.getItem("carrito"));
+                
+                $('#contador').empty()
+                $('#contador').append(carrito.length)
+
+                for (let i = 0; i < carrito.length; i++) {
+                    const producto = carrito[i];
+                    console.log(producto);
+                    const index = i;
+                    $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre +
+                        "</td><td>" + producto.concentracion + "</td><td>" +
+                        producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
+                        .precio +
+                        "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
+                    );
+                }
+            }
+        });    </script>
 
 
 @endsection

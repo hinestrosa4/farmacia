@@ -140,11 +140,11 @@
                                 <div class="image-container">
                                     <img width="75%" src="{{ asset('img/productos/' . $image->getFilename()) }}"
                                         alt="{{ $image->getFilename() }}">
-                                        <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal"
-                                            data-id="{{ $image->getFilename() }}" onclick="enviarFilename(this)"
-                                            data-target="#confirmDeleteModal">
-                                            <i class="fas fa-times"></i>
-                                        </a>
+                                    <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal"
+                                        data-id="{{ $image->getFilename() }}" onclick="enviarFilename(this)"
+                                        data-target="#confirmDeleteModal">
+                                        <i class="fas fa-times"></i>
+                                    </a>
                                     <script>
                                         function enviarFilename(boton) {
                                             var inputModal = document.getElementById('filenameModal')
@@ -162,11 +162,11 @@
                                 <div class="image-container">
                                     <img width="75%" src="{{ asset('img/avatares/' . $image->getFilename()) }}"
                                         alt="{{ $image->getFilename() }}">
-                                        <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal"
-                                            data-id="{{ $image->getFilename() }}" onclick="enviarFilename(this)"
-                                            data-target="#confirmDeleteModal">
-                                            <i class="fas fa-times"></i>
-                                        </a>
+                                    <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal"
+                                        data-id="{{ $image->getFilename() }}" onclick="enviarFilename(this)"
+                                        data-target="#confirmDeleteModal">
+                                        <i class="fas fa-times"></i>
+                                    </a>
                                     <script>
                                         function enviarFilename(boton) {
                                             var inputModal = document.getElementById('filenameModal')
@@ -181,4 +181,64 @@
             </div>
         </section>
     </div>
+    <script>
+       
+       $(document).on('click', '.borrar', function(event) {
+            event.preventDefault();
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            // Obtener el índice del elemento que se debe eliminar
+            const index = $(this).closest('tr').data('index');
+
+            // Eliminar el elemento del array
+            carrito.splice(index, 1);
+
+            // Eliminar el elemento del DOM
+            $(this).closest('tr').remove();
+
+            // Guardar el carrito actualizado en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            console.log(carrito);
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+            return false; // Evitar cualquier acción adicional
+        });
+
+
+        //vaciar carrito
+        $('#vaciarCarrito').click(function() {
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            $('#cestaProductos tr:not(:first)').remove();
+            carrito = [];
+            localStorage.removeItem('carrito');
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+        });
+
+
+        //añadir
+        // Declarar variable global para el carrito
+        let carrito = [];
+
+        $(document).ready(function() {
+            // Cargar el carrito desde el almacenamiento local
+            if (localStorage.getItem("carrito")) {
+                carrito = JSON.parse(localStorage.getItem("carrito"));
+                
+                $('#contador').empty()
+                $('#contador').append(carrito.length)
+
+                for (let i = 0; i < carrito.length; i++) {
+                    const producto = carrito[i];
+                    console.log(producto);
+                    const index = i;
+                    $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre +
+                        "</td><td>" + producto.concentracion + "</td><td>" +
+                        producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
+                        .precio +
+                        "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
+                    );
+                }
+            }
+        });
+    </script>
 @endsection

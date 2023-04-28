@@ -44,6 +44,9 @@
                         <div class="image mr-4" data-toggle="dropdown">
                             <img src="{{ asset('img/carrito.png') }}" class="img" alt="{{ Auth::user()->nombre }}"
                                 width="40px">
+                                <span id="contador" class="position-absolute top-0 start-55 translate-middle badge rounded-pill bg-danger">
+                                    0
+                                  </span>
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">
                             <h4 class="text-center">Carrito de la compra</h4>

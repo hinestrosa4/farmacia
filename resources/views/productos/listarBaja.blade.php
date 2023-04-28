@@ -352,7 +352,7 @@
         </section>
         <section>
             <div class="cotainer-fluid">
-                <div class="card card-info">
+                <div class="card card-info" style="position:relative;top:0px;">
                     <div class="card-header">
                         <h3 class="card-title">Buscar producto</h3>
                         <div class="input-group">
@@ -485,7 +485,7 @@
                         </div>        
                         <!-- Modal de confirmación de alta -->
                         <div class="modal fade" id="confirmAltaModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true" z-index="1">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -538,5 +538,64 @@
             // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
             formularioEliminar.action = "{{ route('altaProducto', '') }}/" + idProducto;
         }
+
+        
+        $(document).on('click', '.borrar', function(event) {
+            event.preventDefault();
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            // Obtener el índice del elemento que se debe eliminar
+            const index = $(this).closest('tr').data('index');
+
+            // Eliminar el elemento del array
+            carrito.splice(index, 1);
+
+            // Eliminar el elemento del DOM
+            $(this).closest('tr').remove();
+
+            // Guardar el carrito actualizado en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            console.log(carrito);
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+            return false; // Evitar cualquier acción adicional
+        });
+
+
+        //vaciar carrito
+        $('#vaciarCarrito').click(function() {
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            $('#cestaProductos tr:not(:first)').remove();
+            carrito = [];
+            localStorage.removeItem('carrito');
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+        });
+
+
+        //añadir
+        // Declarar variable global para el carrito
+        let carrito = [];
+
+        $(document).ready(function() {
+            // Cargar el carrito desde el almacenamiento local
+            if (localStorage.getItem("carrito")) {
+                carrito = JSON.parse(localStorage.getItem("carrito"));
+                
+                $('#contador').empty()
+                $('#contador').append(carrito.length)
+
+                for (let i = 0; i < carrito.length; i++) {
+                    const producto = carrito[i];
+                    console.log(producto);
+                    const index = i;
+                    $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre +
+                        "</td><td>" + producto.concentracion + "</td><td>" +
+                        producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
+                        .precio +
+                        "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
+                    );
+                }
+            }
+        });
     </script>
 @endsection

@@ -26,13 +26,16 @@
                 </li>
             </ul>
 
-            <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
+              <!-- Right navbar links -->
+              <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <div class="dropdown">
                         <div class="image mr-4" data-toggle="dropdown">
                             <img src="{{ asset('img/carrito.png') }}" class="img" alt="{{ Auth::user()->nombre }}"
                                 width="40px">
+                                <span id="contador" class="position-absolute top-0 start-55 translate-middle badge rounded-pill bg-danger">
+                                    0
+                                  </span>
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">
                             <h4 class="text-center">Carrito de la compra</h4>
@@ -50,8 +53,7 @@
                                 </table>
                                 <button class="btn btn-danger" style="width: 100%" id="vaciarCarrito">Vaciar
                                     carrito</button>
-                                <button class="btn btn-primary" style="width: 100%" id="tramitarCompra">Tramitar
-                                    compra</button>
+                                    <button class="btn btn-primary" style="width: 100%" id="tramitarCompra">Tramitar compra</button>
                             </div>
                         </div>
                     </div>
@@ -82,7 +84,6 @@
                     </div>
                 </li>
             </ul>
-
         </nav>
         <!-- /.navbar -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -324,244 +325,253 @@
     <script src={{ asset('templates/plugins/moment/moment.min.js') }}></script>
     <script src={{ asset('templates/plugins/fullcalendar/main.js') }}></script>
     <script>
-        $(function() {
+        $.ajax({
+            url: 'calendario.php',
+            method: 'POST',
+            dataType: 'json',
+            data: {},
+            success: function(respuesta) {
+                console.log(respuesta);
+            },
+            error: function(error) {
+                console.log('error: ' + error);
+            }
+        });
+        /* initialize the external events
+         -----------------------------------------------------------------*/
+        function ini_events(ele) {
+            ele.each(function() {
 
-            /* initialize the external events
-             -----------------------------------------------------------------*/
-            function ini_events(ele) {
-                ele.each(function() {
+                // create an Event Object (https://fullcalendar.io/docs/event-object)
+                // it doesn't need to have a start or end
+                var eventObject = {
+                    title: $.trim($(this).text()) // use the element's text as the event title
+                }
 
-                    // create an Event Object (https://fullcalendar.io/docs/event-object)
-                    // it doesn't need to have a start or end
-                    var eventObject = {
-                        title: $.trim($(this).text()) // use the element's text as the event title
-                    }
+                // store the Event Object in the DOM element so we can get to it later
+                $(this).data('eventObject', eventObject)
 
-                    // store the Event Object in the DOM element so we can get to it later
-                    $(this).data('eventObject', eventObject)
-
-                    // make the event draggable using jQuery UI
-                    $(this).draggable({
-                        zIndex: 1070,
-                        revert: true, // will cause the event to go back to its
-                        revertDuration: 0 //  original position after the drag
-                    })
-
+                // make the event draggable using jQuery UI
+                $(this).draggable({
+                    zIndex: 1070,
+                    revert: true, // will cause the event to go back to its
+                    revertDuration: 0 //  original position after the drag
                 })
+
+            })
+        }
+
+        ini_events($('#external-events div.external-event'))
+
+        /* initialize the calendar
+         -----------------------------------------------------------------*/
+        //Date for the calendar events (dummy data)
+        var date = new Date()
+        var d = date.getDate(),
+            m = date.getMonth(),
+            y = date.getFullYear()
+
+        var Calendar = FullCalendar.Calendar;
+        var Draggable = FullCalendar.Draggable;
+
+        var containerEl = document.getElementById('external-events');
+        var checkbox = document.getElementById('drop-remove');
+        var calendarEl = document.getElementById('calendar');
+
+        // initialize the external events
+        // -----------------------------------------------------------------
+
+        new Draggable(containerEl, {
+            itemSelector: '.external-event',
+            eventData: function(eventEl) {
+                return {
+                    title: eventEl.innerText,
+                    backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue(
+                        'background-color'),
+                    borderColor: window.getComputedStyle(eventEl, null).getPropertyValue(
+                        'background-color'),
+                    textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
+                };
+            }
+        });
+
+        var calendar = new Calendar(calendarEl, {
+            headerToolbar: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            locale: 'es',
+            firstDay: 1,
+            timeZone: 'local',
+            nowIndicator: true,
+            views: {
+                dayGridMonth: {
+                    buttonText: 'Mes'
+                },
+                timeGridWeek: {
+                    buttonText: 'Semana'
+                },
+                timeGridDay: {
+                    buttonText: 'Día'
+                },
+            },
+            themeSystem: 'bootstrap',
+            //Random default events
+            events: [{
+                    title: 'Recepción de pedidos',
+                    start: new Date(y, m, 6),
+                    backgroundColor: 'rgb(40, 167, 69)',
+                    borderColor: 'rgb(40, 167, 69)',
+                    allDay: true
+                },
+                {
+                    title: 'Devolución de pedidos',
+                    start: new Date(y, m, 9),
+                    backgroundColor: 'rgb(40, 167, 69)',
+                    color: 'black',
+                    borderColor: 'rgb(40, 167, 69)',
+                    allDay: true
+                },
+                {
+                    title: 'Consulta rápida de articulos',
+                    start: new Date(y, m, 4),
+                    backgroundColor: 'rgb(255, 193, 7)',
+                    borderColor: 'rgb(255, 193, 7)',
+                    color: '#3B3B3B',
+                    allDay: true,
+                    textColor: 'black'
+                },
+                {
+                    title: 'Repaso de sotck',
+                    start: new Date(y, m, 11),
+                    backgroundColor: 'rgb(255, 193, 7)',
+                    borderColor: 'rgb(255, 193, 7)',
+                    color: '#3B3B3B',
+                    allDay: true,
+                    textColor: 'black'
+                },
+                {
+                    title: 'Control de recetas',
+                    start: new Date(y, m, 13),
+                    backgroundColor: 'rgb(255, 193, 7)',
+                    borderColor: 'rgb(255, 193, 7)',
+                    allDay: true,
+                    textColor: 'black'
+                },
+                {
+                    title: 'Sistema de dosificiacion personalizada',
+                    start: new Date(y, m, 3),
+                    backgroundColor: 'rgb(0, 123, 255)',
+                    borderColor: 'rgb(0, 123, 255)',
+                    allDay: true
+                },
+                {
+                    title: 'Sistema de dosificiacion personalizada',
+                    start: new Date(y, m, 10),
+                    backgroundColor: 'rgb(0, 123, 255)',
+                    borderColor: 'rgb(0, 123, 255)',
+                    allDay: true
+                },
+                {
+                    title: 'Sistema de dosificiacion personalizada',
+                    start: new Date(y, m, 17),
+                    backgroundColor: 'rgb(0, 123, 255)',
+                    borderColor: 'rgb(0, 123, 255)',
+                    color: '#3B3B3B',
+                    allDay: true
+                },
+                {
+                    title: 'Revisión de facturas',
+                    start: new Date(y, m, 14),
+                    backgroundColor: 'rgb(23, 162, 184)',
+                    borderColor: 'rgb(23, 162, 184)',
+                    allDay: true
+                },
+                // {
+                //     title: 'Click for Google',
+                //     start: new Date(y, m, 28),
+                //     end: new Date(y, m, 29),
+                //     // url: 'https://www.google.com/',
+                //     backgroundColor: '#3c8dbc', //Primary (light-blue)
+                //     borderColor: '#3c8dbc' //Primary (light-blue)
+                // }
+            ],
+            editable: true,
+            droppable: true, // this allows things to be dropped onto the calendar !!!
+            drop: function(info) {
+
+            }
+        });
+        calendar.render();
+
+        /* ADDING EVENTS */
+        var currColor = 'rgb(0, 123, 255)'
+        // Color chooser button
+        $('#color-chooser > li > a').click(function(e) {
+            e.preventDefault()
+            // Save color
+            currColor = $(this).css('color')
+
+            // Add color effect to button
+            $('#add-new-event').css({
+                'background-color': currColor,
+                'border-color': currColor
+            })
+        })
+        $('#add-new-event').click(function(e) {
+            e.preventDefault()
+            // Get value and make sure it is not null
+            var val = $('#new-event').val()
+            if (val.length == 0) {
+                return
             }
 
-            ini_events($('#external-events div.external-event'))
-
-            /* initialize the calendar
-             -----------------------------------------------------------------*/
-            //Date for the calendar events (dummy data)
-            var date = new Date()
-            var d = date.getDate(),
-                m = date.getMonth(),
-                y = date.getFullYear()
-
-            var Calendar = FullCalendar.Calendar;
-            var Draggable = FullCalendar.Draggable;
-
-            var containerEl = document.getElementById('external-events');
-            var checkbox = document.getElementById('drop-remove');
-            var calendarEl = document.getElementById('calendar');
-
-            // initialize the external events
-            // -----------------------------------------------------------------
-
-            new Draggable(containerEl, {
-                itemSelector: '.external-event',
-                eventData: function(eventEl) {
-                    return {
-                        title: eventEl.innerText,
-                        backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue(
-                            'background-color'),
-                        borderColor: window.getComputedStyle(eventEl, null).getPropertyValue(
-                            'background-color'),
-                        textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
-                    };
-                }
-            });
-
-            var calendar = new Calendar(calendarEl, {
-                headerToolbar: {
-                    left: 'prev,next',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                locale: 'es',
-                firstDay: 1,
-                timeZone: 'local',
-                nowIndicator: true,
-                views: {
-                    dayGridMonth: {
-                        buttonText: 'Mes'
-                    },
-                    timeGridWeek: {
-                        buttonText: 'Semana'
-                    },
-                    timeGridDay: {
-                        buttonText: 'Día'
-                    },
-                },
-                themeSystem: 'bootstrap',
-                //Random default events
-                events: [{
-                        title: 'Recepción de pedidos',
-                        start: new Date(y, m, 6),
-                        backgroundColor: 'rgb(40, 167, 69)',
-                        borderColor: 'rgb(40, 167, 69)',
-                        allDay: true
-                    },
-                    {
-                        title: 'Devolución de pedidos',
-                        start: new Date(y, m, 9),
-                        backgroundColor: 'rgb(40, 167, 69)',
-                        color: 'black',
-                        borderColor: 'rgb(40, 167, 69)',
-                        allDay: true
-                    },
-                    {
-                        title: 'Consulta rápida de articulos',
-                        start: new Date(y, m, 4),
-                        backgroundColor: 'rgb(255, 193, 7)',
-                        borderColor: 'rgb(255, 193, 7)',
-                        color: '#3B3B3B',
-                        allDay: true,
-                        textColor: 'black'
-                    },
-                    {
-                        title: 'Repaso de sotck',
-                        start: new Date(y, m, 11),
-                        backgroundColor: 'rgb(255, 193, 7)',
-                        borderColor: 'rgb(255, 193, 7)',
-                        color: '#3B3B3B',
-                        allDay: true,
-                        textColor: 'black'
-                    },
-                    {
-                        title: 'Control de recetas',
-                        start: new Date(y, m, 13),
-                        backgroundColor: 'rgb(255, 193, 7)',
-                        borderColor: 'rgb(255, 193, 7)',
-                        allDay: true,
-                        textColor: 'black'
-                    },
-                    {
-                        title: 'Sistema de dosificiacion personalizada',
-                        start: new Date(y, m, 3),
-                        backgroundColor: 'rgb(0, 123, 255)',
-                        borderColor: 'rgb(0, 123, 255)',
-                        allDay: true
-                    },
-                    {
-                        title: 'Sistema de dosificiacion personalizada',
-                        start: new Date(y, m, 10),
-                        backgroundColor: 'rgb(0, 123, 255)',
-                        borderColor: 'rgb(0, 123, 255)',
-                        allDay: true
-                    },
-                    {
-                        title: 'Sistema de dosificiacion personalizada',
-                        start: new Date(y, m, 17),
-                        backgroundColor: 'rgb(0, 123, 255)',
-                        borderColor: 'rgb(0, 123, 255)',
-                        color: '#3B3B3B',
-                        allDay: true
-                    },
-                    {
-                        title: 'Revisión de facturas',
-                        start: new Date(y, m, 14),
-                        backgroundColor: 'rgb(23, 162, 184)',
-                        borderColor: 'rgb(23, 162, 184)',
-                        allDay: true
-                    },
-                    // {
-                    //     title: 'Click for Google',
-                    //     start: new Date(y, m, 28),
-                    //     end: new Date(y, m, 29),
-                    //     // url: 'https://www.google.com/',
-                    //     backgroundColor: '#3c8dbc', //Primary (light-blue)
-                    //     borderColor: '#3c8dbc' //Primary (light-blue)
-                    // }
-                ],
-                editable: true,
-                droppable: true, // this allows things to be dropped onto the calendar !!!
-                drop: function(info) {
-
-                }
-            });
-            calendar.render();
-
-            /* ADDING EVENTS */
-            var currColor = 'rgb(0, 123, 255)'
-            // Color chooser button
-            $('#color-chooser > li > a').click(function(e) {
-                e.preventDefault()
-                // Save color
-                currColor = $(this).css('color')
-
-                // Add color effect to button
-                $('#add-new-event').css({
-                    'background-color': currColor,
-                    'border-color': currColor
-                })
-            })
-            $('#add-new-event').click(function(e) {
-                e.preventDefault()
-                // Get value and make sure it is not null
-                var val = $('#new-event').val()
-                if (val.length == 0) {
-                    return
-                }
-
-                // Create events
-                var event = $('<div />')
+            // Create events
+            var event = $('<div />')
+            event.css({
+                'background-color': currColor,
+                'border-color': currColor,
+                'color': '#fff'
+            }).addClass('external-event')
+            event.text(val)
+            //azul - medicamentos
+            if (event[0].attributes[1].nodeValue ==
+                "background-color: rgb(0, 123, 255); border-color: rgb(0, 123, 255); color: rgb(255, 255, 255);"
+            ) {
+                $('#new-medicamentos').prepend(event)
+            }
+            //amarillo - articulos
+            else if (event[0].attributes[1].nodeValue ==
+                "background-color: rgb(255, 193, 7); border-color: rgb(255, 193, 7); color: rgb(255, 255, 255);"
+            ) {
                 event.css({
-                    'background-color': currColor,
-                    'border-color': currColor,
-                    'color': '#fff'
-                }).addClass('external-event')
-                event.text(val)
-                //azul - medicamentos
-                if (event[0].attributes[1].nodeValue ==
-                    "background-color: rgb(0, 123, 255); border-color: rgb(0, 123, 255); color: rgb(255, 255, 255);"
-                ) {
-                    $('#new-medicamentos').prepend(event)
-                }
-                //amarillo - articulos
-                else if (event[0].attributes[1].nodeValue ==
-                    "background-color: rgb(255, 193, 7); border-color: rgb(255, 193, 7); color: rgb(255, 255, 255);"
-                ) {
-                    event.css({
-                        'color': '#3B3B3B',
-                    })
-                    $('#new-articulos').prepend(event)
-                }
-                //verde - pedidos
-                else if (event[0].attributes[1].nodeValue ==
-                    "background-color: rgb(40, 167, 69); border-color: rgb(40, 167, 69); color: rgb(255, 255, 255);"
-                ) {
-                    $('#new-pedidos').prepend(event)
-                }
-                //info - facturas
-                else if (event[0].attributes[1].nodeValue ==
-                    "background-color: rgb(23, 162, 184); border-color: rgb(23, 162, 184); color: rgb(255, 255, 255);"
-                ) {
-                    $('#new-facturas').prepend(event)
-                } else {
-                    $('#new-medicamentos').prepend(event)
-                }
+                    'color': '#3B3B3B',
+                })
+                $('#new-articulos').prepend(event)
+            }
+            //verde - pedidos
+            else if (event[0].attributes[1].nodeValue ==
+                "background-color: rgb(40, 167, 69); border-color: rgb(40, 167, 69); color: rgb(255, 255, 255);"
+            ) {
+                $('#new-pedidos').prepend(event)
+            }
+            //info - facturas
+            else if (event[0].attributes[1].nodeValue ==
+                "background-color: rgb(23, 162, 184); border-color: rgb(23, 162, 184); color: rgb(255, 255, 255);"
+            ) {
+                $('#new-facturas').prepend(event)
+            } else {
+                $('#new-medicamentos').prepend(event)
+            }
 
-                console.log(event[0].attributes[1].nodeValue);
+            console.log(event[0].attributes[1].nodeValue);
 
-                // Add draggable funtionality
-                ini_events(event)
+            // Add draggable funtionality
+            ini_events(event)
 
-                // Remove event from text input
-                $('#new-event').val('')
-            })
+            // Remove event from text input
+            $('#new-event').val('')
         })
     </script>
     <style>
@@ -573,4 +583,63 @@
             font-weight: bold;
         }
     </style>
+    <script>
+        $(document).on('click', '.borrar', function(event) {
+            event.preventDefault();
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            // Obtener el índice del elemento que se debe eliminar
+            const index = $(this).closest('tr').data('index');
+
+            // Eliminar el elemento del array
+            carrito.splice(index, 1);
+
+            // Eliminar el elemento del DOM
+            $(this).closest('tr').remove();
+
+            // Guardar el carrito actualizado en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            console.log(carrito);
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+            return false; // Evitar cualquier acción adicional
+        });
+
+
+        //vaciar carrito
+        $('#vaciarCarrito').click(function() {
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            $('#cestaProductos tr:not(:first)').remove();
+            carrito = [];
+            localStorage.removeItem('carrito');
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+        });
+
+
+        //añadir
+        // Declarar variable global para el carrito
+        let carrito = [];
+
+        $(document).ready(function() {
+            // Cargar el carrito desde el almacenamiento local
+            if (localStorage.getItem("carrito")) {
+                carrito = JSON.parse(localStorage.getItem("carrito"));
+
+                $('#contador').empty()
+                $('#contador').append(carrito.length)
+
+                for (let i = 0; i < carrito.length; i++) {
+                    const producto = carrito[i];
+                    console.log(producto);
+                    const index = i;
+                    $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre +
+                        "</td><td>" + producto.concentracion + "</td><td>" +
+                        producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
+                        .precio +
+                        "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
+                    );
+                }
+            }
+        });
+    </script>
 </body>

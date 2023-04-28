@@ -9,9 +9,9 @@ if (isset($_POST['funcion']) && isset($_POST['consulta'])) {
     $consulta = $_POST['consulta'];
     
     if ($consulta == "todos") { // Si la consulta es "todos", selecciona todos los clientes
-        $query = "SELECT * FROM usuario WHERE deleted_at IS NOT NULL";
+        $query = "SELECT * FROM usuario WHERE deleted_at IS NOT NULL ORDER BY nombre";
     } else { // Si no, busca por nombres de usuario que contengan la consulta
-        $query = "SELECT * FROM usuario WHERE nombre LIKE '%".$consulta."%' AND deleted_at IS NOT NULL";
+        $query = "SELECT * FROM usuario WHERE nombre LIKE '%".$consulta."%' AND deleted_at IS NOT NULL ORDER BY nombre";
     }
     
     $result = mysqli_query($conexion, $query);
