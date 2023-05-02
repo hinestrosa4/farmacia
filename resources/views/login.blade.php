@@ -26,14 +26,14 @@
                             </div>
                             <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
                                 <img src="https://tecnyfarma.com/wp-content/uploads/2022/03/018_200122_30_0085-HDR-Editar-scaled-1-1.jpg"
-                                    style="width: 800px" class="image">
+                                    style="width: 800px; height:400px" class="image">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card2 card border-0 px-4 py-5">
-                            <div class="row mb-4 px-3">
-                                <img src="{{ asset('img/bannerlogin.png') }}" alt="">
+                            <div class="row mb-4 px-3 justify-content-center">
+                                <img src="{{ asset('img/bannerlogin.png') }}" style="width:500px" alt="">
                             </div>
                             <div class="row px-3 mb-4">
                                 <div class="line"></div>

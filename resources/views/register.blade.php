@@ -20,9 +20,9 @@
                 <div class="row d-flex">
                     <div class="col-lg-6">
                         <div class="card1 pb-5">
-                            <div class="row">
+                            <div class="row justify-content-center">
                                 <img src="{{ asset('img/bannerlogin.png') }}" alt=""
-                                    style="margin-left:52px;margin-top:30px; width: 80%;">
+                                    style="margin-top:30px; width: 400px;">
                             </div>
                             <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
                                 <img src="{{ asset('img/asideRegister.png') }}" style="height: 500px; width:500px; margin-top:50px" class="image">
