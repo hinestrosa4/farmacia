@@ -50,8 +50,6 @@ class LoteController extends Controller
 
     public function update($id)
     {
-        $proveedores = Proveedor::all();
-        $productos = Producto::all();
         $lote = Lote::find($id);
         $datos = request()->validate([
             'stock' => 'required',
@@ -61,7 +59,7 @@ class LoteController extends Controller
         ]);
         // dd($datos);
         $lote->update($datos);
-        session()->flash('message', 'El producto ha sido modificado correctamente');
+        session()->flash('message', 'El lote ha sido modificado correctamente');
         return redirect()->route('editarLote', $id);
     }
 

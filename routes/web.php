@@ -38,10 +38,10 @@ Route::post('formRegister', [RegisterController::class, 'store']);
 
 Route::middleware(['auth'])->group(function () {
 
-    //Calendario
+    /*------ Calendario ------*/
     Route::get('/calendario', CalendarioController::class)->name('calendario');
 
-    //Producto
+    /*------ Producto ------*/
     Route::get('/listaProductos', [ProductoController::class, 'listar'])->name('listaProductos');
     Route::get('/listaProductosBaja', [ProductoController::class, 'listarBaja'])->name('listaProductosBaja');
     Route::delete('/borrarProducto/{producto}', [ProductoController::class, 'borrarProducto'])->name('borrarProducto');
@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('detallesProductoUpdate/{id}', [ProductoController::class, 'update'])->name('detallesProductoUpdate');
     Route::delete('/altaProducto/{producto}', [ProductoController::class, 'altaProducto'])->name('altaProducto');
 
-    //Lotes
+    /*------ Lotes ------*/
     Route::get('/listaLotes', LoteController::class)->name('listaLotes');
     Route::delete('/borrarLote/{lote}', [LoteController::class, 'borrarLote'])->name('borrarLote');
     Route::post('createLote', [LoteController::class, 'store'])->name('createLote');
@@ -60,7 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/gestionLotesEliminados', [LoteController::class, 'gestionLotesEliminados'])->name('gestionLotesEliminados');
     Route::delete('/altaLote/{lote}', [LoteController::class, 'altaLote'])->name('altaLote');
 
-    //Proveedor
+    /*------ Proveedor ------*/
     Route::get('/listaProveedores', ProveedorController::class)->name('listaProveedores');
     Route::get('/perfilProveedor/{id}', [ProveedorController::class, 'perfilProveedor'])->name('perfilProveedor');
     Route::delete('/borrarProveedor/{proveedor}', [ProveedorController::class, 'borrarProveedor'])->name('borrarProveedor');
@@ -69,31 +69,19 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/altaProveedor/{proveedor}', [ProveedorController::class, 'altaProveedor'])->name('altaProveedor');
     Route::put('editarProveedor/{id}', [ProveedorController::class, 'update'])->name('editarProveedor');
 
-    //Usuario
+    /*------ Usuario ------*/
     Route::get('/datosPersonales/{id}', UsuarioController::class)->name('datosPersonales');
     Route::post('createUser', [UsuarioController::class, 'store'])->name('createUser');
     Route::put('datosPersonalesUpdate/{id}', [UsuarioController::class, 'update'])->name('datosPersonalesUpdate');
     Route::put('updatePassword/{id}', [UsuarioController::class, 'updatePassword'])->name('updatePassword');
-
-    //Listado de usuarios
     Route::get('/gestionUsuario', [UsuarioController::class, 'gestionUsuarioView'])->name('gestionUsuario');
-
-    //listado de usuarios borrados
     Route::get('/gestionUsuarioBaja', [UsuarioController::class, 'gestionUsuarioBaja'])->name('gestionUsuarioBaja');
-
-    //alta usuario
     Route::delete('/altaUsuario/{usuario}', [UsuarioController::class, 'altaUsuario'])->name('altaUsuario');
-
-    //borrar usuario
     Route::delete('/borrarUsuario/{usuario}', [UsuarioController::class, 'borrarUsuario'])->name('borrarUsuario');
-
-    //ascender
     Route::put('ascenderUsuario/{usuario_id}', [UsuarioController::class, 'ascenderUsuario'])->name('ascenderUsuario');
-
-    //descender
     Route::put('descenderUsuario/{usuario_id_des}', [UsuarioController::class, 'descenderUsuario'])->name('descenderUsuario');
 
-    //Atributos
+    /*------ Atributos ------*/
     Route::get('/gestionAtributos', AtributoController::class)->name('gestionAtributos');
 
     //Laboratorio
@@ -111,7 +99,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/borrarPre/{presentacion}', [AtributoController::class, 'borrarPre'])->name('borrarPre');
     Route::post('editPre/{presentacion}', [AtributoController::class, 'updatePre'])->name('editPre');
 
-    //configuracion
+    /*------ Configuracion ------*/
     Route::get('/configuracion', ConfiguracionController::class)->name('configuracion');
     Route::get('/listarImagenes', [ConfiguracionController::class, 'listarImagenes'])->name('listarImagenes');
 

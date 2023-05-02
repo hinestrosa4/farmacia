@@ -26,16 +26,17 @@
                 </li>
             </ul>
 
-              <!-- Right navbar links -->
-              <ul class="navbar-nav ml-auto">
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <div class="dropdown">
                         <div class="image mr-4" data-toggle="dropdown">
                             <img src="{{ asset('img/carrito.png') }}" class="img" alt="{{ Auth::user()->nombre }}"
                                 width="40px">
-                                <span id="contador" class="position-absolute top-0 start-55 translate-middle badge rounded-pill bg-danger">
-                                    0
-                                  </span>
+                            <span id="contador"
+                                class="position-absolute top-0 start-55 translate-middle badge rounded-pill bg-danger">
+                                0
+                            </span>
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">
                             <h4 class="text-center">Carrito de la compra</h4>
@@ -53,7 +54,8 @@
                                 </table>
                                 <button class="btn btn-danger" style="width: 100%" id="vaciarCarrito">Vaciar
                                     carrito</button>
-                                    <button class="btn btn-primary" style="width: 100%" id="tramitarCompra">Tramitar compra</button>
+                                <button class="btn btn-primary" style="width: 100%" id="tramitarCompra">Tramitar
+                                    compra</button>
                             </div>
                         </div>
                     </div>
@@ -237,22 +239,31 @@
                                         <!-- the events -->
                                         <div id="external-events">
                                             <h5 id="pedidos">Pedidos</h5>
-                                            <div class="external-event bg-success">Recepción de pedidos</div>
-                                            <div class="external-event bg-success">Devolución de pedidos</div>
+                                            <div name="p" class="external-event bg-success">Recepción de pedidos
+                                            </div>
+                                            <div name="p" class="external-event bg-success">Devolución de
+                                                pedidos</div>
                                             <div id="new-pedidos"></div>
                                             <h5 id="articulos">Artículos</h5>
-                                            <div class="external-event bg-warning">Consulta rápida de artículos</div>
-                                            <div class="external-event bg-warning">Repaso de stock</div>
-                                            <div class="external-event bg-warning">Control de caducidades</div>
-                                            <div class="external-event bg-warning">Control de recetas</div>
+                                            <div name="a" class="external-event bg-warning">Consulta rápida de
+                                                artículos</div>
+                                            <div name="a" class="external-event bg-warning">Repaso de stock
+                                            </div>
+                                            <div name="a" class="external-event bg-warning">Control de
+                                                caducidades</div>
+                                            <div name="a" class="external-event bg-warning">Control de recetas
+                                            </div>
                                             <div id="new-articulos"></div>
                                             <h5 id="medicamentos">Medicamentos personalizados</h5>
-                                            <div class="external-event bg-primary">Sistema de dosificación
+                                            <div name="m" class="external-event bg-primary">Sistema de
+                                                dosificación
                                                 personalizada (SPD)</div>
-                                            <div class="external-event bg-primary">Formulas magistrales</div>
+                                            <div name="m" class="external-event bg-primary">Formulas magistrales
+                                            </div>
                                             <div id="new-medicamentos"></div>
                                             <h5 id="facturas">Facturas</h5>
-                                            <div class="external-event bg-info">Revisión de facturas</div>
+                                            <div name="f" class="external-event bg-info">Revisión de facturas
+                                            </div>
                                             <div id="new-facturas"></div>
                                         </div>
                                     </div>
@@ -324,19 +335,60 @@
     <!-- fullCalendar 2.2.5 -->
     <script src={{ asset('templates/plugins/moment/moment.min.js') }}></script>
     <script src={{ asset('templates/plugins/fullcalendar/main.js') }}></script>
+    <style>
+        .bg-green {
+            background-color: rgb(40, 167, 69);
+            border-color: rgb(40, 167, 69);
+            color: rgb(255, 255, 255);
+        }
+
+        .bg-orange2 {
+            background-color: rgb(255, 193, 7);
+            border-color: rgb(255, 193, 7);
+            color: rgb(77, 77, 77);
+        }
+
+        .bg-blue {
+            background-color: rgb(0, 123, 255);
+            border-color: rgb(0, 123, 255);
+            color: rgb(255, 255, 255);
+        }
+
+        .bg-info {
+            background-color: rgb(23, 162, 184);
+            border-color: rgb(23, 162, 184);
+            color: rgb(255, 255, 255);
+
+        }
+    </style>
     <script>
+        let eventos = [];
         $.ajax({
             url: 'calendario.php',
             method: 'POST',
             dataType: 'json',
-            data: {},
+            data: {
+                // Puedes agregar datos que se enviarán al servidor aquí, en caso de ser necesarios
+            },
             success: function(respuesta) {
-                console.log(respuesta);
+                // Utiliza un bucle para recorrer los elementos de la respuesta
+                respuesta.forEach(function(evento) {
+                    eventos.push({
+                        id: evento.id,
+                        title: evento.title,
+                        start: evento.start,
+                        end: evento.end,
+                        className: evento.className,
+                        description: evento.description,
+                    })
+                });
+                showCalendar();
             },
             error: function(error) {
                 console.log('error: ' + error);
             }
         });
+
         /* initialize the external events
          -----------------------------------------------------------------*/
         function ini_events(ele) {
@@ -395,116 +447,75 @@
             }
         });
 
-        var calendar = new Calendar(calendarEl, {
-            headerToolbar: {
-                left: 'prev,next',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            locale: 'es',
-            firstDay: 1,
-            timeZone: 'local',
-            nowIndicator: true,
-            views: {
-                dayGridMonth: {
-                    buttonText: 'Mes'
-                },
-                timeGridWeek: {
-                    buttonText: 'Semana'
-                },
-                timeGridDay: {
-                    buttonText: 'Día'
-                },
-            },
-            themeSystem: 'bootstrap',
-            //Random default events
-            events: [{
-                    title: 'Recepción de pedidos',
-                    start: new Date(y, m, 6),
-                    backgroundColor: 'rgb(40, 167, 69)',
-                    borderColor: 'rgb(40, 167, 69)',
-                    allDay: true
-                },
-                {
-                    title: 'Devolución de pedidos',
-                    start: new Date(y, m, 9),
-                    backgroundColor: 'rgb(40, 167, 69)',
-                    color: 'black',
-                    borderColor: 'rgb(40, 167, 69)',
-                    allDay: true
-                },
-                {
-                    title: 'Consulta rápida de articulos',
-                    start: new Date(y, m, 4),
-                    backgroundColor: 'rgb(255, 193, 7)',
-                    borderColor: 'rgb(255, 193, 7)',
-                    color: '#3B3B3B',
-                    allDay: true,
-                    textColor: 'black'
-                },
-                {
-                    title: 'Repaso de sotck',
-                    start: new Date(y, m, 11),
-                    backgroundColor: 'rgb(255, 193, 7)',
-                    borderColor: 'rgb(255, 193, 7)',
-                    color: '#3B3B3B',
-                    allDay: true,
-                    textColor: 'black'
-                },
-                {
-                    title: 'Control de recetas',
-                    start: new Date(y, m, 13),
-                    backgroundColor: 'rgb(255, 193, 7)',
-                    borderColor: 'rgb(255, 193, 7)',
-                    allDay: true,
-                    textColor: 'black'
-                },
-                {
-                    title: 'Sistema de dosificiacion personalizada',
-                    start: new Date(y, m, 3),
-                    backgroundColor: 'rgb(0, 123, 255)',
-                    borderColor: 'rgb(0, 123, 255)',
-                    allDay: true
-                },
-                {
-                    title: 'Sistema de dosificiacion personalizada',
-                    start: new Date(y, m, 10),
-                    backgroundColor: 'rgb(0, 123, 255)',
-                    borderColor: 'rgb(0, 123, 255)',
-                    allDay: true
-                },
-                {
-                    title: 'Sistema de dosificiacion personalizada',
-                    start: new Date(y, m, 17),
-                    backgroundColor: 'rgb(0, 123, 255)',
-                    borderColor: 'rgb(0, 123, 255)',
-                    color: '#3B3B3B',
-                    allDay: true
-                },
-                {
-                    title: 'Revisión de facturas',
-                    start: new Date(y, m, 14),
-                    backgroundColor: 'rgb(23, 162, 184)',
-                    borderColor: 'rgb(23, 162, 184)',
-                    allDay: true
-                },
-                // {
-                //     title: 'Click for Google',
-                //     start: new Date(y, m, 28),
-                //     end: new Date(y, m, 29),
-                //     // url: 'https://www.google.com/',
-                //     backgroundColor: '#3c8dbc', //Primary (light-blue)
-                //     borderColor: '#3c8dbc' //Primary (light-blue)
-                // }
-            ],
-            editable: true,
-            droppable: true, // this allows things to be dropped onto the calendar !!!
-            drop: function(info) {
 
-            }
-        });
-        calendar.render();
+        console.log(eventos);
 
+        function showCalendar() {
+            var calendar = new Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                locale: 'es',
+                firstDay: 1,
+                timeZone: 'local',
+                nowIndicator: true,
+                views: {
+                    dayGridMonth: {
+                        buttonText: 'Mes'
+                    },
+                    timeGridWeek: {
+                        buttonText: 'Semana'
+                    },
+                    timeGridDay: {
+                        buttonText: 'Día'
+                    },
+                },
+                themeSystem: 'bootstrap',
+                //Random default events
+                events: eventos,
+                editable: true,
+                droppable: true, // this allows things to be dropped onto the calendar !!!
+                drop: function(info) {
+                    var fecha = moment(info.date).format('YYYY-MM-DD');
+                    var dia = info.date.toLocaleDateString('es-ES', {
+                        weekday: 'long'
+                    });
+
+                    let nombre = info.draggedEl.getAttribute('name')
+                    let className = ""
+                    if (nombre == "p")
+                        className = "bg-green"
+                    else if (nombre == "a")
+                        className = "bg-orange2"
+                    else if (nombre == "m")
+                        className = "bg-blue"
+                    else if (nombre == "f")
+                        className = "bg-info"
+
+                    // console.log(info);
+
+                    $.ajax({
+                        url: 'addEvent.php',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {
+                            title: info.draggedEl.innerText,
+                            className: className,
+                            start: fecha,
+                            end: fecha
+                        },
+                        success: function(respuesta) {},
+
+                    });
+                }
+            });
+
+            calendar.render();
+        }
+
+        showCalendar()
         /* ADDING EVENTS */
         var currColor = 'rgb(0, 123, 255)'
         // Color chooser button
@@ -539,6 +550,7 @@
             if (event[0].attributes[1].nodeValue ==
                 "background-color: rgb(0, 123, 255); border-color: rgb(0, 123, 255); color: rgb(255, 255, 255);"
             ) {
+                $(event).attr('name', 'm');
                 $('#new-medicamentos').prepend(event)
             }
             //amarillo - articulos
@@ -548,20 +560,24 @@
                 event.css({
                     'color': '#3B3B3B',
                 })
+                $(event).attr('name', 'a');
                 $('#new-articulos').prepend(event)
             }
             //verde - pedidos
             else if (event[0].attributes[1].nodeValue ==
                 "background-color: rgb(40, 167, 69); border-color: rgb(40, 167, 69); color: rgb(255, 255, 255);"
             ) {
+                $(event).attr('name', 'p');
                 $('#new-pedidos').prepend(event)
             }
             //info - facturas
             else if (event[0].attributes[1].nodeValue ==
                 "background-color: rgb(23, 162, 184); border-color: rgb(23, 162, 184); color: rgb(255, 255, 255);"
             ) {
+                $(event).attr('name', 'f');
                 $('#new-facturas').prepend(event)
             } else {
+                $(event).attr('name', 'm');
                 $('#new-medicamentos').prepend(event)
             }
 

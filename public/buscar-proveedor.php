@@ -13,7 +13,7 @@ if (isset($_POST['funcion']) && isset($_POST['consulta'])) {
     } else { // Si no, busca por nombres de usuario que contengan la consulta
         $query = "SELECT * FROM proveedor WHERE nombre LIKE '%".$consulta."%' AND deleted_at IS NULL";
     }
-    
+        
     $result = mysqli_query($conexion, $query);
     
     // Mostrar los resultados en formato JSON

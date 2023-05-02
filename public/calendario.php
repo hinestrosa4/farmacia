@@ -1,24 +1,32 @@
 <?php
 // Conectar a la base de datos
-$conexion = mysqli_connect("localhost", "root", "", "farmacia");
-// $conexion = mysqli_connect("localhost", "rafaelhinestrosa", "Yv4*1z6c", "rafaelhinestrosa");
+$host = 'localhost';
+$dbname = 'farmacia';
+$user = 'root';
+$password = '';
 
-// Verificar si la solicitud POST está configurada correctamente
-    
-        $query = "SELECT * FROM calendario";
+try {
+    $conexion = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
+    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Error al conectar a la base de datos: " . $e->getMessage();
+    die();
+}
 
-    $result = mysqli_query($conexion, $query);
-    
-    // Mostrar los resultados en formato JSON
-    if ($result) {
-        $filas = array();
-        while ($fila = mysqli_fetch_array($result)) {
-            $filas[] = $fila;
-        }
-        echo json_encode($filas);
-    } else {
-        echo json_encode(array("error" => "No se encontraron resultados"));
+// Consulta a la base de datos
+$query = "SELECT * FROM calendario";
+$resultado = $conexion->query($query);
+
+// Mostrar los resultados en formato JSON
+if ($resultado) {
+    $filas = array();
+    while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
+        $filas[] = $fila;
     }
-    
-    // Cerrar la conexión a la base de datos
-    mysqli_close($conexion);
+    echo json_encode($filas);
+} else {
+    echo json_encode(array("error" => "No se encontraron resultados"));
+}
+
+// Cerrar la conexión a la base de datos
+$conexion = null;
