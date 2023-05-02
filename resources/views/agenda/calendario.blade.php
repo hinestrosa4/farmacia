@@ -322,6 +322,28 @@
             <!-- /.content -->
         </div>
     </div>
+    <!-- Modal para confirmar eliminación de evento -->
+    <div class="modal fade" id="confirmarEliminacion" tabindex="-1" role="dialog"
+        aria-labelledby="confirmarEliminacionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmarEliminacionLabel">Confirmar eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este evento?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnEliminarEvento">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ./wrapper -->
 
     <!-- jQuery -->
@@ -457,6 +479,37 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
+                eventClick: function(info) {
+                    // Mostrar modal para confirmar eliminación del evento
+                    $('#confirmarEliminacion').modal('show');
+
+                    // Al hacer click en el botón de eliminar del modal, enviar solicitud AJAX para borrar el evento
+                    $('#btnEliminarEvento').click(function() {
+                        var eventId = info.event.id;
+
+                        $.ajax({
+                            url: 'deleteEvent.php',
+                            method: 'POST',
+                            dataType: 'json',
+                            data: {
+                                id: eventId
+                            },
+                            success: function(respuesta) {
+                                // Cerrar modal de confirmación
+                                $('#confirmarEliminacion').modal('hide');
+
+                                // Quitar evento del calendario
+                                info.event.remove();
+
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error("Error al eliminar el evento: " + textStatus +
+                                    " - " + errorThrown);
+                            }
+                        });
+                    });
+                },
+
                 locale: 'es',
                 firstDay: 1,
                 timeZone: 'local',
@@ -492,8 +545,7 @@
                             start: newStart,
                             end: newEnd
                         },
-                        success: function(respuesta) {
-                        },
+                        success: function(respuesta) {},
                         error: function(jqXHR, textStatus, errorThrown) {
                             console.error("Error al actualizar el evento: " + textStatus + " - " +
                                 errorThrown);
@@ -501,8 +553,6 @@
                     });
                 },
                 timeZone: 'Europe/Madrid',
-
-
                 //Random default events
                 events: eventos,
                 editable: true,
@@ -539,7 +589,7 @@
                         success: function(respuesta) {},
 
                     });
-                }
+                },
             });
 
             calendar.render();
