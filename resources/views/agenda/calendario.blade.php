@@ -473,6 +473,36 @@
                     },
                 },
                 themeSystem: 'bootstrap',
+                eventDrop: function(info) {
+                    // Obtener el ID y la nueva fecha del evento
+                    var eventId = info.event.id;
+                    var newStart = info.event.start.toISOString().substring(0, 10);
+                    var newEnd = null;
+                    if (info.event.end !== null) {
+                        newEnd = info.event.end.toISOString().substring(0, 10);
+                    }
+
+                    // Enviar una solicitud AJAX para actualizar el evento en la base de datos
+                    $.ajax({
+                        url: 'updateEvent.php',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {
+                            id: eventId,
+                            start: newStart,
+                            end: newEnd
+                        },
+                        success: function(respuesta) {
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error("Error al actualizar el evento: " + textStatus + " - " +
+                                errorThrown);
+                        }
+                    });
+                },
+                timeZone: 'Europe/Madrid',
+
+
                 //Random default events
                 events: eventos,
                 editable: true,
