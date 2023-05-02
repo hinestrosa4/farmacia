@@ -1,6 +1,7 @@
 <?php
 // Conectar a la base de datos
 $conexion = mysqli_connect("localhost", "root", "", "farmacia");
+// $conexion = mysqli_connect("localhost", "rafaelhinestrosa", "Yv4*1z6c", "rafaelhinestrosa");
 
 // Obtener los datos enviados por AJAX
 $id = $_POST["id"];

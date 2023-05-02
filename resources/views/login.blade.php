@@ -33,20 +33,10 @@
                     <div class="col-lg-6">
                         <div class="card2 card border-0 px-4 py-5">
                             <div class="row mb-4 px-3">
-                                <h6 class="mb-0 mr-4 mt-2">Iniciar sesión con</h6>
-                                <div class="facebook text-center">
-                                    <i class="bi bi-facebook"></i>
-                                </div>
-                                <div class="twitter text-center mr-3">
-                                    <i class="bi bi-twitter"></i>
-                                </div>
-                                <div class="linkedin text-center mr-3">
-                                    <i class="bi bi-linkedin"></i>
-                                </div>
+                                <img src="{{ asset('img/bannerlogin.png') }}" alt="">
                             </div>
                             <div class="row px-3 mb-4">
                                 <div class="line"></div>
-                                <small class="or text-center">O</small>
                                 <div class="line"></div>
                             </div>
                             @if ($errors->any())
@@ -54,6 +44,11 @@
                                     @foreach ($errors->all() as $error)
                                         {{ $error }}
                                     @endforeach
+                                </div>
+                            @endif
+                            @if (session()->has('message'))
+                                <div class="alert alert-success text-center">
+                                    {{ session()->get('message') }}
                                 </div>
                             @endif
                             <div class="row px-3">

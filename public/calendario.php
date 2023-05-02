@@ -5,6 +5,11 @@ $dbname = 'farmacia';
 $user = 'root';
 $password = '';
 
+// $host = 'localhost';
+// $dbname = 'rafaelhinestrosa';
+// $user = 'rafaelhinestrosa';
+// $password = 'Yv4*1z6c';
+
 try {
     $conexion = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
     $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
