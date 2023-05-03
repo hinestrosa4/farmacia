@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Laboratorio;
 use App\Models\Tipo;
 use App\Models\Presentacion;
+use App\Models\Proveedor;
+use App\Models\Lote;
 use App\Models\Producto;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
@@ -21,6 +23,23 @@ class ProductoController extends Controller
     public function __invoke(Request $request)
     {
         //
+    }
+
+    public function addLote($id)
+    {
+        // dd($id);
+        $datos = request()->validate([
+            'stock' => 'required',
+            'vencimiento' => 'required',
+            'lote_id_prod' => '',
+            'lote_id_prov' => '',
+        ]);
+
+        $datos['lote_id_prod'] = $id;
+
+        Lote::create($datos);
+        session()->flash('message', 'El lote se ha creado correctamente');
+        return redirect()->route('listaProductos');
     }
 
     public function store()
@@ -83,9 +102,10 @@ class ProductoController extends Controller
         $laboratorios = Laboratorio::all();
         $tipos = Tipo::all();
         $presentaciones = Presentacion::all();
+        $proveedores = Proveedor::all();
         $productos = Producto::orderBy('id', 'asc')->get();
         $usuario = Usuario::orderBy('id', 'asc')->get();
-        return view('productos.listar', compact('productos', 'usuario', 'laboratorios', 'tipos', 'presentaciones'));
+        return view('productos.listar', compact('productos', 'usuario', 'laboratorios', 'tipos', 'presentaciones', 'proveedores'));
     }
 
     public function altaProducto($id)

@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <form method="POST" action="{{ route('formRegister') }}">
+    <form method="POST" action="{{ route('formRegister') }}" class="needs-validation" novalidate>
         @csrf
         <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
             <div class="card card0 border-0">
@@ -25,7 +25,8 @@
                                     style="margin-top:30px; width: 400px;">
                             </div>
                             <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
-                                <img src="{{ asset('img/asideRegister.png') }}" style="height: 500px; width:500px; margin-top:50px" class="image">
+                                <img src="{{ asset('img/asideRegister.png') }}"
+                                    style="height: 500px; width:500px; margin-top:50px" class="image">
                             </div>
                         </div>
                     </div>
@@ -34,70 +35,70 @@
                             <h1 class="mt-5" style="color:rgb(8, 98, 8)">Registro</h1>
                         </div>
                         <div class="card2 card border-0 px-4 py-5">
-                           
-                            <form id="form" class="row g-3 needs-validation" method="POST"
+                            @if (session()->has('message'))
+                                <div class="alert alert-success">
+                                    {{ session()->get('message') }}
+                                </div>
+                            @endif
+                            @if (session()->has('error'))
+                                <div class="alert alert-danger">
+                                    {{ session()->get('error') }}
+                                </div>
+                            @endif
+                            <form id="form" class="needs-validation" method="POST"
                                 action="{{ route('formRegister') }}">
-                                @csrf
-                                @if (session()->has('message'))
-                                    <div class="alert alert-success">
-                                        {{ session()->get('message') }}
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <label for="validationCustom01" class="form-label">Nombre</label>
+                                        <input type="text" name="nombre" class="form-control" id="nombre"
+                                            value="{{ old('nombre') }}" placeholder="Introduzca su nombre" required>
+                                        {!! $errors->first('nombre', '<span style=color:red>:message</span>') !!}
                                     </div>
-                                @endif
-                                @if (session()->has('error'))
-                                    <div class="alert alert-danger">
-                                        {{ session()->get('error') }}
+                                    <div class="col-md-6">
+                                        <label for="validationCustom02" class="form-label">Apellidos</label>
+                                        <input type="text" name="apellidos" class="form-control" id="apellidos"
+                                            value="{{ old('apellidos') }}" placeholder="Introduzca sus apellidos"
+                                            required>
+                                        {!! $errors->first('apellidos', '<span style=color:red>:message</span>') !!}
                                     </div>
-                                @endif
-
-                                <div class="">
-                                    <label for="validationCustom01" class="form-label">Nombre</label>
-                                    <input type="text" name="nombre" class="form-control" id="nombre"
-                                        value="{{ old('nombre') }}" placeholder="Introduzca su nombre">
-                                    {!! $errors->first('nombre', '<span style=color:red>:message</span>') !!}
                                 </div>
-
-                                <div class="">
-                                    <label for="validationCustom02" class="form-label">Apellidos</label>
-                                    <input type="text" name="apellidos" class="form-control" id="apellidos"
-                                        value="{{ old('apellidos') }}" placeholder="Introduzca sus apellidos">
-                                    {!! $errors->first('apellidos', '<span style=color:red>:message</span>') !!}
-                                </div>
-
-                                <div class="">
-                                    <label for="validationCustom02" class="form-label">Fecha nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" class="form-control"
-                                        id="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}"
-                                        placeholder="Introduzca su fecha de nacimiento">
-                                    {!! $errors->first('fecha_nacimiento', '<span style=color:red>:message</span>') !!}
-                                </div>
-
-                                <div class="">
-                                    <label for="validationCustom01" class="form-label">DNI</label>
-                                    <input type="text" name="dni" class="form-control" id="dni"
-                                        value="{{ old('dni') }}" placeholder="Introduzca su DNI">
-                                    {!! $errors->first('dni', '<span style=color:red>:message</span>') !!}
-                                </div>
-
-                                <div class="">
-                                    <label for="validationCustomUsername" class="form-label">Correo electrónico</label>
-                                    <div class="input-group has-validation">
-                                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                        <input type="text" name="email" class="form-control" id="email"
-                                            value="{{ old('email') }}" placeholder="Correo electrónico"
-                                            aria-describedby="inputGroupPrepend">
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <label for="validationCustom02" class="form-label">Fecha nacimiento</label>
+                                        <input type="date" name="fecha_nacimiento" class="form-control"
+                                            id="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}"
+                                            placeholder="Introduzca su fecha de nacimiento" required>
+                                        {!! $errors->first('fecha_nacimiento', '<span style=color:red>:message</span>') !!}
                                     </div>
-                                    {!! $errors->first('email', '<span style=color:red>:message</span>') !!}
+                                    <div class="col-md-6"> <label for="validationCustom01"
+                                            class="form-label">DNI</label>
+                                        <input type="text" name="dni" class="form-control" id="dni"
+                                            value="{{ old('dni') }}" placeholder="Introduzca su DNI">
+                                        {!! $errors->first('dni', '<span style=color:red>:message</span>') !!}
+                                    </div>
                                 </div>
+                                <div class="row mb-4">
+                                    <div class="col-md-6"> <label for="validationCustomUsername"
+                                            class="form-label">Correo
+                                            electrónico</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                            <input type="text" name="email" class="form-control" id="email"
+                                                value="{{ old('email') }}" placeholder="Correo electrónico"
+                                                aria-describedby="inputGroupPrepend">
+                                        </div>
+                                        {!! $errors->first('email', '<span style=color:red>:message</span>') !!}
+                                    </div>
+                                    <div class="col-md-6"> <label for="validationCustom01"
+                                            class="form-label">Contraseña</label>
+                                        <input type="password" name="password" class="form-control" id="password"
+                                            value="{{ old('password') }}" placeholder="Introduzca su clave">
+                                        {!! $errors->first('password', '<span style=color:red>:message</span>') !!}
+                                    </div>
 
-                                <div class="">
-                                    <label for="validationCustom01" class="form-label">Contraseña</label>
-                                    <input type="password" name="password" class="form-control" id="password"
-                                        value="{{ old('password') }}" placeholder="Introduzca su clave">
-                                    {!! $errors->first('password', '<span style=color:red>:message</span>') !!}
                                 </div>
-
-                                <div class="">
-                                    <label for="validationCustom01" class="form-label">Tipo</label>
+                                <div class="col-md-6"> <label for="validationCustom01"
+                                        class="form-label">Tipo</label>
                                     <select name="tipo" class="form-select">
                                         <option value="2" {{ old('tipo') == 'farmaceutico' ? 'selected' : '' }}>
                                             Farmacéutico</option>
@@ -111,7 +112,7 @@
                                     {!! $errors->first('tipo', '<span style=color:red>:message</span>') !!}
                                 </div>
                             </form>
-                            <br>
+                            <br><br><br>
                             <div class="row mb-3 px-3">
                                 <button class="btn btn-blue text-center" type="submit">Registrarme</button>
                             </div>

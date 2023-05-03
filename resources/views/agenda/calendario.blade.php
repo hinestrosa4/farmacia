@@ -26,8 +26,8 @@
                 </li>
             </ul>
 
-            <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
+             <!-- Right navbar links -->
+             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <div class="dropdown">
                         <div class="image mr-4" data-toggle="dropdown">
@@ -52,10 +52,14 @@
                                         <th>Eliminar</th>
                                     </tr>
                                 </table>
-                                <button class="btn btn-danger" style="width: 100%" id="vaciarCarrito">Vaciar
-                                    carrito</button>
-                                <button class="btn btn-primary" style="width: 100%" id="tramitarCompra">Tramitar
-                                    compra</button>
+                                <div class="row ml-4">
+                                    <button class="btn btn-danger" style="width: 47%" id="vaciarCarrito">
+                                        <img class="mr-2 mb-1" width="32px" src="{{ asset('img/vaciarCarrito.png') }}"> Vaciar
+                                        carrito</button>
+                                    <a href="{{ route('tramitarCompra') }}" class="btn btn-primary ml-2" style="width: 47%" id="tramitarCompra">
+                                        <img class="mr-2 mb-1" width="32px" src="{{ asset('img/tramitarCompra.png') }}"> Tramitar
+                                        compra</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,6 +90,7 @@
                     </div>
                 </li>
             </ul>
+
         </nav>
         <!-- /.navbar -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -128,7 +133,7 @@
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search"
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Buscar"
                             aria-label="Search">
                         <div class="input-group-append">
                             <button class="btn btn-sidebar">
@@ -325,7 +330,7 @@
     <!-- Modal para confirmar eliminación de evento -->
     <div class="modal fade" id="confirmarEliminacion" tabindex="-1" role="dialog"
         aria-labelledby="confirmarEliminacionLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-top my-custom-class" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="confirmarEliminacionLabel">Confirmar eliminación</h5>
@@ -558,11 +563,11 @@
                 editable: true,
                 droppable: true, // this allows things to be dropped onto the calendar !!!
                 drop: function(info) {
+                    //YYYY-MM-DDThh:mm:ssTZD
                     var fecha = moment(info.date).format('YYYY-MM-DD');
                     var dia = info.date.toLocaleDateString('es-ES', {
                         weekday: 'long'
                     });
-
                     let nombre = info.draggedEl.getAttribute('name')
                     let className = ""
                     if (nombre == "p")

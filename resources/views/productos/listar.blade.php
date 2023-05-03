@@ -365,15 +365,16 @@
 
             // verifica si el campo de búsqueda está vacío
             if ($('#buscar').val() == "") {
-                buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
+                buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
             }
 
             $(document).on('keyup', '#buscar', function() {
                 let valor = $(this).val();
-                buscarDatos(valor); // Llama a buscarDatos() con el valor del campo de búsqueda
+                buscarDatosSinFiltro(valor); // Llama a buscarDatos() con el valor del campo de búsqueda
             });
 
-            function buscarDatos(consulta) {
+            //sin filtros
+            function buscarDatosSinFiltro(consulta) {
                 funcion = "buscar";
                 if (!consulta) { // Si no hay consulta, selecciona todos los productos
                     consulta = "todos";
@@ -440,8 +441,12 @@
                                 </a>
                                 <a href="{{ route('detallesProducto', '') }}/${producto.id}" class="btn btn-sm btn-warning mt-1">
                                 <i class="bi bi-pencil-square"></i> Editar
-                            </a>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-success mt-1" data-toggle="modal" data-target="#crearLote" data-id="${producto.id}" onclick="actualizarAccionFormularioLote(this)">
+                                    <i class="bi bi-clipboard2-plus"></i> Crear Lote
+                                </a>
                             @endif
+                            
                             <a href="#" class="btn btn-sm btn-primary mt-1" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
                                 <i class="bi bi-cart-plus-fill"></i> Añadir
                             </a>
@@ -449,6 +454,60 @@
                             </div>
                           </div>
                         </div>
+                        
+                        <!-- Modal para crear un lote -->
+                                <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label" data-backdrop="static"
+                                    data-keyboard="false">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="card card-success">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">
+                                                        Crear lote
+                                                    </h3>
+
+                                                    <button data-dismiss="modal" aria-label="close" class="close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="card-body">
+                                                                <form id="formLote" class="g-3 needs-validation" method="POST" action="{{ route('addLote', '') }}">
+                                                                    @csrf
+                                                                    <h1>Crear lote</h1>
+                                                                    <br>
+                                                                    <div class="">
+                                                                        <label for="validationCustom01" class="form-label">Stock</label>
+                                                                        <input type="number" name="stock" class="form-control" id="stock" required
+                                                                            value="{{ old('stock') }}" placeholder="Introduzca un stock">
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="">
+                                                                        <label for="validationCustom02" class="form-label">Fecha de vencimiento</label>
+                                                                        <input type="date" name="vencimiento" class="form-control" id="vencimiento" required
+                                                                            value="{{ old('vencimiento') }}" placeholder="Introduzca una fecha de vencimiento">
+                                                                    </div>                         
+                                                                    <br>
+                                                                    <div>
+                                                                        <label for="validationCustom01" class="form-label">Proveedor</label>
+                                                                        <select class="form-control" name="lote_id_prov">
+                                                                            @foreach ($proveedores as $proveedor)
+                                                                                <option value={{ $proveedor->id }}
+                                                                                    {{ old('proveedor') == $proveedor->nombre ? 'selected' : '' }}>
+                                                                                    {{ $proveedor->nombre }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="col-12">
+                                                                        <button id="btnSubmit" class="btn btn-success" type="submit">Crear lote</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
                         
                         <!-- Modal de confirmación de eliminación -->
                         <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
@@ -538,6 +597,7 @@
                             valor); // Llama a buscarDatos() con el valor del campo de búsqueda
                     });
 
+                    //filtro precio
                     function buscarDatos(consulta) {
                         funcion = "buscar";
                         if (!consulta) { // Si no hay consulta, selecciona todos los productos
@@ -606,6 +666,9 @@
                                 <a href="{{ route('detallesProducto', '') }}/${producto.id}" class="btn btn-sm btn-warning mt-1">
                                 <i class="bi bi-pencil-square"></i> Editar
                             </a>
+                            <a href="#" class="btn btn-sm btn-success mt-1" data-toggle="modal" data-target="#crearLote" data-id="${producto.id}" onclick="actualizarAccionFormularioLote(this)">
+                                    <i class="bi bi-clipboard2-plus"></i> Crear Lote
+                                </a>
                             @endif
                             <a href="#" class="btn btn-sm btn-primary mt-1" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
                                 <i class="bi bi-cart-plus-fill"></i> Añadir
@@ -614,7 +677,59 @@
                             </div>
                           </div>
                         </div>
-                        
+                                                <!-- Modal para crear un lote -->
+                            <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label" data-backdrop="static"
+                                data-keyboard="false">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="card card-success">
+                                            <div class="card-header">
+                                                <h3 class="card-title">
+                                                    Crear lote
+                                                </h3>
+
+                                                <button data-dismiss="modal" aria-label="close" class="close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="card-body">
+                                                            <form id="formLote" class="g-3 needs-validation" method="POST" action="{{ route('addLote', '') }}">
+                                                                @csrf
+                                                                <h1>Crear lote</h1>
+                                                                <br>
+                                                                <div class="">
+                                                                    <label for="validationCustom01" class="form-label">Stock</label>
+                                                                    <input type="number" name="stock" class="form-control" id="stock" required
+                                                                        value="{{ old('stock') }}" placeholder="Introduzca un stock">
+                                                                </div>
+                                                                <br>
+                                                                <div class="">
+                                                                    <label for="validationCustom02" class="form-label">Fecha de vencimiento</label>
+                                                                    <input type="date" name="vencimiento" class="form-control" id="vencimiento" required
+                                                                        value="{{ old('vencimiento') }}" placeholder="Introduzca una fecha de vencimiento">
+                                                                </div>                         
+                                                                <br>
+                                                                <div>
+                                                                    <label for="validationCustom01" class="form-label">Proveedor</label>
+                                                                    <select class="form-control" name="lote_id_prov">
+                                                                        @foreach ($proveedores as $proveedor)
+                                                                            <option value={{ $proveedor->id }}
+                                                                                {{ old('proveedor') == $proveedor->nombre ? 'selected' : '' }}>
+                                                                                {{ $proveedor->nombre }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <br>
+                                                                <div class="col-12">
+                                                                    <button id="btnSubmit" class="btn btn-success" type="submit">Crear lote</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
                         <!-- Modal de confirmación de eliminación -->
                         <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
                             aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
@@ -692,163 +807,17 @@
 
                     // verifica si el campo de búsqueda está vacío
                     if ($('#buscar').val() == "") {
-                        buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
+                        buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
                     }
 
                     $(document).on('keyup', '#buscar', function() {
                         let valor = $(this).val();
-                        buscarDatos(
+                        buscarDatosSinFiltro(
                             valor); // Llama a buscarDatos() con el valor del campo de búsqueda
                     });
 
-                    function buscarDatos(consulta) {
-                        funcion = "buscar";
-                        if (!consulta) { // Si no hay consulta, selecciona todos los productos
-                            consulta = "todos";
-                        }
-
-                        // $('#mostrarBorrados').change(function() {
-                        $.ajax({
-                                url: 'buscar-productos.php',
-                                type: 'POST',
-                                dataType: 'json',
-                                data: {
-                                    consulta: consulta,
-                                    funcion: funcion,
-                                    filtro: filtro
-                                },
-                            })
-                            .done(function(respuesta) {
-                                if (respuesta.length > 0) {
-                                    // Borra los resultados anteriores
-                                    $('#productos').empty();
-                                    // Agrega los nuevos resultados al cuerpo del card
-                                    // if (!this.checked) {
-
-                                    respuesta.forEach(function(producto, indice) {
-                                        let imagen = producto.imagen == null ?
-                                            "img/productos/sinFoto.png" : producto
-                                            .imagen;
-                                        let presentacionNombre = presentaciones[indice]
-                                        let laboratorioNombre = laboratorios[indice]
-                                        let tipoNombre = tipos[indice]
-
-                                        let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-                          <div class="card bg-light d-flex flex-fill">
-                            <div class="card-header border-bottom-0 mb-4" style="background-color: ${producto.stock < 50 ? '#FF9A9A' : ''} ${producto.stock >= 50 && producto.stock < 100 ? '#FACC59' : ''} ${producto.stock >= 100 ? '#B1FF9A' : ''}">
-                            <i class="bi bi-boxes"></i> ${producto.stock}
-                            </div>
-
-                            <div class="card-body pt-0">
-                              <div class="row">
-                                <div class="col-12">
-                                    <div class="text-center">
-                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
-                                    </div>
-                                  <h2 class=""><b>${producto.nombre}</b></h2>
-                                  <h5>${producto.precio} €</h5>
-                                  <ul class="ml-2 fa-ul">
-                                    <li style="margin-left:-15px"><i class="fas fa-mortar-pestle"></i><strong> Concentración:</strong> ${producto.concentracion}</li>
-                                    <li style="margin-left:-15px"<i class="fas fa-prescription-bottle-alt"></i><strong> Adicional:</strong> ${producto.adicional}</li>
-                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${producto.nombre_lab}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${producto.nombre_tipo}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${producto.nombre_pre}</li>
-                                    </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="card-footer">
-                              <div class="text-right">
-                                <a href="#" class="btn btn-sm btn-info mt-1" data-toggle="modal" data-target="#cambiarImagenModal" id="cambiarImagen" data-id="${producto.imagen}" data-id2="${producto.id}" onclick="mostrarImagen(this)">
-                                <i class="bi bi-card-image"></i> Imagen
-                            </a>
-                            @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                <a href="#" class="btn btn-sm btn-danger mt-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${producto.id}" onclick="actualizarAccionFormulario(this)">
-                                    <i class="bi bi-trash"></i> Eliminar
-                                </a>
-                                <a href="{{ route('detallesProducto', '') }}/${producto.id}" class="btn btn-sm btn-warning mt-1">
-                                <i class="bi bi-pencil-square"></i> Editar
-                            </a>
-                            @endif
-                            <a href="#" class="btn btn-sm btn-primary mt-1" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                                <i class="bi bi-cart-plus-fill"></i> Añadir
-                            </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <!-- Modal de confirmación de eliminación -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas eliminar a este producto?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="{{ route('borrarProducto', '') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                                    </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Modal para cambiar imagen del producto -->
-                        <div class="modal fade" id="cambiarImagenModal" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form action="{{ route('actualizarImagen') }}" method="post" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="producto_id" id="producto_id">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar imagen del producto</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3 text-center">
-                                                <img  src="{{ asset('') }}" class="img-fluid mb-3" style="width:250px" id="imagen_actual">
-                                                <input class="form-control" style="margin-top:20px" type="file" name="imagen" id="imagen_nueva">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        `;
-                                        $('#productos').append(html);
-                                    }); //foreach
-                                    // } //if
-                                    // else {
-                                    //     console.log("borrados")
-                                    // }
-                                } else {
-                                    // Si no se encontraron resultados, muestra un mensaje de error
-                                    $('#productos').html(
-                                        '<p class="text-danger">No se encontraron resultados</p>');
-                                }
-                            })
-                            .fail(function() {
-                                console.log("error");
-                            });
-                        // })// change checkbox
-                    }
+                    //sin filtro
+                    buscarDatosSinFiltro()
                 }
             });
 
@@ -868,6 +837,7 @@
                             valor); // Llama a buscarDatos() con el valor del campo de búsqueda
                     });
 
+                    //filtro stock/estado
                     function buscarDatos(consulta) {
                         funcion = "buscar";
                         if (!consulta) { // Si no hay consulta, selecciona todos los productos
@@ -936,6 +906,9 @@
                                 <a href="{{ route('detallesProducto', '') }}/${producto.id}" class="btn btn-sm btn-warning mt-1">
                                 <i class="bi bi-pencil-square"></i> Editar
                             </a>
+                            <a href="#" class="btn btn-sm btn-success mt-1" data-toggle="modal" data-target="#crearLote" data-id="${producto.id}" onclick="actualizarAccionFormularioLote(this)">
+                                    <i class="bi bi-clipboard2-plus"></i> Crear Lote
+                                </a>
                             @endif
                             <a href="#" class="btn btn-sm btn-primary mt-1" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
                                 <i class="bi bi-cart-plus-fill"></i> Añadir
@@ -944,7 +917,59 @@
                             </div>
                           </div>
                         </div>
-                        
+                                            <!-- Modal para crear un lote -->
+                        <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label" data-backdrop="static"
+                            data-keyboard="false">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="card card-success">
+                                        <div class="card-header">
+                                            <h3 class="card-title">
+                                                Crear lote
+                                            </h3>
+
+                                            <button data-dismiss="modal" aria-label="close" class="close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                  <div class="card-body">
+                                    <form id="formLote" class="g-3 needs-validation" method="POST" action="{{ route('addLote', '') }}">
+                                        @csrf
+                                        <h1>Crear lote</h1>
+                                        <br>
+                                        <div class="">
+                                            <label for="validationCustom01" class="form-label">Stock</label>
+                                            <input type="number" name="stock" class="form-control" id="stock" required
+                                                value="{{ old('stock') }}" placeholder="Introduzca un stock">
+                                        </div>
+                                        <br>
+                                        <div class="">
+                                            <label for="validationCustom02" class="form-label">Fecha de vencimiento</label>
+                                            <input type="date" name="vencimiento" class="form-control" id="vencimiento" required
+                                                value="{{ old('vencimiento') }}" placeholder="Introduzca una fecha de vencimiento">
+                                        </div>                         
+                                        <br>
+                                        <div>
+                                            <label for="validationCustom01" class="form-label">Proveedor</label>
+                                            <select class="form-control" name="lote_id_prov">
+                                                @foreach ($proveedores as $proveedor)
+                                                    <option value={{ $proveedor->id }}
+                                                        {{ old('proveedor') == $proveedor->nombre ? 'selected' : '' }}>
+                                                        {{ $proveedor->nombre }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <br>
+                                        <div class="col-12">
+                                            <button id="btnSubmit" class="btn btn-success" type="submit">Crear lote</button>
+                                        </div>
+                                    </form>
+                                   </div>
+                                 </div>
+                             </div>
+                          </div>
+                        </div>
                         <!-- Modal de confirmación de eliminación -->
                         <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
                             aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
@@ -1022,163 +1047,17 @@
 
                     // verifica si el campo de búsqueda está vacío
                     if ($('#buscar').val() == "") {
-                        buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
+                        buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
                     }
 
                     $(document).on('keyup', '#buscar', function() {
                         let valor = $(this).val();
-                        buscarDatos(
+                        buscarDatosSinFiltro(
                             valor); // Llama a buscarDatos() con el valor del campo de búsqueda
                     });
 
-                    function buscarDatos(consulta) {
-                        funcion = "buscar";
-                        if (!consulta) { // Si no hay consulta, selecciona todos los productos
-                            consulta = "todos";
-                        }
-
-                        // $('#mostrarBorrados').change(function() {
-                        $.ajax({
-                                url: 'buscar-productos.php',
-                                type: 'POST',
-                                dataType: 'json',
-                                data: {
-                                    consulta: consulta,
-                                    funcion: funcion,
-                                    filtro: filtro
-                                },
-                            })
-                            .done(function(respuesta) {
-                                if (respuesta.length > 0) {
-                                    // Borra los resultados anteriores
-                                    $('#productos').empty();
-                                    // Agrega los nuevos resultados al cuerpo del card
-                                    // if (!this.checked) {
-
-                                    respuesta.forEach(function(producto, indice) {
-                                        let imagen = producto.imagen == null ?
-                                            "img/productos/sinFoto.png" : producto
-                                            .imagen;
-                                        let presentacionNombre = presentaciones[indice]
-                                        let laboratorioNombre = laboratorios[indice]
-                                        let tipoNombre = tipos[indice]
-
-                                        let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-                          <div class="card bg-light d-flex flex-fill">
-                            <div class="card-header border-bottom-0 mb-4" style="background-color: ${producto.stock < 50 ? '#FF9A9A' : ''} ${producto.stock >= 50 && producto.stock < 100 ? '#FACC59' : ''} ${producto.stock >= 100 ? '#B1FF9A' : ''}">
-                            <i class="bi bi-boxes"></i> ${producto.stock}
-                            </div>
-
-                            <div class="card-body pt-0">
-                              <div class="row">
-                                <div class="col-12">
-                                    <div class="text-center">
-                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
-                                    </div>
-                                  <h2 class=""><b>${producto.nombre}</b></h2>
-                                  <h5>${producto.precio} €</h5>
-                                  <ul class="ml-2 fa-ul">
-                                    <li style="margin-left:-15px"><i class="fas fa-mortar-pestle"></i><strong> Concentración:</strong> ${producto.concentracion}</li>
-                                    <li style="margin-left:-15px"<i class="fas fa-prescription-bottle-alt"></i><strong> Adicional:</strong> ${producto.adicional}</li>
-                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${producto.nombre_lab}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${producto.nombre_tipo}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${producto.nombre_pre}</li>
-                                    </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="card-footer">
-                              <div class="text-right">
-                                <a href="#" class="btn btn-sm btn-info mt-1" data-toggle="modal" data-target="#cambiarImagenModal" id="cambiarImagen" data-id="${producto.imagen}" data-id2="${producto.id}" onclick="mostrarImagen(this)">
-                                <i class="bi bi-card-image"></i> Imagen
-                            </a>
-                            @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                <a href="#" class="btn btn-sm btn-danger mt-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${producto.id}" onclick="actualizarAccionFormulario(this)">
-                                    <i class="bi bi-trash"></i> Eliminar
-                                </a>
-                                <a href="{{ route('detallesProducto', '') }}/${producto.id}" class="btn btn-sm btn-warning mt-1">
-                                <i class="bi bi-pencil-square"></i> Editar
-                            </a>
-                            @endif
-                            <a href="#" class="btn btn-sm btn-primary mt-1" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                                <i class="bi bi-cart-plus-fill"></i> Añadir
-                            </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <!-- Modal de confirmación de eliminación -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas eliminar a este producto?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="{{ route('borrarProducto', '') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                                    </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Modal para cambiar imagen del producto -->
-                        <div class="modal fade" id="cambiarImagenModal" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form action="{{ route('actualizarImagen') }}" method="post" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="producto_id" id="producto_id">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar imagen del producto</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3 text-center">
-                                                <img  src="{{ asset('') }}" class="img-fluid mb-3" style="width:250px" id="imagen_actual">
-                                                <input class="form-control" style="margin-top:20px" type="file" name="imagen" id="imagen_nueva">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        `;
-                                        $('#productos').append(html);
-                                    }); //foreach
-                                    // } //if
-                                    // else {
-                                    //     console.log("borrados")
-                                    // }
-                                } else {
-                                    // Si no se encontraron resultados, muestra un mensaje de error
-                                    $('#productos').html(
-                                        '<p class="text-danger">No se encontraron resultados</p>');
-                                }
-                            })
-                            .fail(function() {
-                                console.log("error");
-                            });
-                        // })// change checkbox
-                    }
+                    //sin filtro
+                    buscarDatosSinFiltro()
                 }
             });
         });
@@ -1223,7 +1102,7 @@
             // Cargar el carrito desde el almacenamiento local
             if (localStorage.getItem("carrito")) {
                 carrito = JSON.parse(localStorage.getItem("carrito"));
-                
+
                 $('#contador').empty()
                 $('#contador').append(carrito.length)
 
@@ -1247,27 +1126,32 @@
             const JSONproducto = btnAdd.getAttribute("data-info");
             const presentacionNombre = btnAdd.getAttribute("data-id");
             const producto = JSON.parse(JSONproducto);
+            nombres = []
+
+            for(var i = 0;i<carrito.length;i++){
+                nombres.push(carrito[i].nombre)
+            }
 
             // Añadir el producto al carrito
             carrito.push(producto);
             console.log(carrito);
 
-            const index = carrito.length - 1;
+            //contador de productos de la cesta
             $('#contador').empty()
             $('#contador').append(carrito.length)
-
+            
+            const index = carrito.length - 1;
             $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre + "</td><td>" + producto
                 .concentracion + "</td><td>" +
                 producto.adicional + "</td><td>" + presentacionNombre + "</td><td>" + producto.precio +
                 "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
-                );
+            );
 
             $('#vaciarCarrito').click(function() {
                 $('#cestaProductos tr:not(:first)').remove();
                 carrito = [];
                 localStorage.removeItem('carrito');
             });
-
 
             $(document).on('click', '.borrar', function(event) {
                 event.preventDefault();
@@ -1309,5 +1193,17 @@
             // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
             formularioEliminar.action = "{{ route('borrarProducto', '') }}/" + idProducto;
         }
+
+        function actualizarAccionFormularioLote(addLote) {
+            // Obtener el valor del data-id del botón eliminar
+            const idProducto = addLote.getAttribute("data-id");
+
+            // Obtener el elemento form por su id
+            const formLote = document.getElementById("formLote");
+
+            // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
+            formLote.action = "{{ route('addLote', '') }}/" + idProducto;
+        }
     </script>
+
 @endsection

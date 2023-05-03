@@ -28,6 +28,10 @@
         flex-wrap: wrap;
         justify-content: space-between;
     }
+
+    body {
+        overflow-x: hidden;
+    }
 </style>
 
 @section('menu')
@@ -182,8 +186,7 @@
         </section>
     </div>
     <script>
-       
-       $(document).on('click', '.borrar', function(event) {
+        $(document).on('click', '.borrar', function(event) {
             event.preventDefault();
             event.stopPropagation(); // Evitar cierre del menú desplegable
             // Obtener el índice del elemento que se debe eliminar
@@ -223,7 +226,7 @@
             // Cargar el carrito desde el almacenamiento local
             if (localStorage.getItem("carrito")) {
                 carrito = JSON.parse(localStorage.getItem("carrito"));
-                
+
                 $('#contador').empty()
                 $('#contador').append(carrito.length)
 

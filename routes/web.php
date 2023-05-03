@@ -10,6 +10,7 @@ use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\LoteController;
+use App\Http\Controllers\CompraController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,9 @@ Route::middleware(['auth'])->group(function () {
     /*------ Calendario ------*/
     Route::get('/calendario', CalendarioController::class)->name('calendario');
 
+    /*------ Tramitar compra ------*/
+    Route::get('/tramitarCompra', CompraController::class)->name('tramitarCompra');
+
     /*------ Producto ------*/
     Route::get('/listaProductos', [ProductoController::class, 'listar'])->name('listaProductos');
     Route::get('/listaProductosBaja', [ProductoController::class, 'listarBaja'])->name('listaProductosBaja');
@@ -50,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/detallesProducto/{id}', [ProductoController::class, 'detallesProducto'])->name('detallesProducto');
     Route::put('detallesProductoUpdate/{id}', [ProductoController::class, 'update'])->name('detallesProductoUpdate');
     Route::delete('/altaProducto/{producto}', [ProductoController::class, 'altaProducto'])->name('altaProducto');
+    Route::post('addLote/{producto}', [ProductoController::class, 'addLote'])->name('addLote');
 
     /*------ Lotes ------*/
     Route::get('/listaLotes', LoteController::class)->name('listaLotes');
