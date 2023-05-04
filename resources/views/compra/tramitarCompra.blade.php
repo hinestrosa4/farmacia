@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="{{ asset('css/checkModal.css') }}">
 <link rel="stylesheet" href="{{ asset('css/errorModal.css') }}">
 <style>
@@ -31,17 +30,20 @@
     table {
         text-align: center;
     }
+
+    .cantidad {
+        border-radius: 10px;
+    }
 </style>
 
 @section('menu')
-
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
-                <div class="row mb-2 mr-6">
+                <div class="row mr-6">
                     <div class="col-sm-6">
                         <h1>Tramitar compra</h1>
                     </div>
@@ -54,25 +56,44 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
+        <section class="text-center mb-2">
+            <img src="{{ asset('img/logo.png') }}" style="width:80px" alt="">
+        </section>
+        <div class="text-center"
+            style="background-color: rgb(205, 205, 205); border-top:#6aa259 3px solid;border-bottom:#6aa259 3px solid; color:rgb(82, 160, 82)">
+            <span class="mt-5" style="font-size: 28px">Solicitud de compra</span>
+        </div>
+        <section class="ml-4 mr-4 mt-3 mb-4">
+            <div class="row mb-2">
+                <div class="col-md-3 align-self-center">
+                    <label for="cliente" style="color:#4d7342">Cliente</label>
+                </div>
+                <div class="col-md-9">
+                    <input style="width: 80%" type="text" class="form-control" id="cliente"
+                        placeholder="Introduzca el cliente">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 align-self-center">
+                    <label for="vendedor" style="color:#4d7342">Vendedor</label>
+                </div>
+                <div class="col-md-9">
+                    <input readonly style="width: 80%" type="text" class="form-control"
+                        value="{{ Auth::user()->nombre }} {{ Auth::user()->apellidos }}">
+                </div>
+            </div>
+
+        </section>
         <section>
+            <a id="actualizar" style="width: 100%" class="btn btn-warning mt-2">Actualizar productos</a>
             <table id="tablaProductos" class="table">
-                <tr style="background-color: rgba(40, 158, 40, 0.89)">
-                    <th>Nombre</th>
-                    <th>Concentración</th>
-                    <th>Adicional</th>
-                    <th>Presentación</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Eliminar</th>
-                </tr>
+
             </table>
             <style>
                 body {
                     overflow-x: hidden;
                 }
             </style>
-
-
             <!-- Modal Error -->
             <div id="myModal" class="modal fade">
                 <div class="modal-dialog modal-confirm">
@@ -90,7 +111,6 @@
                     </div>
                 </div>
             </div>
-
 
             <!-- Modal Success -->
             <div id="success_tic" class="modal fade" role="dialog">
@@ -113,71 +133,155 @@
                 </div>
             </div>
 
+            {{-- Cards --}}
 
-            <div class="row">
-                <div class="col">
-                    <div class="card text-white bg-primary">
+            <div class="d-flex flex-wrap">
+                {{-- Precio de venta --}}
+                <div class="col-sm-12 col-md-4">
+                    <div class="card">
                         <div class="card-header text-center">
                             <h4>Precio de venta</h4>
                         </div>
                         <div class="card-body">
-                            <span class="card-text">Precio sin IVA: </span><span class="sinIVA"></span><br>
-                            <span class="card-text">IVA: </span><span class="conIVA">21%</span><br>
-                            <span class="card-text">Precio total: </span><span class="total"></span>
+                            <div class="mb-2 p-4" style="background-color:#f8cb46; border-radius:8px">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="{{ asset('img/tag.png') }}" style="width: 50px" alt="">
+                                    </div>
+                                    <div class="col mx-4">
+                                        <span class="card-text">SIN IVA: </span><br>
+                                        <b><span class="sinIVA"></span></b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-2 p-4" style="background-color:#f8cb46; border-radius:8px">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="{{ asset('img/tag.png') }}" style="width: 50px" alt="">
+                                    </div>
+                                    <div class="col mx-4">
+                                        <span class="card-text">IVA: </span><br>
+                                        <b><span class="conIVA">21%</span></b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-2 p-4" style="background-color: rgb(137, 255, 202); border-radius:8px">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="{{ asset('img/tageuro.png') }}" style="width: 50px" alt="">
+                                    </div>
+                                    <div class="col mx-4">
+                                        <span class="card-text">Precio total: </span><br>
+                                        <b><span class="total"></span></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ route('listaProductos') }}" class="btn btn-primary" style="width:100%">Seguir
+                                comprando</a>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card text-white bg-primary">
+                {{-- Descuento --}}
+                <div class="col-sm-12 col-md-4">
+                    <div class="card">
                         <div class="card-header text-center">
                             <h4>Descuento</h4>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">Código de descuento</p>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="descuento"
-                                        placeholder="Introduzca un código">
+                            <div class="p-2 mb-2" style="background-color:rgb(241, 124, 124);border-radius:8px">
+                                <p class="card-text"><b>Código de descuento</b></p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="descuento" placeholder="Código"
+                                            onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <button type="submit" class="btn btn-warning"
+                                            id="descuento-btn">Descuento</button>
+                                    </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <button type="submit" class="btn btn-warning" id="descuento-btn">Descuento</button>
+                            </div>
+                            <div class="mb-2 p-4"
+                                style="background-color:#f8cb46; border-radius:8px;background-color:rgb(165, 249, 154);border-radius:8px;display:none"
+                                id="descuentoOculto">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="{{ asset('img/descuento.png') }}" style="width: 90px" alt="">
+                                    </div>
+                                    <div class="col">
+                                        <img src="{{ asset('img/aplicado.png') }}" style="width: 90px" alt="">
+                                    </div>
                                 </div>
-                            </div><br>
-                            <span class="card-text">Precio total: </span><span class="totalDescuento"></span>
+                            </div>
+                            <div class="mb-2 p-4" style="background-color: rgb(137, 255, 202); border-radius:8px">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="{{ asset('img/tageuro.png') }}" style="width: 50px" alt="">
+                                    </div>
+                                    <div class="col mx-4">
+                                        <span class="card-text">Precio total: </span><br>
+                                        <b> <span class="totalDescuento"></span>
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <script>
-                    // Array de códigos de descuento
-                    var codigosDescuento = ["aa", "descuento2", "descuento3", "descuento4", "descuento5"];
-                    var c = 0
-                    // Capturamos el evento del botón de descuento
-                    $("#descuento-btn").click(function() {
-                        // Obtenemos el valor del input
-                        var codigoIntroducido = $("#descuento").val();
-                        // console.log(codigoIntroducido);
-                        // Verificamos si el código introducido está en el array
-                        if (codigosDescuento.includes(codigoIntroducido) && c == 0) {
-                            // Si está en el array, mostramos el modal de éxito
-                            c++;
-                            $('.totalDescuento').text((parseFloat($('.totalDescuento').text()) - (parseFloat($('.totalDescuento').text()) * 0.05)).toFixed(2) + '€');
-                            $("#success_tic").modal("show");
-                        } else {
-                            // Si no está en el array, mostramos el modal de error
-                            $("#myModal").modal("show");
-                        }
-                    });
-                </script>
-
-                <div class="col">
-                    <div class="card text-white bg-primary">
-                        <div class="card-header">Header</div>
+                {{-- Metodo de pago --}}
+                <div id="metodoPago" class="col-sm-12 col-md-4">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h4>Método de pago</h4>
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title">Primary card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                                the
-                                card's content.</p>
+                            <a href="#" id="metodoPagoEfectivo" class="btn btn-success mb-2" style="width:100%"><i
+                                    class="bi bi-cash"></i> Efectivo</a>
+                            <a href="#" id="metodoPagoPayPal" class="btn btn-primary" style="width:100%"><i
+                                    class="bi bi-paypal"></i> PayPal</a>
+                        </div>
+                    </div>
+                </div>
+                {{-- Efectivo --}}
+                <div id="efectivo" class="col-sm-12 col-md-4">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h4>Efectivo</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-2 p-4" style="background-color: rgb(124, 215, 122); border-radius:8px">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="{{ asset('img/billete.png') }}" style="width: 50px" alt="">
+                                    </div>
+                                    <div class="col mx-4">
+                                        <span class="card-text">Ingreso: </span><br>
+                                        <input min="0" pattern="^[0-9]+" value="0" type="number"
+                                            style="width:100%" class="form-control" id="ingreso"
+                                            placeholder="Ingreso">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-2 p-4" style="background-color: rgb(137, 255, 202); border-radius:8px">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="{{ asset('img/cajaReg.png') }}" style="width: 50px" alt="">
+                                    </div>
+                                    <div class="col mx-4">
+                                        <span class="card-text">Cambio: </span><br>
+                                        <b> <span id="cambio">0€</span>
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button id="imprimirRecibo" class="btn btn-success mb-2" style="width:100%">Realizar
+                                compra</button>
+                            <a href="#" id="cambiarMetodoPago" class="btn btn-primary" style="width:100%">Cambiar
+                                método de pago</a>
                         </div>
                     </div>
                 </div>
@@ -185,6 +289,32 @@
         </section>
     </div>
     <script>
+        // DESCUENTO
+        // Array de códigos de descuento
+        var codigosDescuento = ["FARMALIZE", "VACTOR", "PRIME", "HSN", "AA"];
+        var c = 0
+        // Capturamos el evento del botón de descuento
+        $("#descuento-btn").click(function() {
+            // Obtenemos el valor del input
+            var codigoIntroducido = $("#descuento").val();
+            // console.log(codigoIntroducido);
+            // Verificamos si el código introducido está en el array
+            if (codigosDescuento.includes(codigoIntroducido) && c == 0) {
+                // Si está en el array, mostramos el modal de éxito
+                c++;
+                $('.totalDescuento').text((parseFloat($('.totalDescuento').text()) - (parseFloat($(
+                    '.totalDescuento').text()) * 0.1)).toFixed(2) + '€');
+                $('#descuentoOculto').show('slow')
+                $("#success_tic").modal("show");
+                $('#ingreso').val('');
+                $('#cambio').text('0€');
+            } else {
+                // Si no está en el array, mostramos el modal de error
+                $("#myModal").modal("show");
+            }
+        });
+
+        // BORRAR
         $(document).on('click', '.borrar', function(event) {
             event.preventDefault();
             event.stopPropagation(); // Evitar cierre del menú desplegable
@@ -202,6 +332,7 @@
             console.log(carrito);
             $('#contador').empty()
             $('#contador').append(carrito.length)
+            if (localStorage.getItem("carrito")) {}
             return false; // Evitar cualquier acción adicional
         });
 
@@ -214,73 +345,154 @@
             localStorage.removeItem('carrito');
             $('#contador').empty()
             $('#contador').append(carrito.length)
+            // actualizar()
         });
 
-
-        //añadir
-        // Declarar variable global para el carrito
         let carrito = [];
-
         $(document).ready(function() {
-            // Cargar el carrito desde el almacenamiento local
-            if (localStorage.getItem("carrito")) {
-                carrito = JSON.parse(localStorage.getItem("carrito"));
+            //CARGAR CARRITO
+            for (let i = 0; i < carrito.length; i++) {
+                const producto = carrito[i];
+                // console.log(producto);
+                const index = i;
+                $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre +
+                    "</td><td>" + producto.concentracion + "</td><td>" +
+                    producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
+                    .precio +
+                    "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
+                );
+            }
+            //añadir
+            // Declarar variable global para el carrito
 
-                $('#contador').empty()
-                $('#contador').append(carrito.length)
+            $("#imprimirRecibo").attr('disabled', true);
 
-                for (let i = 0; i < carrito.length; i++) {
-                    const producto = carrito[i];
-                    console.log(producto);
-                    const index = i;
-                    $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre +
-                        "</td><td>" + producto.concentracion + "</td><td>" +
-                        producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
-                        .precio +
-                        "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
-                    );
-                    $('#tablaProductos').append("<tr style='background-color: rgb(126, 235, 126)' data-index='" +
-                        index + "'><td>" + producto.nombre +
-                        "</td><td>" + producto.concentracion + "</td><td>" +
-                        producto.adicional + "</td><td>" + producto.nombre_pre +
-                        "</td><td><input min='1' pattern='^[0-9]+' class='text-center cantidad' style='width:80px' type='number' value = '1' data-precio='" +
-                        producto.precio + "'></td><td class='precio-total'>" +
-                        producto.precio +
-                        "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
-                    );
-                }
-                let total = 0;
-                for (let i = 0; i < carrito.length; i++) {
-                    const producto = carrito[i];
-                    const cantidad = parseInt($('#tablaProductos tr[data-index="' + i + '"] input')
-                        .val());
-                    total += producto.precio * cantidad;
-                }
-                $('.sinIVA').text((total / 1.21).toFixed(2) + '€');
-                $('.total').text(total.toFixed(2) + '€');
-                $('.totalDescuento').text(total.toFixed(2) + '€');
+            $("#actualizar").click(function() {
+                actualizartabla()
+                actualizar()
+            })
 
-                console.log(total);
+            $("#metodoPagoEfectivo").click(function() {
+                event.preventDefault(); // Evita la acción por defecto
+                $("#metodoPago").hide();
+                $("#efectivo").show('slow');
+            });
 
-                // Actualizar precio total cada vez que se cambie la cantidad
-                $('#tablaProductos').on('change', '.cantidad', function() {
-                    const cantidad = $(this).val();
-                    const precioUnitario = $(this).data('precio');
-                    const precioTotal = cantidad * precioUnitario;
-                    $(this).closest('tr').find('.precio-total').text(precioTotal.toFixed(2) + '€');
+            $("#cambiarMetodoPago").click(function() {
+                event.preventDefault(); // Evita la acción por defecto
+                $("#efectivo").hide();
+                $("#metodoPago").show('slow');
+            });
+
+
+        })
+
+        actualizar()
+        actualizartabla()
+
+        function actualizartabla() {
+            carrito = JSON.parse(localStorage.getItem("carrito"));
+
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+
+            $('#tablaProductos').empty()
+
+            $('#tablaProductos').append(
+                "<tr style='background-color: #6aa259'><th>Stock</th><th>Nombre</th><th>Concentración</th><th>Adicional</th><th>Presentación</th><th>Cantidad</th><th>Precio</th></tr>"
+            )
+
+            for (let i = 0; i < carrito.length; i++) {
+                const producto = carrito[i];
+                // console.log(producto);
+                const index = i;
+
+                $('#tablaProductos').append(
+                    "<tr style='background-color: #A8DA98' data-index='" +
+                    index + "'><td>" + producto.stock + "</td><td>" + producto.nombre +
+                    "</td><td>" + producto.concentracion + "</td><td>" +
+                    producto.adicional + "</td><td>" + producto.nombre_pre +
+                    "</td><td><input min='1' pattern='^[0-9]+' class='text-center cantidad' style='width:80px; border:none; background-color:white;' type='number' value='1' data-precio='" +
+                    producto.precio + "'></td><td class='precio-total'>" +
+                    producto.precio +
+                    "€</td></tr>"
+                );
+            }
+        }
+
+        function actualizar() {
+            $(document).ready(function() {
+                $('#metodoPago').show('slow')
+                $('#efectivo').hide()
+                $('#descuentoOculto').hide()
+                $('#descuento').val("")
+                c = 0
+                // Cargar el carrito desde el almacenamiento local
+                if (localStorage.getItem("carrito")) {
+                    carrito = JSON.parse(localStorage.getItem("carrito"));
+
+                    $('#contador').empty()
+                    $('#contador').append(carrito.length)
+
                     let total = 0;
                     for (let i = 0; i < carrito.length; i++) {
                         const producto = carrito[i];
                         const cantidad = parseInt($('#tablaProductos tr[data-index="' + i + '"] input')
                             .val());
                         total += producto.precio * cantidad;
+                        console.log(cantidad);
                     }
                     $('.sinIVA').text((total / 1.21).toFixed(2) + '€');
                     $('.total').text(total.toFixed(2) + '€');
+                    $('.totalDescuento').text(total.toFixed(2) + '€');
 
                     console.log(total);
-                });
-            }
-        });
+
+                    // Actualizar precio total cada vez que se cambie la cantidad
+                    $('#tablaProductos').on('change', '.cantidad', function() {
+                        const cantidad = $(this).val();
+                        const precioUnitario = $(this).data('precio');
+                        const precioTotal = cantidad * precioUnitario;
+                        $(this).closest('tr').find('.precio-total').text(precioTotal.toFixed(2) + '€');
+                        let total = 0;
+                        for (let i = 0; i < carrito.length; i++) {
+                            const producto = carrito[i];
+                            const cantidad = parseInt($('#tablaProductos tr[data-index="' + i +
+                                    '"] input')
+                                .val());
+                            total += producto.precio * cantidad;
+                        }
+                        $('#ingreso').val('');
+                        $('.sinIVA').text((total / 1.21).toFixed(2) + '€');
+                        $('.total').text(total.toFixed(2) + '€');
+                        if (c == 0)
+                            $('.totalDescuento').text(total.toFixed(2) + '€');
+                        else
+                            $('.totalDescuento').text((parseFloat($('.total').text()) - ((parseFloat($(
+                                    '.total')
+                                .text())) * 0.1)).toFixed(2) + '€');
+
+                        console.log(total);
+                    });
+
+                    $('#ingreso').on('change', function() {
+                        // console.log((parseFloat($('.totalDescuento').text())) - (parseFloat($('#ingreso').val())));
+                        $('#cambio').text(((parseFloat($('#ingreso').val())) - (parseFloat($(
+                                '.totalDescuento')
+                            .text()))).toFixed(2) + '€');
+                        if ($('#ingreso').val() == "" || $('#ingreso').val() <= parseFloat($(
+                                    '.totalDescuento')
+                                .text())) {
+                            $('#cambio').text("0€")
+                        }
+
+                        if ($('#cambio').text() == "0€")
+                            $("#imprimirRecibo").attr('disabled', true);
+                        else
+                            $("#imprimirRecibo").attr('disabled', false);
+                    });
+                }
+            });
+        }
     </script>
 @endsection

@@ -22,8 +22,6 @@
     table {
         text-align: center;
     }
-
-    
 </style>
 
 @section('menu')
@@ -113,7 +111,7 @@
                                             .remove(); // eliminar cualquier div existente
                                         $("#vencimiento").parent().append(
                                             "<div class='invalid-feedback'>Por favor, introduce una fecha de vencimiento.</div>"
-                                            );
+                                        );
                                     } else {
                                         $("#vencimiento").removeClass("is-invalid");
                                         $("#vencimiento").addClass("is-valid");
@@ -263,7 +261,7 @@
                                     <li class="small"><span class="fa-li"><i class="fa-solid fa-key"></i></span> <strong>Identificador:</strong> ${lote.id}</li>
                                     <li class="small"><span class="fa-li"><i class="fa-solid fa-boxes-stacked"></i></span> <strong>Stock:</strong> ${lote.stock}</li>
                                     <li></li>
-                                    <li class="small"><span class="fa-li"><i class="fa-regular fa-calendar fa-lg"></i></span> <strong>Vencimiento:</strong> ${d}/${m}/${y}</li>
+                                    <li class="small"><span class="fa-li"><i class="fa-regular fa-calendar fa-lg"></i></span> <strong>Fecha de caducidad:</strong> ${d}/${m}/${y}</li>
                                     </ul>
                                 </div>
                                 <div class="col-5 text-center">
@@ -343,7 +341,7 @@
             editar.href = "{{ route('editarLote', '') }}/" + idLote;
         }
 
-       
+
         $(document).on('click', '.borrar', function(event) {
             event.preventDefault();
             event.stopPropagation(); // Evitar cierre del menú desplegable
@@ -384,7 +382,7 @@
             // Cargar el carrito desde el almacenamiento local
             if (localStorage.getItem("carrito")) {
                 carrito = JSON.parse(localStorage.getItem("carrito"));
-                
+
                 $('#contador').empty()
                 $('#contador').append(carrito.length)
 

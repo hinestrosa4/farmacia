@@ -67,7 +67,7 @@
                                             </span>
                                         </li>
                                         <li class="list-group-item">
-                                            <b style="color:#0B7300">Vencimiento</b>
+                                            <b style="color:#0B7300">Caducidad</b>
                                             <span class="float-right ml-4" style="color:rgb(26, 57, 255)">
                                                 {{ DateTime::createFromFormat('Y-m-d', $lote->vencimiento)->format('d-m-Y') }}
                                             </span>
@@ -106,7 +106,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="validationCustom02" class="form-label">Fecha de
-                                                    vencimiento</label>
+                                                    caducidad</label>
                                                 <input type="date" name="vencimiento" class="form-control"
                                                     id="vencimiento" value="{{ old('vencimiento') }}"
                                                     placeholder="Introduzca una fecha de vencimiento">

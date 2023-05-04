@@ -65,8 +65,7 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check form-switch d-flex"
-                        style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
+                    <div class="form-check form-switch d-flex" style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
                         <div class="ml-auto">
                             <a type="button" href="{{ route('listaLotes') }}" class="btn bg-gradient-success"><i
                                     class="bi bi-archive-fill"></i> Lotes activos</a>
@@ -78,7 +77,7 @@
                             {{ session()->get('message') }}
                     @endif
                 </div>
-                
+
                 <div class="card-body">
                     <div id="lotes" class="row d-flex align-items-stretch">
 
@@ -127,9 +126,9 @@
                             // Agrega los nuevos resultados al cuerpo del card
                             // if (!this.checked) {
                             respuesta.forEach(function(lote, indice) {
-                                let d= lote.vencimiento.substring(8)
-                                let m = lote.vencimiento.substring(7,5)
-                                let y = lote.vencimiento.substring(0,4)
+                                let d = lote.vencimiento.substring(8)
+                                let m = lote.vencimiento.substring(7, 5)
+                                let y = lote.vencimiento.substring(0, 4)
 
                                 let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                           <div class="card bg-light d-flex flex-fill">
@@ -144,7 +143,7 @@
                                     <li class="small"><span class="fa-li"><i class="fa-solid fa-key"></i></span> <strong>Identificador:</strong> ${lote.id}</li>
                                     <li class="small"><span class="fa-li"><i class="fa-solid fa-boxes-stacked"></i></span> <strong>Stock:</strong> ${lote.stock}</li>
                                     <li></li>
-                                    <li class="small"><span class="fa-li"><i class="fa-regular fa-calendar fa-lg"></i></span> <strong>Vencimiento:</strong> ${d}/${m}/${y}</li>
+                                    <li class="small"><span class="fa-li"><i class="fa-regular fa-calendar fa-lg"></i></span> <strong>Fecha de caducidad:</strong> ${d}/${m}/${y}</li>
                                     </ul>
                                 </div>
                                 <div class="col-5 text-center">
@@ -219,7 +218,7 @@
             formularioEliminar.action = "{{ route('altaLote', '') }}/" + idLote;
         }
 
-        
+
         $(document).on('click', '.borrar', function(event) {
             event.preventDefault();
             event.stopPropagation(); // Evitar cierre del menú desplegable
@@ -260,7 +259,7 @@
             // Cargar el carrito desde el almacenamiento local
             if (localStorage.getItem("carrito")) {
                 carrito = JSON.parse(localStorage.getItem("carrito"));
-                
+
                 $('#contador').empty()
                 $('#contador').append(carrito.length)
 
