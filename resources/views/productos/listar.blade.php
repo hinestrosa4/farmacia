@@ -52,6 +52,47 @@
 </style>
 
 @section('menu')
+    {{-- Producto ya existe en el carrito --}}
+    <div class="modal fade" id="productoExistente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <h5 class="modal-title" id="exampleModalLabel">Producto existente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    Este producto ya está añadido al carrito
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Producto agotado --}}
+    <div class="modal fade" id="productoAgotado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <h5 class="modal-title" id="exampleModalLabel2">Producto agotado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    Este producto está agotado
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal para crear un producto -->
     <div class="modal fade" id="crearproducto" tabindex="-1" role="dialog" aria-labelledby="crearproducto-label"
@@ -917,7 +958,7 @@
                             </div>
                           </div>
                         </div>
-                                            <!-- Modal para crear un lote -->
+                        <!-- Modal para crear un lote -->
                         <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label" data-backdrop="static"
                             data-keyboard="false">
                             <div class="modal-dialog" role="document">
@@ -1126,10 +1167,22 @@
             const JSONproducto = btnAdd.getAttribute("data-info");
             const presentacionNombre = btnAdd.getAttribute("data-id");
             const producto = JSON.parse(JSONproducto);
-            nombres = []
+            // console.log(producto);
+            // Comprobar si el producto ya está en el carrito
+            const productoYaEnCarrito = carrito.some(item => item.nombre === producto.nombre && item.concentracion ===
+                producto.concentracion && item.adicional === producto.adicional);
 
-            for(var i = 0;i<carrito.length;i++){
-                nombres.push(carrito[i].nombre)
+            // Comprobar si el stock del producto es 0
+            if (producto.stock == "0") {
+                // Mostrar un modal para indicar que el producto está agotado
+                $('#productoAgotado').modal('show');
+                return;
+            }
+
+            if (productoYaEnCarrito) {
+                // Mostrar un modal para indicar que el producto ya está en el carrito
+                $('#productoExistente').modal('show');
+                return;
             }
 
             // Añadir el producto al carrito
@@ -1139,7 +1192,7 @@
             //contador de productos de la cesta
             $('#contador').empty()
             $('#contador').append(carrito.length)
-            
+
             const index = carrito.length - 1;
             $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre + "</td><td>" + producto
                 .concentracion + "</td><td>" +
@@ -1171,6 +1224,7 @@
             // Guardar el carrito en localStorage
             localStorage.setItem('carrito', JSON.stringify(carrito));
         }
+
 
 
         function mostrarImagen(botonImagen) {

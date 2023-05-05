@@ -410,6 +410,14 @@
             // console.log(carrito);
         });
 
+        $('#cliente').on('change', function() {
+            for (let i = 0; i < carrito.length; i++) {
+                if (!carrito[i].cantidad) {
+                    carrito[i].cantidad = 1;
+                }
+            }
+            console.log(carrito);
+        });
 
         $("#imprimirRecibo").click(function() {
             if ($('#cliente').val() == "")
