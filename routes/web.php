@@ -11,6 +11,8 @@ use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\LoteController;
 use App\Http\Controllers\CompraController;
+use App\Http\Controllers\FacturaController;
+use App\Http\Controllers\VentaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +39,9 @@ Route::get('/register', RegisterController::class)->name('register');
 Route::get('/formRegister', RegisterController::class)->name('formRegister');
 Route::post('formRegister', [RegisterController::class, 'store']);
 
+//Factura
+Route::get('/generatePDF/{venta}', FacturaController::class)->name('generatePDF');
+
 Route::middleware(['auth'])->group(function () {
 
     /*------ Calendario ------*/
@@ -44,6 +49,9 @@ Route::middleware(['auth'])->group(function () {
 
     /*------ Tramitar compra ------*/
     Route::get('/tramitarCompra', CompraController::class)->name('tramitarCompra');
+
+    /*------ Venta ------*/
+    Route::post('createVenta/{venta}', [VentaController::class, 'store'])->name('createVenta');
 
     /*------ Producto ------*/
     Route::get('/listaProductos', [ProductoController::class, 'listar'])->name('listaProductos');

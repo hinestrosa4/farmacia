@@ -78,7 +78,7 @@
                     <label for="vendedor" style="color:#4d7342">Vendedor</label>
                 </div>
                 <div class="col-md-9">
-                    <input readonly style="width: 80%" type="text" class="form-control"
+                    <input id="vendedor" readonly style="width: 80%" type="text" class="form-control"
                         value="{{ Auth::user()->nombre }} {{ Auth::user()->apellidos }}">
                 </div>
             </div>
@@ -137,7 +137,7 @@
 
             <div class="d-flex flex-wrap">
                 {{-- Precio de venta --}}
-                <div class="col-sm-12 col-md-4">
+                <div id="ventaCard" style="display: none" class="col-sm-12 col-md-4">
                     <div class="card">
                         <div class="card-header text-center">
                             <h4>Precio de venta</h4>
@@ -184,7 +184,7 @@
                     </div>
                 </div>
                 {{-- Descuento --}}
-                <div class="col-sm-12 col-md-4">
+                <div id="descuentoCard" style="display: none" class="col-sm-12 col-md-4">
                     <div class="card">
                         <div class="card-header text-center">
                             <h4>Descuento</h4>
@@ -221,7 +221,7 @@
                                         <img src="{{ asset('img/tageuro.png') }}" style="width: 50px" alt="">
                                     </div>
                                     <div class="col mx-4">
-                                        <span class="card-text">Precio total: </span><br>
+                                        <span class="card-text">Total: </span><br>
                                         <b> <span class="totalDescuento"></span>
                                         </b>
                                     </div>
@@ -231,7 +231,7 @@
                     </div>
                 </div>
                 {{-- Metodo de pago --}}
-                <div id="metodoPago" class="col-sm-12 col-md-4">
+                <div id="metodoPago" style="display: none" class="col-sm-12 col-md-4">
                     <div class="card">
                         <div class="card-header text-center">
                             <h4>Método de pago</h4>
@@ -278,7 +278,8 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button id="imprimirRecibo" class="btn btn-success mb-2" style="width:100%">Realizar
+                            <button id="imprimirRecibo" class="btn btn-success mb-2" style="width:100%"
+                                onclick="pasarVenta()">Realizar
                                 compra</button>
                             <a href="#" id="cambiarMetodoPago" class="btn btn-primary" style="width:100%">Cambiar
                                 método de pago</a>
@@ -287,8 +288,136 @@
                 </div>
             </div>
         </section>
+        <!-- Imprimir recibo -->
+        <div class="modal fade" id="imprimirReciboModal" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-green">
+                        <h5 class="modal-title" id="exampleModalLabel">Recibo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Deseas imprimir el recibo?
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ route('listaProductos') }}" class="btn btn-danger text-white">No</a>
+                        <form id="formEnviar" action="{{ route('createVenta', '') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="venta" id="venta">
+                            <button type="submit" class="btn btn-success text-white" onclick="abrirPDF()">Si</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Error -->
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-red">
+                        <h5 class="modal-title" id="errorModalLabel">Conflicto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Debes rellenar el nombre del cliente
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-secondary text-white" data-dismiss="modal">Aceptar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
+        let venta = []
+        let producto = []
+        let ventaS = ""
+
+        function abrirPDF() {
+
+            // Redirigir a la ruta del PDF en una nueva pestaña
+            window.open("{{ route('generatePDF', '') }}/" + ventaS, '_blank');
+
+            carrito = []
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+
+            // Redirigir a la página de listaProducto
+            window.location.href = "{{ route('listaProductos') }}";
+        }
+
+        function generarCodigoTicket() {
+            var caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var longitudCodigo = 8;
+            var codigo = "";
+            for (var i = 0; i < longitudCodigo; i++) {
+                codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            }
+            return codigo;
+        }
+
+        function pasarVenta() {
+            venta = []
+            producto = []
+            ventaS = ""
+            generateVenta();
+
+            var formEnviar = document.getElementById("formEnviar")
+            // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
+            formEnviar.action = "{{ route('createVenta', '') }}/" + ventaS;
+        }
+
+        function generateVenta() {
+            for (var i = 0; i < carrito.length; i++) {
+                producto.push([
+                    [carrito[i].nombre],
+                    [carrito[i].adicional],
+                    [carrito[i].nombre_pre],
+                    [carrito[i].cantidad],
+                    [carrito[i].precio],
+                ])
+            }
+            console.log(carrito);
+            console.log(producto);
+
+            // console.log(producto);
+            var now = new Date();
+            var timezoneOffset = now.getTimezoneOffset() * 60000; // convierte la diferencia horaria a milisegundos
+            var fechaHoraEspaña = new Date(now - timezoneOffset).toLocaleString("es-ES", {
+                timeZone: "Europe/Madrid"
+            });
+
+            venta.push(generarCodigoTicket())
+            venta.push(new Date(fechaHoraEspaña).toISOString());
+            venta.push($('#cliente').val())
+            venta.push("efectivo")
+            venta.push($('.totalDescuento').text())
+            venta.push({{ Auth::user()->id }})
+            venta.push(producto); // Encierra el array de productos dentro de otro array
+            console.log(venta);
+            ventaS = JSON.stringify(venta);
+        }
+
+        $('#tablaProductos').on('change', '.cantidad', function() {
+            const cantidad = $(this).val();
+            const index = $(this).closest('tr').data('index');
+            carrito[index].cantidad = cantidad;
+            // console.log(carrito);
+        });
+
+
+        $("#imprimirRecibo").click(function() {
+            if ($('#cliente').val() == "")
+                $('#errorModal').modal('show')
+            else
+                $('#imprimirReciboModal').modal('show')
+        })
+
         // DESCUENTO
         // Array de códigos de descuento
         var codigosDescuento = ["FARMALIZE", "VACTOR", "PRIME", "HSN", "AA"];
@@ -306,8 +435,9 @@
                     '.totalDescuento').text()) * 0.1)).toFixed(2) + '€');
                 $('#descuentoOculto').show('slow')
                 $("#success_tic").modal("show");
-                $('#ingreso').val('');
+                $('#ingreso').val('0');
                 $('#cambio').text('0€');
+                $("#imprimirRecibo").attr('disabled', true);
             } else {
                 // Si no está en el array, mostramos el modal de error
                 $("#myModal").modal("show");
@@ -350,6 +480,9 @@
 
         let carrito = [];
         $(document).ready(function() {
+            $('#ventaCard').show('slow')
+            $('#descuentoCard').show('slow')
+            $('#metodoPago').show('slow')
             //CARGAR CARRITO
             for (let i = 0; i < carrito.length; i++) {
                 const producto = carrito[i];
@@ -453,7 +586,8 @@
                         const cantidad = $(this).val();
                         const precioUnitario = $(this).data('precio');
                         const precioTotal = cantidad * precioUnitario;
-                        $(this).closest('tr').find('.precio-total').text(precioTotal.toFixed(2) + '€');
+                        $(this).closest('tr').find('.precio-total').text(precioTotal.toFixed(2) +
+                            '€');
                         let total = 0;
                         for (let i = 0; i < carrito.length; i++) {
                             const producto = carrito[i];
@@ -463,14 +597,16 @@
                             total += producto.precio * cantidad;
                         }
                         $('#ingreso').val('');
+                        $('#cambio').text('0€');
                         $('.sinIVA').text((total / 1.21).toFixed(2) + '€');
                         $('.total').text(total.toFixed(2) + '€');
                         if (c == 0)
                             $('.totalDescuento').text(total.toFixed(2) + '€');
                         else
-                            $('.totalDescuento').text((parseFloat($('.total').text()) - ((parseFloat($(
-                                    '.total')
-                                .text())) * 0.1)).toFixed(2) + '€');
+                            $('.totalDescuento').text((parseFloat($('.total').text()) - ((
+                                parseFloat($(
+                                        '.total')
+                                    .text())) * 0.1)).toFixed(2) + '€');
 
                         console.log(total);
                     });
