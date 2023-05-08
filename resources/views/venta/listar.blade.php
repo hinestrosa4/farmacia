@@ -3,11 +3,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
 <style>
     #cuerpo {
@@ -503,17 +498,84 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-
+                                <h4>Historial de Ventas</h4>
                             </div>
                             <div class="card-body">
-                                <table class="table">
-                                    @foreach ($ventas as $venta)
-                                        <tr>
-                                            <td>{{ $venta }}</td>
-                                        </tr>
-                                    @endforeach
-                                </table>
+                                <div class="table-responsive">
+                                    <table id="myTable" class="table table-hover text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th style="border-spacing:10px">Productos</th>
+                                                <th>Total</th>
+                                                <th>Cliente</th>
+                                                <th>Fecha</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            // $ventas = json_decode($ventas, true);
+                                            // print_r($ventas);
+                                            ?>
+                                            @foreach ($ventas as $venta)
+                                                <?php
+                                                $productos = json_decode($venta['productos'], true);
+                                                ?>
+                                                <tr>
+                                                    <td>{{ $venta['id'] }}</td>
+                                                    <td>
+                                                        <button class="btn btn-success" type="button"
+                                                            data-toggle="collapse"
+                                                            data-target="#productos-{{ $venta['id'] }}"
+                                                            aria-expanded="false"
+                                                            aria-controls="productos-{{ $venta['id'] }}">
+                                                            {{ count($productos) }} productos
+                                                        </button>
+                                                        <div class="collapse" id="productos-{{ $venta['id'] }}">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Producto</th>
+                                                                        <th>Cantidad</th>
+                                                                        {{-- <th>Unidad</th> --}}
+                                                                        <th>Precio</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach ($productos as $producto)
+                                                                        <tr>
+                                                                            <td>{{ $producto[0][0] }}</td>
+                                                                            <td>{{ $producto[3][0] }}</td>
+                                                                            {{-- <td>{{ $producto[2][0] }}</td> --}}
+                                                                            <td>{{ $producto[4][0] }}€</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ $venta['total'] }}</td>
+                                                    <td>{{ $venta['cliente'] }}</td>
+                                                    <td>{{ date('d/m/Y H:i:s', strtotime($venta['fecha'])) }}</td>
+                                                    <td>
+                                                        <a class="btn btn-secondary" href=""><i
+                                                                class="bi bi-printer"></i></a>
+                                                        <a class="btn btn-success" href=""><i
+                                                                class="bi bi-envelope-at"></i></a>
+                                                        <a class="btn btn-warning" href=""><i
+                                                                class="bi bi-pencil-square"></i></a>
+                                                        <a class="btn btn-danger" href=""><i
+                                                                class="bi bi-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+
                             <div class="card-footer">
 
                             </div>
@@ -682,5 +744,7 @@
             }
         });
     </script>
+
+
 
 @endsection

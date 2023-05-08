@@ -392,7 +392,7 @@
                 timeZone: "Europe/Madrid"
             });
 
-            venta.push(generarCodigoTicket())
+            // venta.push(generarCodigoTicket())
             venta.push(new Date(fechaHoraEspaña).toISOString());
             venta.push($('#cliente').val())
             venta.push("efectivo")

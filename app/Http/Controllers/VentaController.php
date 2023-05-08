@@ -22,17 +22,18 @@ class VentaController extends Controller
         $laboratorios = Laboratorio::orderBy('id', 'asc')->get();
         $tipos = Tipo::orderBy('id', 'asc')->get();
         $presentaciones = Presentacion::orderBy('id', 'asc')->get();
-        $ventas = Venta::all();
+        $ventas = Venta::all()->toArray();
         // dd($ventas);
         return view('venta.listar', compact('ventas'));
     }
+
 
     public function store($ventaS)
     {
         $venta = json_decode($ventaS);
         // var_dump($venta);
         $datos = request()->validate([
-            'id' => '',
+            // 'id' => '',
             'fecha' => '',
             'cliente' => '',
             'metodoPago' => '',
@@ -41,14 +42,13 @@ class VentaController extends Controller
             'vendedor' => '',
         ]);
         // dd($venta);
-        $datos['id'] = $venta[0];
+        // $datos['id'] = $venta[0];
         $datos['fecha'] = $venta[1];
         $datos['cliente'] = $venta[2];
         $datos['metodoPago'] = $venta[3];
         $datos['total'] = $venta[4];
         $datos['vendedor'] = $venta[5];
         $datos['productos'] = json_encode($venta[6]);
-
 
         Venta::create($datos);
         return redirect()->route('listaProductos');
