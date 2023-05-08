@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Laboratorio;
+use App\Models\Presentacion;
+use App\Models\Tipo;
 use App\Models\Venta;
-use App\Models\Producto;
-use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,8 +17,14 @@ class VentaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke()
+    public function __invoke(Request $request)
     {
+        $laboratorios = Laboratorio::orderBy('id', 'asc')->get();
+        $tipos = Tipo::orderBy('id', 'asc')->get();
+        $presentaciones = Presentacion::orderBy('id', 'asc')->get();
+        $ventas = Venta::all();
+        // dd($ventas);
+        return view('venta.listar', compact('ventas'));
     }
 
     public function store($ventaS)

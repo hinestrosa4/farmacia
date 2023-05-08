@@ -19,9 +19,10 @@
         <span>farmalize@gmail.com</span>
 
         <div class="mt-4">
-            <span>Factura Ident.: {{ $venta[0] }}</span><br>
-            <span>Fecha: {{ $venta[1] }}</span><br>
-            <span>Método de Pago: {{ $venta[3] }}</span>
+            <span><b>Factura Ident.: </b>{{ $venta[0] }}</span><br>
+            <span><b>Fecha: </b>{{ (new DateTime($venta[1]))->format('d/m/Y H:i:s') }}
+            </span><br>
+            <span><b>Método de Pago: </b>{{ $venta[3] }}</span>
         </div>
 
         <div class="text-center mt-5">

@@ -13,6 +13,7 @@ use App\Http\Controllers\LoteController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\VentaController;
+use App\Http\Controllers\RecuperarPassController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,9 @@ Route::get('/register', RegisterController::class)->name('register');
 Route::get('/formRegister', RegisterController::class)->name('formRegister');
 Route::post('formRegister', [RegisterController::class, 'store']);
 
+//Recuperar contraseña
+Route::post('recuperarPass', [RecuperarPassController::class, 'store'])->name('recuperarPass');
+
 //Factura
 Route::get('/generatePDF/{venta}', FacturaController::class)->name('generatePDF');
 
@@ -51,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tramitarCompra', CompraController::class)->name('tramitarCompra');
 
     /*------ Venta ------*/
+    Route::get('/gestionVentas', VentaController::class)->name('gestionVentas');
     Route::post('createVenta/{venta}', [VentaController::class, 'store'])->name('createVenta');
 
     /*------ Producto ------*/

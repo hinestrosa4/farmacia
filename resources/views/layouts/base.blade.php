@@ -65,10 +65,13 @@
                                 </table>
                                 <div class="row ml-4">
                                     <button class="btn btn-danger" style="width: 47%" id="vaciarCarrito">
-                                        <img class="mr-2 mb-1" width="32px" src="{{ asset('img/vaciarCarrito.png') }}"> Vaciar
+                                        <img class="mr-2 mb-1" width="32px"
+                                            src="{{ asset('img/vaciarCarrito.png') }}"> Vaciar
                                         carrito</button>
-                                    <a href="{{ route('tramitarCompra') }}" class="btn btn-primary ml-2" style="width: 47%" id="tramitarCompra">
-                                        <img class="mr-2 mb-1" width="32px" src="{{ asset('img/tramitarCompra.png') }}"> Tramitar
+                                    <a href="{{ route('tramitarCompra') }}" class="btn btn-primary ml-2"
+                                        style="width: 47%" id="tramitarCompra">
+                                        <img class="mr-2 mb-1" width="32px"
+                                            src="{{ asset('img/tramitarCompra.png') }}"> Tramitar
                                         compra</a>
                                 </div>
                             </div>
@@ -171,6 +174,15 @@
                                 <i class="bi bi-person-lines-fill"></i>
                                 <p class="ml-1">
                                     Gestión de usuarios
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-header">VENTAS</li>
+                        <li class="nav-item">
+                            <a href="{{ route('gestionVentas') }}" class="nav-link">
+                                <i class="bi bi-boxes"></i>
+                                <p class="ml-1">
+                                    Gestión de ventas
                                 </p>
                             </a>
                         </li>

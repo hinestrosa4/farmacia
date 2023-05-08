@@ -8,11 +8,72 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+
+
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <title>Farmacia</title>
 </head>
 
 <body>
+    <!-- Modal para recuperar password -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="enviarEmail" tabindex="-1" aria-labelledby="enviarEmail" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEnviar" class="g-3 needs-validation" method="POST"
+                        action="{{ route('recuperarPass') }}">
+                        @csrf
+                        <h3>Recuperar contraseña</h3>
+                        <br>
+                        <div class="">
+                            <input type="email" name="email" class="form-control" id="email"
+                                value="{{ old('email') }}" placeholder="Introduzca un email">
+                        </div>
+                        <br>
+                        <div class="col-12">
+                            <button id="btnSubmitEnviar" style="width: 100%" class="btn btn-success"
+                                type="submit">Enviar nueva
+                                contraseña</button>
+                        </div>
+                    </form>
+
+                    <script>
+                        $(document).ready(function() {
+                            $("#formEnviar").submit(function(event) {
+                                // Prevenir la acción predeterminada del formulario
+                                event.preventDefault();
+                                // Validar el campo de laboratorio
+                                if ($("#email").val() == "") {
+                                    $("#email").addClass("is-invalid");
+                                    $("#email").parent().find(".invalid-feedback")
+                                        .remove(); // eliminar cualquier div existente
+                                    $("#email").parent().append(
+                                        "<div class='invalid-feedback'>Por favor, introduce un email.</div>");
+                                } else {
+                                    $("#email").removeClass("is-invalid");
+                                    $("#email").addClass("is-valid");
+                                }
+                                // Enviar el formulario si todos los campos son válidos
+                                if ($(".is-invalid").length == 0) {
+                                    $("#formEnviar").unbind("submit").submit();
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
     <form action="" method="POST">
         @csrf
         <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
@@ -64,15 +125,23 @@
                                 </label>
                                 <input type="password" name="password" placeholder="Enter password">
                             </div>
-                            <div class="row px-3 mb-4">
-                                <a href="#" class="ml-auto mb-0 text-sm">¿Has olvidado la contraseña?</a>
+                            <div class="row px-3 pt-2 mb-4">
+                                <a id="olvidoPass" data-toggle="modal" style="font-size:15px"
+                                    data-target="#enviarEmail">
+                                    ¿Has olvidado tu contraseña?
+                                </a>
                             </div>
+                            <script>
+                                $("#olvidoPass").on("click", function() {
+                                    $("#enviarEmail").modal("show");
+                                });
+                            </script>
                             <div class="row mb-3 px-3">
                                 <button type="submit" class="btn btn-blue text-center">Iniciar Sesión</button>
                             </div>
                             <div class="row mb-4 px-3">
-                                <small class="font-weight-bold">No tienes una cuenta? <a href="{{ route('register') }}"
-                                        class="text-danger ">Registrate</a></small>
+                                <small class="font-weight" style="font-size:15px">No tienes una cuenta? <a
+                                        href="{{ route('register') }}" class="text-danger ">Registrate</a></small>
                             </div>
                         </div>
                     </div>

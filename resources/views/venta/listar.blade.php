@@ -1,9 +1,13 @@
-@section('title', 'Gestión de Atributos')
+@section('title', 'Gestión de Ventas')
 @extends('layouts.base')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
 <style>
     #cuerpo {
@@ -33,19 +37,19 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Gestión de Atributos</h1>
+                        <h1>Gestión de Ventas</h1>
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
-                            <li class="breadcrumb-item active">Gestión de atributos</li>
+                            <li class="breadcrumb-item active">Gestión de ventas</li>
                         </ol>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
         </section>
 
-        <!-- Modal borrar laboratorio -->
+        {{-- <!-- Modal borrar laboratorio -->
         <div class="modal fade" id="confirmLab" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -123,9 +127,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        <!-- Modal para crear un laboratorio -->
+        {{-- <!-- Modal para crear un laboratorio -->
         <div class="modal fade" id="crearlaboratorio" tabindex="-1" role="dialog"
             aria-labelledby="crearlaboratorio-label" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" role="document">
@@ -490,7 +494,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Main content -->
         <section class="content">
@@ -499,265 +503,16 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" data-toggle="tab" href="#laboratoriotab"
-                                            role="tab" aria-controls="laboratorio"
-                                            aria-selected="true">Laboratorio</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tipotab" role="tab"
-                                            aria-controls="tipo" aria-selected="false">Tipo</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#presentaciontab" role="tab"
-                                            aria-controls="presentacion" aria-selected="false">Presentación</a>
-                                    </li>
-                                </ul>
+
                             </div>
-                            <style>
-                                .nav-tabs .nav-item .nav-link.active {
-                                    background-color: rgb(30, 36, 43);
-                                    color: white;
-                                    border: none;
-                                    border-bottom-color: transparent;
-                                }
-
-                                .nav-tabs .nav-item .nav-link:hover {
-                                    background-color: rgb(30, 36, 43);
-                                    color: white;
-                                }
-                            </style>
-                            <script>
-                                $(document).ready(function() {
-                                    // Al cargar la página, activar la última pestaña que se seleccionó
-                                    var lastTab = localStorage.getItem('lastTab');
-                                    if (lastTab) {
-                                        $('#myTab a[href="' + lastTab + '"]').tab('show');
-                                    }
-
-                                    // Al hacer clic en una pestaña, recordar cuál fue la última activa
-                                    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-                                        localStorage.setItem('lastTab', $(e.target).attr('href'));
-                                    });
-                                });
-                            </script>
-
                             <div class="card-body">
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="laboratoriotab">
-                                        <div class="card card-success">
-                                            <div class="card-header">
-                                                <div class="card-title">Buscar laboratorio
-                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                        <button type="button" data-toggle="modal"
-                                                            data-target="#crearlaboratorio"
-                                                            class="btn bg-gradient-primary btn-sm m-2">Crear
-                                                            laboratorio</button>
-                                                    @endif
-                                                </div>
-                                                <div class="input-group">
-                                                    <input type="text" id="buscar-laboratorio"
-                                                        class="form-control float-left" placeholder="Ingrese nombre">
-                                                    <div class="input-group-append"><button class="btn btn-default"><i
-                                                                class="bi bi-search"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                @if (session()->has('messageLab'))
-                                                    <div class="alert alert-success text-center">
-                                                        {{ session()->get('messageLab') }}
-                                                    </div>
-                                                @endif
-
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover text-center" id="tabla-laboratorio">
-                                                        <thead class="table-dark">
-                                                            <tr>
-                                                                <th scope="col">#</th>
-                                                                <th scope="col">Laboratorio</th>
-                                                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                    <th scope="col">Acciones</th>
-                                                                @endif
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($laboratorios as $index => $laboratorio)
-                                                                <tr class="laboratorio">
-                                                                    <td>{{ $index + 1 }}</td>
-                                                                    <td class="nombreLab">{{ $laboratorio->nombre }}</td>
-                                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                        <td>
-                                                                            <a class="btn btn-danger" data-toggle="modal"
-                                                                                data-target="#confirmLab"
-                                                                                data-id="{{ $laboratorio->id }}"
-                                                                                onclick="pasarIdLab(this)">
-                                                                                <i class="bi bi-trash"></i>
-                                                                            </a>
-                                                                            <a class="btn btn-warning" data-toggle="modal"
-                                                                                data-target="#modificarLab"
-                                                                                data-id="{{ $laboratorio->id }}"
-                                                                                onclick="pasarIdLab(this), datoAntiguo(this)">
-                                                                                <i class="bi bi-pencil-square"></i>
-                                                                            </a>
-                                                                        </td>
-                                                                    @endif
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-
-
-                                                    {{-- <div id="table-nav">
-                                                        <div class="btn-group" role="group"
-                                                            aria-label="Navegación de tabla">
-                                                            <button id="first-page" type="button"
-                                                                class="btn btn-primary">&laquo;</button>
-                                                            <button id="prev-page" type="button"
-                                                                class="btn btn-primary">&lsaquo;</button>
-                                                            <div id="page-numbers"></div>
-                                                            <button id="next-page" type="button"
-                                                                class="btn btn-primary">&rsaquo;</button>
-                                                            <button id="last-page" type="button"
-                                                                class="btn btn-primary">&raquo;</button>
-                                                        </div>
-                                                    </div> --}}
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="tipotab">
-                                        <div class="card card-success">
-                                            <div class="card-header">
-                                                <div class="card-title">Buscar tipo
-                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                        <button type="button" data-toggle="modal"
-                                                            data-target="#creartipo"
-                                                            class="btn bg-gradient-primary btn-sm m-2">Crear tipo</button>
-                                                    @endif
-                                                </div>
-                                                <div class="input-group">
-                                                    <input type="text" id="buscar-tipo"
-                                                        class="form-control float-left" placeholder="Ingrese nombre">
-                                                    <div class="input-group-append"><button class="btn btn-default"><i
-                                                                class="bi bi-search"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                @if (session()->has('messageTipo'))
-                                                    <div class="alert alert-success text-center">
-                                                        {{ session()->get('messageTipo') }}
-                                                    </div>
-                                                @endif
-
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover text-center" id="tabla-tipo">
-                                                        <thead class="table-dark">
-                                                            <tr>
-                                                                <th scope="col">#</th>
-                                                                <th scope="col">Tipo</th>
-                                                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                    <th scope="col">Acciones</th>
-                                                                @endif
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($tipos as $index => $tipo)
-                                                                <tr class="tipo">
-                                                                    <td>{{ $index + 1 }}</td>
-                                                                    <td class="nombreLab">{{ $tipo->nombre }}</td>
-                                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                        <td><a class="btn btn-danger" data-toggle="modal"
-                                                                                data-target="#confirmTipo"
-                                                                                data-id="{{ $tipo->id }}"
-                                                                                onclick="pasarIdTipo(this)"><i
-                                                                                    class="bi bi-trash"></i></a> <a
-                                                                                class="btn btn-warning"
-                                                                                data-toggle="modal"
-                                                                                data-target="#modificarTipo"
-                                                                                data-id="{{ $tipo->id }}"
-                                                                                onclick="pasarIdLab(this), datoAntiguoTipo(this)"><i
-                                                                                    class="bi bi-pencil-square"></i></a>
-                                                                        </td>
-                                                                    @endif
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="presentaciontab">
-                                        <div class="card card-success">
-                                            <div class="card-header">
-                                                <div class="card-title">Buscar presentación
-                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                        <button type="button" data-toggle="modal"
-                                                            data-target="#crearpresentacion"
-                                                            class="btn bg-gradient-primary btn-sm m-2">Crear
-                                                            presentacion</button>
-                                                    @endif
-                                                </div>
-                                                <div class="input-group">
-                                                    <input type="text" id="buscar-presentacion"
-                                                        class="form-control float-left" placeholder="Ingrese nombre">
-                                                    <div class="input-group-append"><button class="btn btn-default"><i
-                                                                class="bi bi-search"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                @if (session()->has('messagePre'))
-                                                    <div class="alert alert-success text-center">
-                                                        {{ session()->get('messagePre') }}
-                                                    </div>
-                                                @endif
-
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover" id="tabla-presentacion">
-                                                        <thead class="table-dark">
-                                                            <tr>
-                                                                <th scope="col">#</th>
-                                                                <th scope="col">Presentación</th>
-                                                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                    <th scope="col">Acciones</th>
-                                                                @endif
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($presentaciones as $index => $presentacion)
-                                                                <tr class="presentacion">
-                                                                    <td>{{ $index + 1 }}</td>
-                                                                    <td class="nombreLab">{{ $presentacion->nombre }}</td>
-                                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                        <td><a class="btn btn-danger" data-toggle="modal"
-                                                                                data-target="#confirmPre"
-                                                                                data-id="{{ $presentacion->id }}"
-                                                                                onclick="pasarIdPre(this)"><i
-                                                                                    class="bi bi-trash"></i></a> <a
-                                                                                class="btn btn-warning"
-                                                                                data-toggle="modal"
-                                                                                data-target="#modificarPre"
-                                                                                data-id="{{ $presentacion->id }}"
-                                                                                onclick="pasarIdLab(this), datoAntiguoPre(this)"><i
-                                                                                    class="bi bi-pencil-square"></i></a>
-                                                                        </td>
-                                                                    @endif
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
+                                <table class="table">
+                                    @foreach ($ventas as $venta)
+                                        <tr>
+                                            <td>{{ $venta }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
                             </div>
                             <div class="card-footer">
 
@@ -771,8 +526,7 @@
     </div>
     <!-- /.content-wrapper -->
 
-    {{-- Editar --}}
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('#tabla-laboratorios').DataTable();
         });
@@ -830,7 +584,7 @@
             // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
             formularioEliminar.action = "{{ route('borrarPre', '') }}/" + idPre;
         }
-        // Buscar Laboratorio
+
         $(document).ready(function() {
             $('#buscar-laboratorio').keyup(function() {
                 var texto = $(this).val().toLowerCase();
@@ -842,8 +596,9 @@
                 }).show();
             });
         });
+    </script>
 
-        // Buscar Tipo
+    <script>
         $(document).ready(function() {
             $('#buscar-tipo').keyup(function() {
                 var texto = $(this).val().toLowerCase();
@@ -855,8 +610,9 @@
                 }).show();
             });
         });
+    </script>
 
-        // Buscar Laboratorio
+    <script>
         $(document).ready(function() {
             $('#buscar-presentacion').keyup(function() {
                 var texto = $(this).val().toLowerCase();
@@ -868,7 +624,7 @@
                 }).show();
             });
         });
-    </script>
+    </script> --}}
 
     {{-- Carrito --}}
     <script>
@@ -892,7 +648,6 @@
             return false; // Evitar cualquier acción adicional
         });
 
-
         //vaciar carrito
         $('#vaciarCarrito').click(function() {
             event.stopPropagation(); // Evitar cierre del menú desplegable
@@ -902,12 +657,9 @@
             $('#contador').empty()
             $('#contador').append(carrito.length)
         });
-
-
         //añadir
         // Declarar variable global para el carrito
         let carrito = [];
-
         $(document).ready(function() {
             // Cargar el carrito desde el almacenamiento local
             if (localStorage.getItem("carrito")) {
@@ -930,7 +682,5 @@
             }
         });
     </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
 @endsection
