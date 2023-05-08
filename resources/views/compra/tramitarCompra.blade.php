@@ -342,7 +342,7 @@
         function abrirPDF() {
 
             // Redirigir a la ruta del PDF en una nueva pestaña
-            window.open("{{ route('generatePDF', '') }}/" + ventaS, '_blank');
+            // window.open("{{ route('generatePDF', '') }}/" + 2, '_blank');
 
             carrito = []
             localStorage.setItem('carrito', JSON.stringify(carrito));

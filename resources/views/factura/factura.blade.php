@@ -19,10 +19,11 @@
         <span>farmalize@gmail.com</span>
 
         <div class="mt-4">
-            <span><b>Factura Ident.: </b>{{ $venta[0] }}</span><br>
-            <span><b>Fecha: </b>{{ (new DateTime($venta[1]))->format('d/m/Y H:i:s') }}
+            <span><b>Factura Ident.: </b>{{ $venta['id'] }}</span><br>
+            <span><b>Cliente: </b>{{ $venta['cliente'] }}</span><br>
+            <span><b>Fecha: </b>{{ (new DateTime($venta['fecha']))->format('d/m/Y H:i:s') }}
             </span><br>
-            <span><b>Método de Pago: </b>{{ $venta[3] }}</span>
+            <span><b>Método de Pago: </b>{{ $venta['metodoPago'] }}</span>
         </div>
 
         <div class="text-center mt-5">
@@ -34,7 +35,10 @@
                     <th>Cantidad</th>
                     <th>Precio</th>
                 </tr>
-                @foreach ($venta[6] as $producto)
+                <?php
+                $productos = json_decode($venta['productos'], true);
+                ?>
+                @foreach ($productos as $producto)
                     <tr>
                         @foreach ($producto as $dato)
                             <td>{{ $dato[0] }}</td>
@@ -51,12 +55,12 @@
             <div class="row">
                 <span style="margin-left:90px">TOTAL SIN I.V.A.</span>
                 <span
-                    style="float:right;margin-right:130px">{{ number_format(floatval($venta[4]) / 1.21, 2, '.', '') }}€</span>
+                    style="float:right;margin-right:130px">{{ number_format(floatval($venta['total']) / 1.21, 2, '.', '') }}€</span>
             </div>
             <br>
             <div class="row">
                 <span style="margin-left:90px">TOTAL</span>
-                <span style="float:right;margin-right:130px">{{ $venta[4] }}</span>
+                <span style="float:right;margin-right:130px">{{ $venta['total'] }}</span>
             </div>
         </div>
     </div>

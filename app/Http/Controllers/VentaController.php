@@ -43,14 +43,21 @@ class VentaController extends Controller
         ]);
         // dd($venta);
         // $datos['id'] = $venta[0];
-        $datos['fecha'] = $venta[1];
-        $datos['cliente'] = $venta[2];
-        $datos['metodoPago'] = $venta[3];
-        $datos['total'] = $venta[4];
-        $datos['vendedor'] = $venta[5];
-        $datos['productos'] = json_encode($venta[6]);
+        $datos['fecha'] = $venta[0];
+        $datos['cliente'] = $venta[1];
+        $datos['metodoPago'] = $venta[2];
+        $datos['total'] = $venta[3];
+        $datos['vendedor'] = $venta[4];
+        $datos['productos'] = json_encode($venta[5]);
 
         Venta::create($datos);
         return redirect()->route('listaProductos');
+    }
+
+    public function borrarVenta(Venta $venta)
+    {
+        $venta->delete();
+        session()->flash('message', 'La venta ha sido borrada correctamente.');
+        return redirect()->route('gestionVentas');
     }
 }

@@ -6,7 +6,7 @@ use App\Mail\NosecaenMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use PDF;
-use App\Models\Cuota;
+use App\Models\Venta;
 use App\Models\Cliente;
 
 class FacturaController extends Controller
@@ -17,13 +17,13 @@ class FacturaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($ventaS)
+    public function __invoke($ventaID)
     {
-        $venta = json_decode($ventaS);
+        // $venta = json_decode($ventaS);
         // $cuota = Cuota::findOrFail($id);
-        // dd($venta);
 
-        // $cliente = Cliente::where('id', $cuota['clientes_id'])->first();
+        $venta = Venta::where('id', $ventaID)->first();
+        // dd($venta);
 
         // $pdf = PDF::loadView('factura', compact('cuota', 'cliente', 'tipo_cambio'));
         $pdf = PDF::loadView('factura.factura', compact('venta'));

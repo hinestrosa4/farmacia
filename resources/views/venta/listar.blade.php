@@ -491,6 +491,32 @@
             </div>
         </div> --}}
 
+        <!-- Modal de confirmación de eliminación -->
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
+            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Estás seguro de que deseas borrar esta venta?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <form id="deleteForm" action="{{ route('borrarVenta', '') }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Borrar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -525,7 +551,8 @@
                                                 <tr>
                                                     <td>{{ $venta['id'] }}</td>
                                                     <td>
-                                                        <button class="btn btn-success" type="button"
+                                                        <button class="btn btn-success"
+                                                            style="padding-left: 100px;padding-right: 100px" type="button"
                                                             data-toggle="collapse"
                                                             data-target="#productos-{{ $venta['id'] }}"
                                                             aria-expanded="false"
@@ -557,20 +584,22 @@
                                                     </td>
                                                     <td>{{ $venta['total'] }}</td>
                                                     <td>{{ $venta['cliente'] }}</td>
-                                                    <td>{{ date('d/m/Y H:i:s', strtotime($venta['fecha'])) }}</td>
+                                                    <td>{{ (new DateTime($venta['fecha']))->format('d/m/Y H:i:s') }}</td>
                                                     <td>
-                                                        <a class="btn btn-secondary" href=""><i
-                                                                class="bi bi-printer"></i></a>
+                                                        <a href="{{ route('generatePDF', ['venta' => $venta['id']]) }}"
+                                                            class="btn btn-secondary">
+                                                            <i class="bi bi-printer"></i>
+                                                        </a>
                                                         <a class="btn btn-success" href=""><i
                                                                 class="bi bi-envelope-at"></i></a>
                                                         <a class="btn btn-warning" href=""><i
                                                                 class="bi bi-pencil-square"></i></a>
-                                                        <a class="btn btn-danger" href=""><i
-                                                                class="bi bi-trash"></i></a>
+                                                        <a class="btn btn-danger" href="" data-toggle="modal"
+                                                            data-target="#confirmDeleteModal" data-id="{{ $venta['id'] }}"
+                                                            onclick="actualizarBorrar(this)"><i class="bi bi-trash"></i></a>
                                                     </td>
                                                 </tr>
                                             @endforeach
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -588,105 +617,19 @@
     </div>
     <!-- /.content-wrapper -->
 
-    {{-- <script>
-        $(document).ready(function() {
-            $('#tabla-laboratorios').DataTable();
-        });
-
-        function datoAntiguo(old) {
-            var olddata = old.parentNode.parentNode.querySelector('.nombreLab').innerHTML;
-            document.getElementById('newnombre').value = olddata
-        }
-
-        function datoAntiguoTipo(old) {
-            var olddata = old.parentNode.parentNode.querySelector('.nombreLab').innerHTML;
-            document.getElementById('newnombreTipo').value = olddata
-        }
-
-        function datoAntiguoPre(old) {
-            var olddata = old.parentNode.parentNode.querySelector('.nombreLab').innerHTML;
-            document.getElementById('newnombrePre').value = olddata
-        }
-
-        function pasarIdLab(botonEliminar) {
-            // Obtener el valor del data-id del botón eliminar
-            const idLab = botonEliminar.getAttribute("data-id");
-
-            // Obtener el elemento form por su id
-            const formularioEliminar = document.getElementById("deleteFormLab");
-            const formEdit = document.getElementById("formeditlaboratorio");
-            const formEditTipo = document.getElementById("formedittipo");
-            const formEditPre = document.getElementById("formeditPre");
-
-            // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
-            formularioEliminar.action = "{{ route('borrarLab', '') }}/" + idLab;
-            formEdit.action = "{{ route('editLab', '') }}/" + idLab;
-            formEditTipo.action = "{{ route('editTipo', '') }}/" + idLab;
-            formEditPre.action = "{{ route('editPre', '') }}/" + idLab;
-        }
-
-        function pasarIdTipo(botonEliminar) {
-            // Obtener el valor del data-id del botón eliminar
-            const idTipo = botonEliminar.getAttribute("data-id");
-
-            // Obtener el elemento form por su id
-            const formularioEliminar = document.getElementById("deleteFormTipo");
-
-            // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
-            formularioEliminar.action = "{{ route('borrarTipo', '') }}/" + idTipo;
-        }
-
-        function pasarIdPre(botonEliminar) {
-            // Obtener el valor del data-id del botón eliminar
-            const idPre = botonEliminar.getAttribute("data-id");
-
-            // Obtener el elemento form por su id
-            const formularioEliminar = document.getElementById("deleteFormPre");
-
-            // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
-            formularioEliminar.action = "{{ route('borrarPre', '') }}/" + idPre;
-        }
-
-        $(document).ready(function() {
-            $('#buscar-laboratorio').keyup(function() {
-                var texto = $(this).val().toLowerCase();
-                $('table tbody tr.laboratorio').filter(function() {
-                    return $(this).text().toLowerCase().indexOf(texto) < 0;
-                }).hide();
-                $('table tbody tr.laboratorio').filter(function() {
-                    return $(this).text().toLowerCase().indexOf(texto) >= 0;
-                }).show();
-            });
-        });
-    </script>
-
     <script>
-        $(document).ready(function() {
-            $('#buscar-tipo').keyup(function() {
-                var texto = $(this).val().toLowerCase();
-                $('table tbody tr.tipo').filter(function() {
-                    return $(this).text().toLowerCase().indexOf(texto) < 0;
-                }).hide();
-                $('table tbody tr.tipo').filter(function() {
-                    return $(this).text().toLowerCase().indexOf(texto) >= 0;
-                }).show();
-            });
-        });
-    </script>
+        function actualizarBorrar(botonEliminar) {
+            // Obtener el valor del data-id del botón eliminar
+            const idVenta = botonEliminar.getAttribute("data-id");
 
-    <script>
-        $(document).ready(function() {
-            $('#buscar-presentacion').keyup(function() {
-                var texto = $(this).val().toLowerCase();
-                $('table tbody tr.presentacion').filter(function() {
-                    return $(this).text().toLowerCase().indexOf(texto) < 0;
-                }).hide();
-                $('table tbody tr.presentacion').filter(function() {
-                    return $(this).text().toLowerCase().indexOf(texto) >= 0;
-                }).show();
-            });
-        });
-    </script> --}}
+            // Obtener el elemento form por su id
+            const formularioEliminar = document.getElementById("deleteForm");
+
+            // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
+            formularioEliminar.action = "{{ route('borrarVenta', '') }}/" + idVenta;
+
+        }
+    </script>
 
     {{-- Carrito --}}
     <script>
