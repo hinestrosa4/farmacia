@@ -42,7 +42,7 @@
                             <h4 class="text-center">Carrito de la compra</h4>
                             <div class="dropdown-divider"></div>
                             <div class="dropdown-container">
-                                <table id="cestaProductos" class="table">
+                                <table id="cestaProductos" class="table text-center">
                                     <tr>
                                         <th>Nombre</th>
                                         <th>Concentración</th>
@@ -170,8 +170,8 @@
                         <li class="nav-header">VENTAS</li>
                         <li class="nav-item">
                             <a href="{{ route('gestionVentas') }}" class="nav-link">
-                                <i class="bi bi-boxes"></i>
-                                <p class="ml-1">
+                                <i class="bi bi-currency-dollar"></i>
+                                <p class="">
                                     Gestión de ventas
                                 </p>
                             </a>

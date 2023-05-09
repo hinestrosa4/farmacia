@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Empleado;
-use App\Models\Cuota;
-use App\Mail\NosecaenMail;
+use App\Models\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Message;
@@ -24,20 +23,20 @@ class EmailController extends Controller
         return $password;
     }
 
-    // public function enviarCuota(Empleado $empleado, Cuota $cuota)
-    // {
-    //     $email = 'hinestrosarafa@gmail.com';
+    public function enviarRecibo($email, Venta $venta)
+    {
+        // $email = 'hinestrosarafa@gmail.com';
 
-    //     $pdf = PDF::loadView('factura', compact('cuota'));
-    //     $pdf_content = $pdf->output();
+        $pdf = PDF::loadView('factura', compact('cuota'));
+        $pdf_content = $pdf->output();
 
-    //     Mail::send('email.cuotaPDF', ['empleado' => $empleado], function ($message) use ($email, $pdf_content) {
-    //         $message->to($email)
-    //             ->subject("Factura")
-    //             ->attachData($pdf_content, 'Factura.pdf');
-    //     });
-    //     return redirect()->back();
-    // }
+        Mail::send('email.reciboPDF', ['venta' => $venta], function ($message) use ($email, $pdf_content) {
+            $message->to($email)
+                ->subject("Recibo")
+                ->attachData($pdf_content, 'Recibo.pdf');
+        });
+        return redirect()->back();
+    }
 
     function generatePass()
     {

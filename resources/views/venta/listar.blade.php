@@ -3,6 +3,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+
 
 <style>
     #cuerpo {
@@ -44,459 +46,12 @@
             </div><!-- /.container-fluid -->
         </section>
 
-        {{-- <!-- Modal borrar laboratorio -->
-        <div class="modal fade" id="confirmLab" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmLabLabel">Confirmar eliminación</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        ¿Estás seguro de que deseas eliminar este laboratorio?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <form id="deleteFormLab" action="{{ route('borrarLab', '') }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal borrar tipo -->
-        <div class="modal fade" id="confirmTipo" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmTipoLabel">Confirmar eliminación</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        ¿Estás seguro de que deseas eliminar este tipo?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <form id="deleteFormTipo" action="{{ route('borrarTipo', '') }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal borrar tipo -->
-        <div class="modal fade" id="confirmPre" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="card card-success">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="confirmPresentacionLabel">Confirmar eliminación</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            ¿Estás seguro de que deseas eliminar esta presentación?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <form id="deleteFormPre" action="{{ route('borrarPre', '') }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-
-        {{-- <!-- Modal para crear un laboratorio -->
-        <div class="modal fade" id="crearlaboratorio" tabindex="-1" role="dialog"
-            aria-labelledby="crearlaboratorio-label" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="card card-success">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Crear laboratorio
-                            </h3>
-                            <button data-dismiss="modal" aria-label="close" class="close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="card-body">
-                            <form id="formlaboratorio" class="g-3 needs-validation" method="POST"
-                                action="{{ route('createLab') }}">
-                                @csrf
-                                <h1>Crear laboratorio</h1>
-                                <br>
-                                <div class="">
-                                    <label for="validationCustom01" class="form-label">Laboratorio</label>
-                                    <input type="text" name="nombre" class="form-control" id="nombre"
-                                        value="{{ old('nombre') }}" placeholder="Introduzca un laboratorio">
-                                </div>
-                                <br>
-                                <div class="col-12">
-                                    <button id="btnSubmit" class="btn btn-success" type="submit">Crear
-                                        laboratorio</button>
-                                </div>
-                            </form>
-
-                            <script>
-                                $(document).ready(function() {
-                                    $("#formlaboratorio").submit(function(event) {
-                                        // Prevenir la acción predeterminada del formulario
-                                        event.preventDefault();
-                                        // Validar el campo de laboratorio
-                                        if ($("#nombre").val() == "") {
-                                            $("#nombre").addClass("is-invalid");
-                                            $("#nombre").parent().find(".invalid-feedback")
-                                                .remove(); // eliminar cualquier div existente
-                                            $("#nombre").parent().append(
-                                                "<div class='invalid-feedback'>Por favor, introduce un laboratorio.</div>");
-                                        } else {
-                                            $("#nombre").removeClass("is-invalid");
-                                            $("#nombre").addClass("is-valid");
-                                        }
-                                        // Enviar el formulario si todos los campos son válidos
-                                        if ($(".is-invalid").length == 0) {
-                                            $("#formlaboratorio").unbind("submit").submit();
-                                        }
-                                    });
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal para modificar un laboratorio -->
-        <div class="modal fade" id="modificarLab" tabindex="-1" role="dialog"
-            aria-labelledby="crearlaboratorio-label" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="card card-warning">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Modificar laboratorio
-                            </h3>
-                            <button data-dismiss="modal" aria-label="close" class="close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="card-body">
-                            <form id="formeditlaboratorio" class="g-3 needs-validation" method="POST"
-                                action="{{ route('editLab', '') }}">
-                                @csrf
-                                <h1>Modificar laboratorio</h1>
-                                <br>
-                                <div class="">
-                                    <label for="validationCustom01" class="form-label">Laboratorio</label>
-                                    <input type="text" name="nombre" class="form-control" id="newnombre"
-                                        value="{{ old('nombre') }}" placeholder="Introduzca un laboratorio">
-                                </div>
-                                <br>
-                                <div class="col-12">
-                                    <button id="btnSubmitEdit" class="btn btn-warning" type="submit">Modificar
-                                        laboratorio</button>
-                                </div>
-                            </form>
-
-                            <script>
-                                $(document).ready(function() {
-                                    $("#formeditlaboratorio").submit(function(event) {
-                                        // Prevenir la acción predeterminada del formulario
-                                        event.preventDefault();
-                                        // Validar el campo de laboratorio
-                                        if ($("#newnombre").val() == "") {
-                                            $("#newnombre").addClass("is-invalid");
-                                            $("#newnombre").parent().find(".invalid-feedback")
-                                                .remove(); // eliminar cualquier div existente
-                                            $("#newnombre").parent().append(
-                                                "<div class='invalid-feedback'>Por favor, introduce un laboratorio.</div>");
-                                        } else {
-                                            $("#newnombre").removeClass("is-invalid");
-                                            $("#newnombre").addClass("is-valid");
-                                        }
-                                        // Enviar el formulario si todos los campos son válidos
-                                        if ($(".is-invalid").length == 0) {
-                                            $("#formeditlaboratorio").unbind("submit").submit();
-                                        }
-                                    });
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal para crear un tipo -->
-        <div class="modal fade" id="creartipo" tabindex="-1" role="dialog" aria-labelledby="creartipo-label"
-            data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="card card-success">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Crear tipo
-                            </h3>
-
-                            <button data-dismiss="modal" aria-label="close" class="close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="card-body">
-                            <form id="formtipo" class="g-3 needs-validation" method="POST"
-                                action="{{ route('createTipo') }}">
-                                @csrf
-                                <h1>Crear tipo</h1>
-                                <br>
-                                <div class="">
-                                    <label for="validationCustom01" class="form-label">Tipo</label>
-                                    <input type="text" name="nombre" class="form-control"
-                                        value="{{ old('nombre') }}" id="tipo" placeholder="Introduzca un tipo">
-                                </div>
-                                <br>
-                                <div class="col-12">
-                                    <button id="btnSubmittipo" class="btn btn-success" type="submit">Crear tipo</button>
-                                </div>
-                            </form>
-
-                            <script>
-                                $(document).ready(function() {
-                                    $("#formtipo").submit(function(event) {
-                                        // Prevenir la acción predeterminada del formulario
-                                        event.preventDefault();
-                                        // Validar el campo de tipo
-                                        if ($("#tipo").val() == "") {
-                                            $("#tipo").addClass("is-invalid");
-                                            $("#tipo").parent().find(".invalid-feedback")
-                                                .remove(); // eliminar cualquier div existente
-                                            $("#tipo").parent().append(
-                                                "<div class='invalid-feedback'>Por favor, introduce un tipo.</div>");
-                                        } else {
-                                            $("#tipo").removeClass("is-invalid");
-                                            $("#tipo").addClass("is-valid");
-                                        }
-                                        // Enviar el formulario si todos los campos son válidos
-                                        if ($(".is-invalid").length == 0) {
-                                            $("#formtipo").unbind("submit").submit();
-                                        }
-                                    });
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal para modificar un tipo -->
-        <div class="modal fade" id="modificarTipo" tabindex="-1" role="dialog"
-            aria-labelledby="crearlaboratorio-label" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="card card-warning">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Modificar tipo
-                            </h3>
-                            <button data-dismiss="modal" aria-label="close" class="close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="card-body">
-                            <form id="formedittipo" class="g-3 needs-validation" method="POST"
-                                action="{{ route('editTipo', '') }}">
-                                @csrf
-                                <h1>Modificar tipo</h1>
-                                <br>
-                                <div class="">
-                                    <label for="validationCustom01" class="form-label">Laboratorio</label>
-                                    <input type="text" name="nombre" class="form-control" id="newnombreTipo"
-                                        value="{{ old('nombre') }}" placeholder="Introduzca un laboratorio">
-                                </div>
-                                <br>
-                                <div class="col-12">
-                                    <button id="btnSubmitEditTipo" class="btn btn-warning" type="submit">Modificar
-                                        Tipo</button>
-                                </div>
-                            </form>
-
-                            <script>
-                                $(document).ready(function() {
-                                    $("#formedittipo").submit(function(event) {
-                                        // Prevenir la acción predeterminada del formulario
-                                        event.preventDefault();
-                                        // Validar el campo de laboratorio
-                                        if ($("#newnombreTipo").val() == "") {
-                                            $("#newnombreTipo").addClass("is-invalid");
-                                            $("#newnombreTipo").parent().find(".invalid-feedback")
-                                                .remove(); // eliminar cualquier div existente
-                                            $("#newnombreTipo").parent().append(
-                                                "<div class='invalid-feedback'>Por favor, introduce un tipo.</div>");
-                                        } else {
-                                            $("#newnombreTipo").removeClass("is-invalid");
-                                            $("#newnombreTipo").addClass("is-valid");
-                                        }
-                                        // Enviar el formulario si todos los campos son válidos
-                                        if ($(".is-invalid").length == 0) {
-                                            $("#formedittipo").unbind("submit").submit();
-                                        }
-                                    });
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal para crear una presentacion -->
-        <div class="modal fade" id="crearpresentacion" tabindex="-1" role="dialog"
-            aria-labelledby="crearpresentacion-label" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="card card-success">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Crear presentación
-                            </h3>
-
-                            <button data-dismiss="modal" aria-label="close" class="close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="card-body">
-                            <form id="formpresentacion" class="g-3 needs-validation" method="POST"
-                                action="{{ route('createPresentacion') }}">
-                                @csrf
-                                <h1>Crear presentación</h1>
-                                <br>
-                                <div class="">
-                                    <label for="validationCustom01" class="form-label">Presentacion</label>
-                                    <input type="text" name="nombre" class="form-control" id="presentacion"
-                                        value="{{ old('nombre') }}" placeholder="Introduzca una presentacion">
-                                </div>
-                                <br>
-                                <div class="col-12">
-                                    <button id="btnSubmitpresentacion" class="btn btn-success" type="submit">Crear
-                                        presentacion</button>
-                                </div>
-                            </form>
-
-                            <script>
-                                $(document).ready(function() {
-                                    $("#formpresentacion").submit(function(event) {
-                                        // Prevenir la acción predeterminada del formulario
-                                        event.preventDefault();
-                                        // Validar el campo de presentacion
-                                        if ($("#presentacion").val() == "") {
-                                            $("#presentacion").addClass("is-invalid");
-                                            $("#presentacion").parent().find(".invalid-feedback")
-                                                .remove(); // eliminar cualquier div existente
-                                            $("#presentacion").parent().append(
-                                                "<div class='invalid-feedback'>Por favor, introduce una presentacion.</div>");
-                                        } else {
-                                            $("#presentacion").removeClass("is-invalid");
-                                            $("#presentacion").addClass("is-valid");
-                                        }
-                                        // Enviar el formulario si todos los campos son válidos
-                                        if ($(".is-invalid").length == 0) {
-                                            $("#formpresentacion").unbind("submit").submit();
-                                        }
-                                    });
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal para modificar una presentacion -->
-        <div class="modal fade" id="modificarPre" tabindex="-1" role="dialog"
-            aria-labelledby="crearlaboratorio-label" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="card card-warning">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Modificar Presentación
-                            </h3>
-                            <button data-dismiss="modal" aria-label="close" class="close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="card-body">
-                            <form id="formeditPre" class="g-3 needs-validation" method="POST"
-                                action="{{ route('editPre', '') }}">
-                                @csrf
-                                <h1>Modificar presentación</h1>
-                                <br>
-                                <div class="">
-                                    <label for="validationCustom01" class="form-label">Laboratorio</label>
-                                    <input type="text" name="nombre" class="form-control" id="newnombrePre"
-                                        value="{{ old('nombre') }}" placeholder="Introduzca un laboratorio">
-                                </div>
-                                <br>
-                                <div class="col-12">
-                                    <button id="btnSubmitEditPre" class="btn btn-warning" type="submit">Modificar
-                                        presentación</button>
-                                </div>
-                            </form>
-
-                            <script>
-                                $(document).ready(function() {
-                                    $("#formedittipo").submit(function(event) {
-                                        // Prevenir la acción predeterminada del formulario
-                                        event.preventDefault();
-                                        // Validar el campo de laboratorio
-                                        if ($("#newnombreTipo").val() == "") {
-                                            $("#newnombreTipo").addClass("is-invalid");
-                                            $("#newnombreTipo").parent().find(".invalid-feedback")
-                                                .remove(); // eliminar cualquier div existente
-                                            $("#newnombreTipo").parent().append(
-                                                "<div class='invalid-feedback'>Por favor, introduce un tipo.</div>");
-                                        } else {
-                                            $("#newnombreTipo").removeClass("is-invalid");
-                                            $("#newnombreTipo").addClass("is-valid");
-                                        }
-                                        // Enviar el formulario si todos los campos son válidos
-                                        if ($(".is-invalid").length == 0) {
-                                            $("#formedittipo").unbind("submit").submit();
-                                        }
-                                    });
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-
         <!-- Modal de confirmación de eliminación -->
         <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
             aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-danger">
                         <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                             <span aria-hidden="true">&times;</span>
@@ -517,6 +72,62 @@
             </div>
         </div>
 
+        <!-- Modal de enviar correo -->
+        <div class="modal fade" id="enviarCorreo" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="modal-title" id="enviarCorreoL">Enviar recibo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 class="mb-4">Enviar a:</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header bg-success">
+                                        Comprador
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <form id="formEnviar" class="g-3 needs-validation" method="POST"> @csrf <label
+                                                    for="exampleFormControlInput1" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="exampleFormControlInput1"
+                                                    placeholder="prueba@prueba.com"><br>
+                                                <button href="" class="btn btn-success">Enviar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header bg-success">
+                                        Otro usuario
+                                    </div>
+                                    <div class="card-body">
+                                        <label for="exampleFormControlInput1" class="form-label">Usuarios</label>
+                                        <select class="form-select">
+                                            @foreach ($usuarios as $usuario)
+                                                <option value="{{ $usuario->email }}">{{ $usuario->nombre }}</option>
+                                            @endforeach
+                                        </select><br>
+                                        <a href="" class="btn btn-success mb-3">Enviar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- <div class="modal-footer">
+                    </div> --}}
+                </div>
+            </div>
+        </div>
+
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -527,8 +138,12 @@
                                 <h4>Historial de Ventas</h4>
                             </div>
                             <div class="card-body">
+                                @if (session()->has('message'))
+                                    <div class="alert alert-success text-center">
+                                        {{ session()->get('message') }}
+                                @endif
                                 <div class="table-responsive">
-                                    <table id="myTable" class="table table-hover text-center">
+                                    <table id="myTable" class="table text-center">
                                         <thead>
                                             <tr>
                                                 <th>Id</th>
@@ -551,16 +166,32 @@
                                                 <tr>
                                                     <td>{{ $venta['id'] }}</td>
                                                     <td>
-                                                        <button class="btn btn-success"
-                                                            style="padding-left: 100px;padding-right: 100px" type="button"
-                                                            data-toggle="collapse"
+                                                        <button id="boton-{{ $venta['id'] }}" class="btn btn-success"
+                                                            style="padding-left: 100px;padding-right: 100px"
+                                                            type="button" data-toggle="collapse"
                                                             data-target="#productos-{{ $venta['id'] }}"
                                                             aria-expanded="false"
                                                             aria-controls="productos-{{ $venta['id'] }}">
                                                             {{ count($productos) }} productos
                                                         </button>
+
+                                                        {{-- Boton collapse --}}
+                                                        <script>
+                                                            $(function() {
+                                                                // Cuando se muestra la tabla, cambia el color del botón a rojo
+                                                                $('#productos-{{ $venta['id'] }}').on('shown.bs.collapse', function() {
+                                                                    $('#boton-{{ $venta['id'] }}').removeClass('btn-success').addClass('btn-danger');
+                                                                });
+
+                                                                // Cuando se oculta la tabla, cambia el color del botón a verde
+                                                                $('#productos-{{ $venta['id'] }}').on('hidden.bs.collapse', function() {
+                                                                    $('#boton-{{ $venta['id'] }}').removeClass('btn-danger').addClass('btn-success');
+                                                                });
+                                                            });
+                                                        </script>
+
                                                         <div class="collapse" id="productos-{{ $venta['id'] }}">
-                                                            <table class="table table-hover">
+                                                            <table class="table">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>Producto</th>
@@ -587,16 +218,19 @@
                                                     <td>{{ (new DateTime($venta['fecha']))->format('d/m/Y H:i:s') }}</td>
                                                     <td>
                                                         <a href="{{ route('generatePDF', ['venta' => $venta['id']]) }}"
-                                                            class="btn btn-secondary">
+                                                            class="btn btn-secondary" target="_blank">
                                                             <i class="bi bi-printer"></i>
                                                         </a>
-                                                        <a class="btn btn-success" href=""><i
+                                                        <a class="btn btn-success" href="" data-toggle="modal"
+                                                            data-target="#enviarCorreo" data-id="{{ $venta['id'] }}"><i
                                                                 class="bi bi-envelope-at"></i></a>
                                                         <a class="btn btn-warning" href=""><i
                                                                 class="bi bi-pencil-square"></i></a>
                                                         <a class="btn btn-danger" href="" data-toggle="modal"
-                                                            data-target="#confirmDeleteModal" data-id="{{ $venta['id'] }}"
-                                                            onclick="actualizarBorrar(this)"><i class="bi bi-trash"></i></a>
+                                                            data-target="#confirmDeleteModal"
+                                                            data-id="{{ $venta['id'] }}"
+                                                            onclick="actualizarBorrar(this)"><i
+                                                                class="bi bi-trash"></i></a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -604,9 +238,7 @@
                                     </table>
                                 </div>
                             </div>
-
                             <div class="card-footer">
-
                             </div>
                         </div>
                     </div>
@@ -617,6 +249,16 @@
     </div>
     <!-- /.content-wrapper -->
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
+    </script>
+
+    {{-- Borrar venta --}}
     <script>
         function actualizarBorrar(botonEliminar) {
             // Obtener el valor del data-id del botón eliminar
@@ -630,7 +272,6 @@
 
         }
     </script>
-
     {{-- Carrito --}}
     <script>
         $(document).on('click', '.borrar', function(event) {

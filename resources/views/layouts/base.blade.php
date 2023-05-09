@@ -180,8 +180,8 @@
                         <li class="nav-header">VENTAS</li>
                         <li class="nav-item">
                             <a href="{{ route('gestionVentas') }}" class="nav-link">
-                                <i class="bi bi-boxes"></i>
-                                <p class="ml-1">
+                                <i class="bi bi-currency-dollar"></i>
+                                <p class="">
                                     Gestión de ventas
                                 </p>
                             </a>
@@ -237,7 +237,7 @@
             <strong>Copyright &copy; 2023 <p>Rafael Hinestrosa</p></strong>
         </footer> --}}
     </div>
-    <script src="{{ asset('templates/plugins/jquery/jquery.min.js') }}"></script>
+    {{-- <script src="{{ asset('templates/plugins/jquery/jquery.min.js') }}"></script> --}}
     <script src="{{ asset('templates/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('templates/dist/js/adminlte.min.js') }}"></script>
 </body>

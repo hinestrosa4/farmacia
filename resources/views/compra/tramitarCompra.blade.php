@@ -367,6 +367,8 @@
             ventaS = ""
             generateVenta();
 
+            console.log("producto: " + venta);
+
             var formEnviar = document.getElementById("formEnviar")
             // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
             formEnviar.action = "{{ route('createVenta', '') }}/" + ventaS;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Laboratorio;
-use App\Models\Presentacion;
+use App\Models\Usuario;
+use App\Models\Producto;
 use App\Models\Tipo;
 use App\Models\Venta;
 use Illuminate\Http\Request;
@@ -19,14 +19,11 @@ class VentaController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $laboratorios = Laboratorio::orderBy('id', 'asc')->get();
-        $tipos = Tipo::orderBy('id', 'asc')->get();
-        $presentaciones = Presentacion::orderBy('id', 'asc')->get();
+        $usuarios = usuario::orderBy('id', 'asc')->get();
         $ventas = Venta::all()->toArray();
         // dd($ventas);
-        return view('venta.listar', compact('ventas'));
+        return view('venta.listar', compact('ventas', 'usuarios'));
     }
-
 
     public function store($ventaS)
     {
@@ -50,6 +47,15 @@ class VentaController extends Controller
         $datos['vendedor'] = $venta[4];
         $datos['productos'] = json_encode($venta[5]);
 
+        $productos = json_decode($datos['productos'], true);
+
+        foreach ($productos as $producto) {
+            $nombre = $producto[0][0];
+            $cantidad = $producto[3][0];
+            $productoDb = Producto::where('nombre', $nombre)->first();
+            $productoDb->stock -= $cantidad;
+            $productoDb->save();
+        }
         Venta::create($datos);
         return redirect()->route('listaProductos');
     }
@@ -58,6 +64,15 @@ class VentaController extends Controller
     {
         $venta->delete();
         session()->flash('message', 'La venta ha sido borrada correctamente.');
+        return redirect()->route('gestionVentas');
+    }
+
+    public function enviarFactura($email, Venta $venta)
+    {
+        $emailController = new EmailController();
+        $emailController->enviarRecibo($email, $venta);
+
+        session()->flash('message', 'El correo ha sido enviado correctamente.');
         return redirect()->route('gestionVentas');
     }
 }
