@@ -357,7 +357,7 @@
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-right">
-                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('ventaProductos') }}">Inicio</a></li>
                             <li class="breadcrumb-item active">Gestión de usuarios</li>
                         </ol>
                     </div>
@@ -366,7 +366,7 @@
         </section>
         <section>
             <div class="cotainer-fluid">
-                <div class="card card-warning" >
+                <div class="card card-warning">
                     <div class="card-header">
                         <h3 class="card-title">Buscar usuario</h3>
                         <div class="input-group">
@@ -611,7 +611,7 @@
             // Cargar el carrito desde el almacenamiento local
             if (localStorage.getItem("carrito")) {
                 carrito = JSON.parse(localStorage.getItem("carrito"));
-                
+
                 $('#contador').empty()
                 $('#contador').append(carrito.length)
 

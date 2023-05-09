@@ -10,11 +10,17 @@
 <link rel="stylesheet" href={{ asset('templates/dist/css/adminlte.min.css') }}>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
+<style>
+    body {
+        padding-top: 56px;
+        /* altura del navbar */
+    }
+</style>
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light fixed-top">
             <!-- Top navbar links -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
@@ -22,7 +28,7 @@
                             class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ route('listaProductos') }}" class="nav-link">Inicio</a>
+                    <a href="{{ route('ventaProductos') }}" class="nav-link">Inicio</a>
                 </li>
             </ul>
 
@@ -33,8 +39,8 @@
                         <div class="image mr-4" data-toggle="dropdown">
                             <img src="{{ asset('img/carrito.png') }}" class="img" alt="{{ Auth::user()->nombre }}"
                                 width="40px">
-                            <span id="contador"
-                                class="position-absolute top-0 start-55 translate-middle badge rounded-pill bg-danger">
+                            <span id="contador" style="margin-left: -8px;margin-top:-8px"
+                                class="position-absolute translate-middle badge rounded-pill bg-danger">
                                 0
                             </span>
                         </div>
@@ -150,29 +156,29 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-                        <li class="nav-header">USUARIO</li>
-                        {{-- <li class="nav-item">
-                            <a href="{{ route('datosPersonales', Auth::user()->id) }}" class="nav-link">
-                                <i class="bi bi-person-fill-gear"></i>
-                                <p>
-                                    Datos personales
-                                </p>
-                            </a>
-                        </li> --}}
+                        <li class="nav-header">VENTAS</li>
                         <li class="nav-item">
-                            <a href="{{ route('gestionUsuario') }}" class="nav-link">
-                                <i class="bi bi-person-lines-fill"></i>
-                                <p class="ml-1">
-                                    Gestión de usuarios
+                            <a href="{{ route('ventaProductos') }}" class="nav-link">
+                                <i class="bi bi-bag"></i>
+                                <p class="">
+                                    Venta de productos
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-header">VENTAS</li>
                         <li class="nav-item">
                             <a href="{{ route('gestionVentas') }}" class="nav-link">
                                 <i class="bi bi-currency-dollar"></i>
                                 <p class="">
                                     Gestión de ventas
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-header">AGENDA</li>
+                        <li class="nav-item">
+                            <a href="{{ route('calendario') }}" class="nav-link">
+                                <i class="bi bi-calendar-event"></i>
+                                <p class="ml-1">
+                                    Calendario
                                 </p>
                             </a>
                         </li>
@@ -209,12 +215,12 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-header">AGENDA</li>
+                        <li class="nav-header">USUARIO</li>
                         <li class="nav-item">
-                            <a href="{{ route('calendario') }}" class="nav-link">
-                                <i class="bi bi-calendar-event"></i>
+                            <a href="{{ route('gestionUsuario') }}" class="nav-link">
+                                <i class="bi bi-person-lines-fill"></i>
                                 <p class="ml-1">
-                                    Calendario
+                                    Gestión de usuarios
                                 </p>
                             </a>
                         </li>

@@ -34,8 +34,9 @@
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('gestionUsuario') }}">Gestión de usuarios</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('ventaProductos') }}">Inicio</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('gestionUsuario') }}">Gestión de
+                                    usuarios</a></li>
                             <li class="breadcrumb-item active">Perfil</li>
                         </ol>
                     </div>
@@ -112,7 +113,8 @@
                                                         contraseña</h5>
 
                                                 </div>
-                                                <div id="mensaje-contrasenas" style="display: none; color: red; text-align:center">
+                                                <div id="mensaje-contrasenas"
+                                                    style="display: none; color: red; text-align:center">
                                                     Asegúrate de que ambas contraseñas son iguales
                                                 </div>
 
@@ -366,7 +368,7 @@
             });
         });
 
-        
+
         $(document).on('click', '.borrar', function(event) {
             event.preventDefault();
             event.stopPropagation(); // Evitar cierre del menú desplegable
@@ -407,7 +409,7 @@
             // Cargar el carrito desde el almacenamiento local
             if (localStorage.getItem("carrito")) {
                 carrito = JSON.parse(localStorage.getItem("carrito"));
-                
+
                 $('#contador').empty()
                 $('#contador').append(carrito.length)
 

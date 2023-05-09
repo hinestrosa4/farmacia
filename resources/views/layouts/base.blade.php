@@ -17,12 +17,17 @@
         color: rgb(255, 255, 255);
         background-color: rgb(78, 78, 78);
     }
+
+    body {
+        padding-top: 56px;
+        /* altura del navbar */
+    }
 </style>
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light fixed-top">
             <!-- Top navbar links -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
@@ -30,7 +35,7 @@
                             class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ route('listaProductos') }}" class="nav-link">Inicio</a>
+                    <a href="{{ route('ventaProductos') }}" class="nav-link">Inicio</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
 
@@ -160,29 +165,29 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-                        <li class="nav-header">USUARIO</li>
-                        {{-- <li class="nav-item">
-                            <a href="{{ route('datosPersonales', Auth::user()->id) }}" class="nav-link">
-                                <i class="bi bi-person-fill-gear"></i>
-                                <p>
-                                    Datos personales
-                                </p>
-                            </a>
-                        </li> --}}
+                        <li class="nav-header">VENTA</li>
                         <li class="nav-item">
-                            <a href="{{ route('gestionUsuario') }}" class="nav-link">
-                                <i class="bi bi-person-lines-fill"></i>
-                                <p class="ml-1">
-                                    Gestión de usuarios
+                            <a href="{{ route('ventaProductos') }}" class="nav-link">
+                                <i class="bi bi-bag"></i>
+                                <p class="">
+                                    Venta de productos
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-header">VENTAS</li>
                         <li class="nav-item">
                             <a href="{{ route('gestionVentas') }}" class="nav-link">
                                 <i class="bi bi-currency-dollar"></i>
                                 <p class="">
                                     Gestión de ventas
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-header">AGENDA</li>
+                        <li class="nav-item">
+                            <a href="{{ route('calendario') }}" class="nav-link">
+                                <i class="bi bi-calendar-event"></i>
+                                <p class="ml-1">
+                                    Calendario
                                 </p>
                             </a>
                         </li>
@@ -219,12 +224,12 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-header">AGENDA</li>
+                        <li class="nav-header">USUARIO</li>
                         <li class="nav-item">
-                            <a href="{{ route('calendario') }}" class="nav-link">
-                                <i class="bi bi-calendar-event"></i>
+                            <a href="{{ route('gestionUsuario') }}" class="nav-link">
+                                <i class="bi bi-person-lines-fill"></i>
                                 <p class="ml-1">
-                                    Calendario
+                                    Gestión de usuarios
                                 </p>
                             </a>
                         </li>

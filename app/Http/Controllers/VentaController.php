@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Usuario;
 use App\Models\Producto;
+use App\Models\Laboratorio;
+use App\Models\Presentacion;
+use App\Models\Proveedor;
 use App\Models\Tipo;
 use App\Models\Venta;
 use Illuminate\Http\Request;
@@ -23,6 +26,17 @@ class VentaController extends Controller
         $ventas = Venta::all()->toArray();
         // dd($ventas);
         return view('venta.listar', compact('ventas', 'usuarios'));
+    }
+
+    public function ventaProductos()
+    {
+        $laboratorios = Laboratorio::all();
+        $tipos = Tipo::all();
+        $presentaciones = Presentacion::all();
+        $proveedores = Proveedor::all();
+        $productos = Producto::orderBy('id', 'asc')->get();
+        $usuario = Usuario::orderBy('id', 'asc')->get();
+        return view('venta.ventaProductos', compact('productos', 'usuario', 'laboratorios', 'tipos', 'presentaciones', 'proveedores'));
     }
 
     public function store($ventaS)

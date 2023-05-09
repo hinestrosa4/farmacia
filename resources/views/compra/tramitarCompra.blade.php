@@ -542,7 +542,7 @@
             $('#tablaProductos').empty()
 
             $('#tablaProductos').append(
-                "<tr style='background-color: #6aa259'><th>Stock</th><th>Nombre</th><th>Concentración</th><th>Adicional</th><th>Presentación</th><th>Cantidad</th><th>Precio</th></tr>"
+                "<tr style='background-color: #E5F5DF'><th>Stock</th><th>Nombre</th><th>Concentración</th><th>Adicional</th><th>Presentación</th><th>Cantidad</th><th>Precio</th></tr>"
             )
 
             for (let i = 0; i < carrito.length; i++) {
@@ -551,7 +551,7 @@
                 const index = i;
 
                 $('#tablaProductos').append(
-                    "<tr style='background-color: #A8DA98' data-index='" +
+                    "<tr style='background-color:#EEF3EC' data-index='" +
                     index + "'><td>" + producto.stock + "</td><td>" + producto.nombre +
                     "</td><td>" + producto.concentracion + "</td><td>" +
                     producto.adicional + "</td><td>" + producto.nombre_pre +

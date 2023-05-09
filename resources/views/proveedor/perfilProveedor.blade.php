@@ -34,8 +34,9 @@
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('listaProveedores') }}">Gestión de proveedores</a>
+                            <li class="breadcrumb-item"><a href="{{ route('ventaProductos') }}">Inicio</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('listaProveedores') }}">Gestión de
+                                    proveedores</a>
                             </li>
                             <li class="breadcrumb-item active">Perfil</li>
                         </ol>
@@ -52,8 +53,8 @@
                             <div class="card card-success card-outline">
                                 <div class="card-body box-profile">
                                     <div class="text-center">
-                                        <img src={{ asset("img/avatares/avatarProveedor.png") }} alt="" class="img-fluid"
-                                            width="150px">
+                                        <img src={{ asset('img/avatares/avatarProveedor.png') }} alt=""
+                                            class="img-fluid" width="150px">
                                     </div>
                                     <h3 class="profile-username text-center text-success">
                                         {{ $proveedor->nombre }}
@@ -100,15 +101,15 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="validationCustom02" class="form-label">Dirección</label>
-                                                <input type="text" name="direccion" class="form-control"
-                                                    id="direccion" value="{{ old('direccion') }}"
+                                                <input type="text" name="direccion" class="form-control" id="direccion"
+                                                    value="{{ old('direccion') }}"
                                                     placeholder="Introduzca una fecha de direccion">
                                                 {!! $errors->first('direccion', '<span style=color:red>:message</span>') !!}
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="validationCustom02" class="form-label">Teléfono</label>
-                                                <input type="text" name="telefono" class="form-control"
-                                                    id="telefono" value="{{ old('telefono') }}"
+                                                <input type="text" name="telefono" class="form-control" id="telefono"
+                                                    value="{{ old('telefono') }}"
                                                     placeholder="Introduzca una fecha de telefono">
                                                 {!! $errors->first('telefono', '<span style=color:red>:message</span>') !!}
                                             </div>

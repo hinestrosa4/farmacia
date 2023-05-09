@@ -30,8 +30,8 @@ use App\Http\Controllers\RecuperarPassController;
 //     return view('login.login');
 // });
 
-Route::get('/prueba', function () {
-    return view('prueba');
+Route::get('/faq', function () {
+    return view('faq');
 });
 
 //Login
@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tramitarCompra', CompraController::class)->name('tramitarCompra');
 
     /*------ Venta ------*/
+    Route::get('/ventaProductos', [VentaController::class, 'ventaProductos'])->name('ventaProductos');
     Route::get('/gestionVentas', VentaController::class)->name('gestionVentas');
     Route::post('createVenta/{venta}', [VentaController::class, 'store'])->name('createVenta');
     Route::delete('/borrarVenta/{venta}', [VentaController::class, 'borrarVenta'])->name('borrarVenta');

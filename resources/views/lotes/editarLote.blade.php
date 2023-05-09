@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('ventaProductos') }}">Inicio</a></li>
                             <li class="breadcrumb-item active"><a href="{{ route('listaProductos') }}">Gestión de lotes</a>
                             </li>
                             <li class="breadcrumb-item active">Detalles</li>

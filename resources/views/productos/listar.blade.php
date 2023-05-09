@@ -3,6 +3,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <style>
     #cuerpo {
@@ -141,7 +142,8 @@
                             <br>
                             <div>
                                 <label for="validationCustom01" class="form-label">Laboratorio</label>
-                                <select class="form-control" name="producto_lab">
+                                <select class="js-example-basic-multiple js-states form-control" name="producto_lab"
+                                    style="width: 100%">
                                     @foreach ($laboratorios as $laboratorio)
                                         <option value={{ $laboratorio->id }}
                                             {{ old('laboratorio') == $laboratorio->nombre ? 'selected' : '' }}>
@@ -154,7 +156,8 @@
                             <br>
                             <div>
                                 <label for="validationCustom01" class="form-label">Tipo</label>
-                                <select class="form-control" name="producto_tipo" data-placeholder="Selecciona un tipo">
+                                <select class="form-control" name="producto_tipo" data-placeholder="Selecciona un tipo"
+                                    style="width: 100%">
                                     @foreach ($tipos as $tipo)
                                         <option value={{ $tipo->id }}
                                             {{ old('tipo') == $tipo->nombre ? 'selected' : '' }}>
@@ -167,7 +170,7 @@
                             <div>
                                 <label for="validationCustom01" class="form-label">Presentación</label>
                                 <select class="form-control" name="producto_pre"
-                                    data-placeholder="Selecciona una presentacion">
+                                    data-placeholder="Selecciona una presentacion" style="width: 100%">
                                     @foreach ($presentaciones as $presentacion)
                                         <option value={{ $presentacion->id }}
                                             {{ old('presentacion') == $presentacion->nombre ? 'selected' : '' }}>
@@ -325,7 +328,7 @@
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-right">
-                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('ventaProductos') }}">Inicio</a></li>
                             <li class="breadcrumb-item active">Gestión de productos</li>
                         </ol>
                     </div>
@@ -394,7 +397,14 @@
     </section>
     </div>
 
+    <!-- JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
     <script>
+        $(document).ready(function() {
+            $('select').select2();
+        });
+
         $(document).ready(function() {
             var presentaciones = <?php echo $presentaciones_json; ?>;
             var laboratorios = <?php echo $laboratorios_json; ?>;
@@ -488,9 +498,7 @@
                                 </a>
                             @endif
                             
-                            <a href="#" class="btn btn-sm btn-primary mt-1" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                                <i class="bi bi-cart-plus-fill"></i> Añadir
-                            </a>
+                           
                               </div>
                             </div>
                           </div>

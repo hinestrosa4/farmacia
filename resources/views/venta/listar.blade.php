@@ -38,7 +38,7 @@
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('ventaProductos') }}">Inicio</a></li>
                             <li class="breadcrumb-item active">Gestión de ventas</li>
                         </ol>
                     </div>
@@ -166,7 +166,7 @@
                                                 <tr>
                                                     <td>{{ $venta['id'] }}</td>
                                                     <td>
-                                                        <button id="boton-{{ $venta['id'] }}" class="btn btn-success"
+                                                        <button id="boton-{{ $venta['id'] }}" class="btn btn-primary"
                                                             style="padding-left: 100px;padding-right: 100px"
                                                             type="button" data-toggle="collapse"
                                                             data-target="#productos-{{ $venta['id'] }}"
@@ -180,12 +180,12 @@
                                                             $(function() {
                                                                 // Cuando se muestra la tabla, cambia el color del botón a rojo
                                                                 $('#productos-{{ $venta['id'] }}').on('shown.bs.collapse', function() {
-                                                                    $('#boton-{{ $venta['id'] }}').removeClass('btn-success').addClass('btn-danger');
+                                                                    $('#boton-{{ $venta['id'] }}').removeClass('btn-primary').addClass('btn-danger');
                                                                 });
 
                                                                 // Cuando se oculta la tabla, cambia el color del botón a verde
                                                                 $('#productos-{{ $venta['id'] }}').on('hidden.bs.collapse', function() {
-                                                                    $('#boton-{{ $venta['id'] }}').removeClass('btn-danger').addClass('btn-success');
+                                                                    $('#boton-{{ $venta['id'] }}').removeClass('btn-danger').addClass('btn-primary');
                                                                 });
                                                             });
                                                         </script>
@@ -219,13 +219,11 @@
                                                     <td>
                                                         <a href="{{ route('generatePDF', ['venta' => $venta['id']]) }}"
                                                             class="btn btn-secondary" target="_blank">
-                                                            <i class="bi bi-printer"></i>
+                                                            <i class="bi bi-filetype-pdf"></i>
                                                         </a>
                                                         <a class="btn btn-success" href="" data-toggle="modal"
                                                             data-target="#enviarCorreo" data-id="{{ $venta['id'] }}"><i
                                                                 class="bi bi-envelope-at"></i></a>
-                                                        <a class="btn btn-warning" href=""><i
-                                                                class="bi bi-pencil-square"></i></a>
                                                         <a class="btn btn-danger" href="" data-toggle="modal"
                                                             data-target="#confirmDeleteModal"
                                                             data-id="{{ $venta['id'] }}"
@@ -251,10 +249,49 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            $('#myTable').DataTable();
+            $('#myTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                },
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'copy',
+                        text: "<i class='bi bi-clipboard'></i> Copiar",
+                        className: 'btn btn-light'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="bi bi-filetype-csv"></i> CSV',
+                        className: 'btn btn-light'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="bi bi-file-excel"></i> Excel',
+                        className: 'btn btn-light'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bi bi-filetype-pdf"></i> PDF',
+                        className: 'btn btn-light'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bi bi-printer"></i> Imprimir',
+                        className: 'btn btn-light'
+                    }
+                ]
+            });
         });
     </script>
 

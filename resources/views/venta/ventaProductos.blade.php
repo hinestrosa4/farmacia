@@ -1,0 +1,683 @@
+@section('title', 'Venta de productos')
+@extends('layouts.base')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+<style>
+    #cuerpo {
+        margin: 1em;
+    }
+
+    #paginacion {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #cuerpo {
+        margin: 2em;
+    }
+
+    table {
+        text-align: center;
+    }
+
+    .status-indicator-success {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-left: 5px;
+        border-radius: 50%;
+        background-color: rgb(0, 224, 0);
+    }
+
+    .status-indicator-warning {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-left: 5px;
+        border-radius: 50%;
+        background-color: rgb(255, 186, 26);
+    }
+
+    .status-indicator-danger {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-left: 5px;
+        border-radius: 50%;
+        background-color: rgb(224, 0, 0);
+    }
+</style>
+
+@section('menu')
+    {{-- Producto ya existe en el carrito --}}
+    <div class="modal fade" id="productoExistente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <h5 class="modal-title" id="exampleModalLabel">Producto existente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    Este producto ya está añadido al carrito
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Producto agotado --}}
+    <div class="modal fade" id="productoAgotado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <h5 class="modal-title" id="exampleModalLabel2">Producto agotado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    Este producto está agotado
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2 mr-6">
+                    <div class="col-sm-6">
+                        <h1>Venta de productos</h1>
+                    </div>
+                    <div class="col-sm-5">
+                        <ol class="breadcrumb float-right">
+                            <li class="breadcrumb-item"><a href="{{ route('ventaProductos') }}">Inicio</a></li>
+                            <li class="breadcrumb-item active">Venta de productos</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <section>
+            <div class="cotainer-fluid">
+                <div class="card card-info" style="">
+                    <div class="card-header">
+                        <h3 class="card-title">Buscar producto</h3>
+                        <div class="input-group">
+                            <input type="text" id="buscar" placeholder="Introduzca nombre de un producto"
+                                class="form-control float-left">
+                            <div class="input-group-append"><button class="btn btn-default"><i
+                                        class="bi bi-search"></i></button></div>
+                        </div>
+                    </div>
+                    <div class="form-check form-switch d-flex" style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
+                        <div class="mt-2" style="margin-left: 12px">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="cbEstado">
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Ordenar por estado</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="cbPrecio">
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Ordenar por precio</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br>
+                    @if (session()->has('message'))
+                        <div class="alert alert-success text-center">
+                            {{ session()->get('message') }}
+                    @endif
+                </div>
+                <?php
+                $presentaciones = [];
+                $laboratorios = [];
+                $tipos = [];
+                ?>
+                @foreach ($productos as $producto)
+                    <?php
+                    $presentaciones[] = $producto->presentacion->nombre;
+                    $presentaciones_json = json_encode($presentaciones);
+                    
+                    $laboratorios[] = $producto->laboratorio->nombre;
+                    $laboratorios_json = json_encode($laboratorios);
+                    
+                    $tipos[] = $producto->tipo->nombre;
+                    $tipos_json = json_encode($tipos);
+                    ?>
+                @endforeach
+                <div class="card-body">
+                    <div id="productos" class="row d-flex align-items-stretch">
+                    </div>
+                </div>
+            </div>
+    </div>
+    </section>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            var presentaciones = <?php echo $presentaciones_json; ?>;
+            var laboratorios = <?php echo $laboratorios_json; ?>;
+            var tipos = <?php echo $tipos_json; ?>;
+
+            var filtro = " ORDER BY p.id";
+            var checkbox = document.getElementById('cbEstado')
+            var checkboxPrecio = document.getElementById('cbPrecio')
+
+            // verifica si el campo de búsqueda está vacío
+            if ($('#buscar').val() == "") {
+                buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
+            }
+
+            $(document).on('keyup', '#buscar', function() {
+                let valor = $(this).val();
+                buscarDatosSinFiltro(valor); // Llama a buscarDatos() con el valor del campo de búsqueda
+            });
+
+            //sin filtros
+            function buscarDatosSinFiltro(consulta) {
+                funcion = "buscar";
+                if (!consulta) { // Si no hay consulta, selecciona todos los productos
+                    consulta = "todos";
+                }
+
+                // $('#mostrarBorrados').change(function() {
+                $.ajax({
+                        url: 'buscar-productos.php',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            consulta: consulta,
+                            funcion: funcion,
+                            filtro: filtro
+                        },
+                    })
+                    .done(function(respuesta) {
+                        if (respuesta.length > 0) {
+                            // Borra los resultados anteriores
+                            $('#productos').empty();
+                            // Agrega los nuevos resultados al cuerpo del card
+                            // if (!this.checked) {
+
+                            respuesta.forEach(function(producto, indice) {
+                                let imagen = producto.imagen == null ?
+                                    "img/productos/sinFoto.png" : producto
+                                    .imagen;
+                                let presentacionNombre = presentaciones[indice]
+                                let laboratorioNombre = laboratorios[indice]
+                                let tipoNombre = tipos[indice]
+
+                                let html = `
+                                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                          <div class="card bg-light d-flex flex-fill">
+                            <a href="#" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                            <div class="card-header border-bottom-0 mb-4" style="background-color: ${producto.stock < 50 ? '#FF9A9A' : ''} ${producto.stock >= 50 && producto.stock < 100 ? '#FACC59' : ''} ${producto.stock >= 100 ? '#B1FF9A' : ''}">
+                            <i class="bi bi-boxes"></i> ${producto.stock}
+                            </div>
+
+                            <div class="card-body pt-0">
+                              <div class="row">
+                                <div class="col-12">
+                                    <div class="text-center">
+                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
+                                    </div>
+                                  <h2 class=""><b>${producto.nombre}</b></h2>
+                                  <h5>${producto.precio} €</h5>
+                                  <ul class="ml-2 fa-ul">
+                                    <li style="margin-left:-15px"><i class="fas fa-mortar-pestle"></i><strong> Concentración:</strong> ${producto.concentracion}</li>
+                                    <li style="margin-left:-15px"<i class="fas fa-prescription-bottle-alt"></i><strong> Adicional:</strong> ${producto.adicional}</li>
+                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${producto.nombre_lab}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${producto.nombre_tipo}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${producto.nombre_pre}</li>
+                                    </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          </a>
+                        </div>
+                        </div>
+
+                        `;
+                                $('#productos').append(html);
+                            }); //foreach
+                            // } //if
+                            // else {
+                            //     console.log("borrados")
+                            // }
+                        } else {
+                            // Si no se encontraron resultados, muestra un mensaje de error
+                            $('#productos').html(
+                                '<p class="text-danger">No se encontraron resultados</p>');
+                        }
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    });
+                // })// change checkbox
+            }
+
+            checkboxPrecio.addEventListener('click', function() {
+                if (checkboxPrecio.checked) {
+                    filtro = " ORDER BY p.precio desc"
+                    checkbox.checked = 0
+
+                    // verifica si el campo de búsqueda está vacío
+                    if ($('#buscar').val() == "") {
+                        buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
+                    }
+
+                    $(document).on('keyup', '#buscar', function() {
+                        let valor = $(this).val();
+                        buscarDatos(
+                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
+                    });
+
+                    //filtro precio
+                    function buscarDatos(consulta) {
+                        funcion = "buscar";
+                        if (!consulta) { // Si no hay consulta, selecciona todos los productos
+                            consulta = "todos";
+                        }
+
+                        // $('#mostrarBorrados').change(function() {
+                        $.ajax({
+                                url: 'buscar-productos.php',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    consulta: consulta,
+                                    funcion: funcion,
+                                    filtro: filtro
+                                },
+                            })
+                            .done(function(respuesta) {
+                                if (respuesta.length > 0) {
+                                    // Borra los resultados anteriores
+                                    $('#productos').empty();
+                                    // Agrega los nuevos resultados al cuerpo del card
+                                    // if (!this.checked) {
+
+                                    respuesta.forEach(function(producto, indice) {
+                                        let imagen = producto.imagen == null ?
+                                            "img/productos/sinFoto.png" : producto
+                                            .imagen;
+                                        let presentacionNombre = presentaciones[indice]
+                                        let laboratorioNombre = laboratorios[indice]
+                                        let tipoNombre = tipos[indice]
+
+                                        let html = `
+                                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                          <div class="card bg-light d-flex flex-fill">
+                            <a href="#" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                            <div class="card-header border-bottom-0 mb-4" style="background-color: ${producto.stock < 50 ? '#FF9A9A' : ''} ${producto.stock >= 50 && producto.stock < 100 ? '#FACC59' : ''} ${producto.stock >= 100 ? '#B1FF9A' : ''}">
+                            <i class="bi bi-boxes"></i> ${producto.stock}
+                            </div>
+
+                            <div class="card-body pt-0">
+                              <div class="row">
+                                <div class="col-12">
+                                    <div class="text-center">
+                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
+                                    </div>
+                                  <h2 class=""><b>${producto.nombre}</b></h2>
+                                  <h5>${producto.precio} €</h5>
+                                  <ul class="ml-2 fa-ul">
+                                    <li style="margin-left:-15px"><i class="fas fa-mortar-pestle"></i><strong> Concentración:</strong> ${producto.concentracion}</li>
+                                    <li style="margin-left:-15px"<i class="fas fa-prescription-bottle-alt"></i><strong> Adicional:</strong> ${producto.adicional}</li>
+                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${producto.nombre_lab}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${producto.nombre_tipo}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${producto.nombre_pre}</li>
+                                    </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          </a>
+                        </div>
+                        </div>
+
+                        `;
+                                        $('#productos').append(html);
+                                    }); //foreach
+                                    // } //if
+                                    // else {
+                                    //     console.log("borrados")
+                                    // }
+                                } else {
+                                    // Si no se encontraron resultados, muestra un mensaje de error
+                                    $('#productos').html(
+                                        '<p class="text-danger">No se encontraron resultados</p>');
+                                }
+                            })
+                            .fail(function() {
+                                console.log("error");
+                            });
+                        // })// change checkbox
+                    }
+                } else {
+
+                    filtro = " ORDER BY p.id";
+
+                    // verifica si el campo de búsqueda está vacío
+                    if ($('#buscar').val() == "") {
+                        buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
+                    }
+
+                    $(document).on('keyup', '#buscar', function() {
+                        let valor = $(this).val();
+                        buscarDatosSinFiltro(
+                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
+                    });
+
+                    //sin filtro
+                    buscarDatosSinFiltro()
+                }
+            });
+
+            checkbox.addEventListener('click', function() {
+                if (checkbox.checked) {
+                    filtro = " ORDER BY p.stock desc"
+                    checkboxPrecio.checked = 0
+
+                    // verifica si el campo de búsqueda está vacío
+                    if ($('#buscar').val() == "") {
+                        buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
+                    }
+
+                    $(document).on('keyup', '#buscar', function() {
+                        let valor = $(this).val();
+                        buscarDatos(
+                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
+                    });
+
+                    //filtro stock/estado
+                    function buscarDatos(consulta) {
+                        funcion = "buscar";
+                        if (!consulta) { // Si no hay consulta, selecciona todos los productos
+                            consulta = "todos";
+                        }
+
+                        // $('#mostrarBorrados').change(function() {
+                        $.ajax({
+                                url: 'buscar-productos.php',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    consulta: consulta,
+                                    funcion: funcion,
+                                    filtro: filtro
+                                },
+                            })
+                            .done(function(respuesta) {
+                                if (respuesta.length > 0) {
+                                    // Borra los resultados anteriores
+                                    $('#productos').empty();
+                                    // Agrega los nuevos resultados al cuerpo del card
+                                    // if (!this.checked) {
+
+                                    respuesta.forEach(function(producto, indice) {
+                                        let imagen = producto.imagen == null ?
+                                            "img/productos/sinFoto.png" : producto
+                                            .imagen;
+                                        let presentacionNombre = presentaciones[indice]
+                                        let laboratorioNombre = laboratorios[indice]
+                                        let tipoNombre = tipos[indice]
+
+                                        let html = `
+                                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                          <div class="card bg-light d-flex flex-fill">
+                            <a href="#" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                            <div class="card-header border-bottom-0 mb-4" style="background-color: ${producto.stock < 50 ? '#FF9A9A' : ''} ${producto.stock >= 50 && producto.stock < 100 ? '#FACC59' : ''} ${producto.stock >= 100 ? '#B1FF9A' : ''}">
+                            <i class="bi bi-boxes"></i> ${producto.stock}
+                            </div>
+
+                            <div class="card-body pt-0">
+                              <div class="row">
+                                <div class="col-12">
+                                    <div class="text-center">
+                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
+                                    </div>
+                                  <h2 class=""><b>${producto.nombre}</b></h2>
+                                  <h5>${producto.precio} €</h5>
+                                  <ul class="ml-2 fa-ul">
+                                    <li style="margin-left:-15px"><i class="fas fa-mortar-pestle"></i><strong> Concentración:</strong> ${producto.concentracion}</li>
+                                    <li style="margin-left:-15px"<i class="fas fa-prescription-bottle-alt"></i><strong> Adicional:</strong> ${producto.adicional}</li>
+                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${producto.nombre_lab}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${producto.nombre_tipo}</li>
+                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${producto.nombre_pre}</li>
+                                    </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          </a>
+                        </div>
+                        </div>
+
+                        `;
+                                        $('#productos').append(html);
+                                    }); //foreach
+                                    // } //if
+                                    // else {
+                                    //     console.log("borrados")
+                                    // }
+                                } else {
+                                    // Si no se encontraron resultados, muestra un mensaje de error
+                                    $('#productos').html(
+                                        '<p class="text-danger">No se encontraron resultados</p>');
+                                }
+                            })
+                            .fail(function() {
+                                console.log("error");
+                            });
+                        // })// change checkbox
+                    }
+                } else {
+
+                    filtro = " ORDER BY p.id";
+
+                    // verifica si el campo de búsqueda está vacío
+                    if ($('#buscar').val() == "") {
+                        buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
+                    }
+
+                    $(document).on('keyup', '#buscar', function() {
+                        let valor = $(this).val();
+                        buscarDatosSinFiltro(
+                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
+                    });
+
+                    //sin filtro
+                    buscarDatosSinFiltro()
+                }
+            });
+        });
+
+        let carrito = [];
+
+        $(document).on('click', '.borrar', function(event) {
+            event.preventDefault();
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            // Obtener el índice del elemento que se debe eliminar
+            const index = $(this).closest('tr').data('index');
+
+            // Eliminar el elemento del array
+            carrito.splice(index, 1);
+
+            // Eliminar el elemento del DOM
+            $(this).closest('tr').remove();
+
+            // Actualizar los índices de los elementos en la tabla
+            $('#cestaProductos tr:not(:first)').each(function(index, elemento) {
+                $(elemento).attr('data-index', index);
+            });
+
+            // Guardar el carrito actualizado en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            console.log(carrito);
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+            cargarCarrito()
+            return false; // Evitar cualquier acción adicional
+        });
+
+
+        //vaciar carrito
+        $('#vaciarCarrito').click(function() {
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            $('#cestaProductos tr:not(:first)').remove();
+            carrito = [];
+            localStorage.removeItem('carrito');
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+        });
+
+        //añadir
+        cargarCarrito()
+
+        function cargarCarrito() {
+            // Cargar el carrito desde el almacenamiento local
+            if (localStorage.getItem("carrito")) {
+                carrito = JSON.parse(localStorage.getItem("carrito"));
+
+                $('#contador').empty()
+                $('#contador').append(carrito.length)
+
+                crearTablaCarrito();
+            }
+        }
+
+        function crearTablaCarrito() {
+            $('#cestaProductos tr:not(:first)').remove();
+
+            for (let i = 0; i < carrito.length; i++) {
+                const producto = carrito[i];
+                console.log(producto);
+                const index = i;
+                $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre +
+                    "</td><td>" + producto.concentracion + "</td><td>" +
+                    producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
+                    .precio +
+                    "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
+                );
+            }
+        }
+
+
+
+
+
+        // Función para añadir un producto al carrito
+        function addCarrito(btnAdd) {
+            event.preventDefault();
+            const JSONproducto = btnAdd.getAttribute("data-info");
+            const presentacionNombre = btnAdd.getAttribute("data-id");
+            const producto = JSON.parse(JSONproducto);
+            // console.log(producto);
+            // Comprobar si el producto ya está en el carrito
+            const productoYaEnCarrito = carrito.some(item => item.nombre === producto.nombre && item.concentracion ===
+                producto.concentracion && item.adicional === producto.adicional);
+
+            // Comprobar si el stock del producto es 0
+            if (producto.stock == "0") {
+                // Mostrar un modal para indicar que el producto está agotado
+                $('#productoAgotado').modal('show');
+                return;
+            }
+
+            if (productoYaEnCarrito) {
+                // Mostrar un modal para indicar que el producto ya está en el carrito
+                $('#productoExistente').modal('show');
+                return;
+            }
+
+            // Añadir el producto al carrito
+            carrito.push(producto);
+            console.log(carrito);
+
+            //contador de productos de la cesta
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+
+            const index = carrito.length - 1;
+            $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre + "</td><td>" + producto
+                .concentracion + "</td><td>" +
+                producto.adicional + "</td><td>" + presentacionNombre + "</td><td>" + producto.precio +
+                "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
+            );
+
+            $('#vaciarCarrito').click(function() {
+                $('#cestaProductos tr:not(:first)').remove();
+                carrito = [];
+                localStorage.removeItem('carrito');
+            });
+
+            $(document).on('click', '.borrar', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                // Obtener el índice del elemento que se debe eliminar
+                const index = $(this).closest('tr').data('index');
+
+                // Eliminar el elemento del array
+                carrito.splice(index, 1);
+
+                // Eliminar el elemento del DOM
+                $(this).closest('tr').remove();
+                console.log(carrito);
+            });
+
+            // Guardar el carrito en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+        }
+
+        function mostrarImagen(botonImagen) {
+            const id_producto = botonImagen.getAttribute("data-id2");
+            document.getElementById('producto_id').value = id_producto;
+            // console.log(id_producto)
+            const imagen_actual = botonImagen.getAttribute("data-id");
+            const img = document.getElementById("imagen_actual")
+            // formularioEliminar.action = "{{ route('borrarProducto', '') }}/" + idProducto;
+            img.src = "{{ asset('') }}" + imagen_actual;
+        }
+
+        function actualizarAccionFormulario(botonEliminar) {
+            // Obtener el valor del data-id del botón eliminar
+            const idProducto = botonEliminar.getAttribute("data-id");
+
+            // Obtener el elemento form por su id
+            const formularioEliminar = document.getElementById("deleteForm");
+
+            // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
+            formularioEliminar.action = "{{ route('borrarProducto', '') }}/" + idProducto;
+        }
+
+        function actualizarAccionFormularioLote(addLote) {
+            // Obtener el valor del data-id del botón eliminar
+            const idProducto = addLote.getAttribute("data-id");
+
+            // Obtener el elemento form por su id
+            const formLote = document.getElementById("formLote");
+
+            // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
+            formLote.action = "{{ route('addLote', '') }}/" + idProducto;
+        }
+    </script>
+
+@endsection
