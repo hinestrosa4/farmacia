@@ -23,11 +23,11 @@ class EmailController extends Controller
         return $password;
     }
 
-    public function enviarRecibo($email, Venta $venta)
+    public function enviarRecibo($email, $venta_id)
     {
-        // $email = 'hinestrosarafa@gmail.com';
+        $venta = Venta::findOrFail($venta_id);
 
-        $pdf = PDF::loadView('factura', compact('cuota'));
+        $pdf = PDF::loadView('factura.factura', compact('venta'));
         $pdf_content = $pdf->output();
 
         Mail::send('email.reciboPDF', ['venta' => $venta], function ($message) use ($email, $pdf_content) {
@@ -35,6 +35,7 @@ class EmailController extends Controller
                 ->subject("Recibo")
                 ->attachData($pdf_content, 'Recibo.pdf');
         });
+
         return redirect()->back();
     }
 

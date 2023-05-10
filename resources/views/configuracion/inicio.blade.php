@@ -48,7 +48,7 @@
                     <a href="{{ route('listarImagenes') }}" class="btn btn-primary btn-block">Imágenes</a>
                 </div>
             </div>
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-12 mb-3">
                     <a href="#" class="btn btn-primary btn-block">Opción 2</a>
                 </div>
@@ -62,7 +62,7 @@
                 <div class="col-12 mb-3">
                     <a href="#" class="btn btn-primary btn-block">Opción 4</a>
                 </div>
-            </div>
+            </div> --}}
         </section>
     </div>
 

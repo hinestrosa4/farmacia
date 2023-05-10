@@ -26,94 +26,31 @@
 
 @section('menu')
 
-    {{-- <!-- Modal Ascender-->
-    <div class="modal fade" id="ascenderModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
-        <div class="modal-dialog text-center">
+    <!-- Modal de confirmación de alta -->
+    <div class="modal fade" id="confirmAltaModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true" z-index="1">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title text-center" id="passwordModalLabel">Ascender producto</h4>
-                    <button data-dismiss="modal" aria-label="close" class="close">
+                    <h5 class="modal-title" id="confirmAltaModalLabel">Restaurar producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3 text-center">
-                        <p class="mb-0" style="font-style: oblique">Al darle más privilegios a este producto, podrá
-                            realizar acciones y acceder a información que antes estaba restringida.</p>
-                        <br>
-                        <p><strong>¿Deseas continuar?</strong></p>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <button type="button" style="width: 46px; height:38px" class="btn btn-secondary mr-3" data-dismiss="modal">No</button>
-                        <form id="formAscender" class="g-3 needs-validation" method="POST"
-                            action="{{ route('ascenderproducto', '') }}">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="producto_id" id="producto_id" value="">
-                            <button type="submit" style="width: 46px" class="btn btn-primary" id="acceptPasswordButton">Sí</button>
-                        </form>
-                    </div>
+                    ¿Estás seguro de que deseas restaurar este producto?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <form id="altaForm" action="{{ route('altaProducto', '') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-success">Restaurar</button>
+                    </form>
                 </div>
             </div>
         </div>
-    </div> --}}
-
-    {{-- <script>
-        $(document).on('click', '#ascendButton', function() {
-            var producto_id = $(this).data('id');
-            console.log(producto_id)
-            $('#producto_id').val(producto_id);
-            var action_url = '{{ route('ascenderproducto', '') }}';
-            action_url = action_url.replace('{{ route('ascenderproducto', '') }}',
-                '{{ route('ascenderproducto', '') }}/' + producto_id);
-            $('#formAscender').attr('action', action_url);
-        });
-    </script> --}}
-
-    {{-- <!-- Modal Descender -->
-    <div class="modal fade" id="descenderModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
-        <div class="modal-dialog text-center">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title text-center" id="passwordModalLabel2">Descender producto</h4>
-                    <button data-dismiss="modal" aria-label="close" class="close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3 text-center">
-                        <p class="mb-0" style="font-style: oblique">Al darle menos privilegios a este producto, no podrá
-                            realizar acciones y acceder a información que antes estaba permitida.</p>
-                        <br>
-                        <p><strong>¿Deseas continuar?</strong></p>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <button type="button" style="width: 46px; height:38px" class="btn btn-secondary mr-3" data-dismiss="modal">No</button>
-                        <form id="formDescender" class="g-3 needs-validation" method="POST"
-                            action="{{ route('descenderproducto', '') }}">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="producto_id_des" id="producto_id_des" value="">
-                            <button type="submit" style="width: 46px" class="btn btn-primary" id="acceptPasswordButton2">Sí</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    {{-- <script>
-        $(document).on('click', '#descendButton', function() {
-            var producto_id_des = $(this).data('id');
-            console.log(producto_id_des)
-            $('#producto_id_des').val(producto_id_des);
-            var action_url = '{{ route('descenderproducto', '') }}';
-            action_url = action_url.replace('{{ route('descenderproducto', '') }}',
-                '{{ route('descenderproducto', '') }}/' + producto_id_des);
-            $('#formDescender').attr('action', action_url);
-        });
-    </script>
- --}}
-
+    </div>
 
     <!-- Modal para crear un producto -->
     <div class="modal fade" id="crearproducto" tabindex="-1" role="dialog" aria-labelledby="crearproducto-label"
@@ -483,31 +420,7 @@
                             </div>
                           </div>
                         </div>        
-                        <!-- Modal de confirmación de alta -->
-                        <div class="modal fade" id="confirmAltaModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true" z-index="1">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmAltaModalLabel">Restaurar producto</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas restaurar este producto?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="altaForm" action="{{ route('altaProducto', '') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-success">Restaurar</button>
-                                    </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>  
+                      
                         `;
                                 $('#productos').append(html);
                             }); //foreach

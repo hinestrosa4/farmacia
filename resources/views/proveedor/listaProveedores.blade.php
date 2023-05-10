@@ -35,6 +35,32 @@
 
 @section('menu')
 
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas dar de baja a este proveedor?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" action="{{ route('borrarProveedor', '') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Dar de Baja</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para crear un proveedor -->
     <div class="modal fade" id="crearProveedor" tabindex="-1" role="dialog" aria-labelledby="crearProveedor-label"
         data-backdrop="static" data-keyboard="false">
@@ -226,7 +252,8 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check form-switch d-flex" style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
+                    <div class="form-check form-switch d-flex"
+                        style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
                         <div class="ml-auto">
                             <a type="button" href="{{ route('listaProveedoresBaja') }}"
                                 class="btn bg-gradient-danger"><i class="fa-sharp fa-solid fa-user-xmark"></i> Proveedores
@@ -330,33 +357,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
-                        
-                        <!-- Modal de confirmación de eliminación -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas dar de baja a este proveedor?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="{{ route('borrarProveedor', '') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Dar de Baja</button>
-                                    </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </div>                                              
                         `;
                                 $('#usuarios').append(html);
                             }); //foreach

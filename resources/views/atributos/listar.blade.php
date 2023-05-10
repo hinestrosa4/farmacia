@@ -572,7 +572,8 @@
                                                 @endif
 
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover text-center" id="tabla-laboratorio">
+                                                    <table class="table table-light table-hover text-center"
+                                                        id="tabla-laboratorio">
                                                         <thead class="table-dark">
                                                             <tr>
                                                                 <th scope="col">#</th>
@@ -655,7 +656,8 @@
                                                 @endif
 
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover text-center" id="tabla-tipo">
+                                                    <table class="table table-light table-hover text-center"
+                                                        id="tabla-tipo">
                                                         <thead class="table-dark">
                                                             <tr>
                                                                 <th scope="col">#</th>
@@ -719,7 +721,7 @@
                                                 @endif
 
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover" id="tabla-presentacion">
+                                                    <table class="table table-light table-hover" id="tabla-presentacion">
                                                         <thead class="table-dark">
                                                             <tr>
                                                                 <th scope="col">#</th>
@@ -773,10 +775,6 @@
 
     {{-- Editar --}}
     <script>
-        $(document).ready(function() {
-            $('#tabla-laboratorios').DataTable();
-        });
-
         function datoAntiguo(old) {
             var olddata = old.parentNode.parentNode.querySelector('.nombreLab').innerHTML;
             document.getElementById('newnombre').value = olddata
@@ -937,12 +935,21 @@
     <script>
         $(document).ready(function() {
             $('#tabla-laboratorio').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                },
                 searching: false,
             });
             $('#tabla-presentacion').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                },
                 searching: false,
             });
             $('#tabla-tipo').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                },
                 searching: false,
             });
 

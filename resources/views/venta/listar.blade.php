@@ -93,12 +93,55 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="mb-3">
-                                            <form id="formEnviar" class="g-3 needs-validation" method="POST"> @csrf <label
-                                                    for="exampleFormControlInput1" class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="exampleFormControlInput1"
-                                                    placeholder="prueba@prueba.com"><br>
-                                                <button href="" class="btn btn-success">Enviar</button>
+                                            <form id="formEnviar" action="{{ route('enviarCorreo', '') }}"
+                                                class="g-3 needs-validation" method="POST">
+                                                @csrf
+                                                <label for="validationCustomUsername" class="form-label">Correo
+                                                    electrónico</label>
+                                                <div class="input-group has-validation">
+                                                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                                    <input type="text" name="email" class="form-control" id="email"
+                                                        value="{{ old('email') }}" placeholder="Correo electrónico"
+                                                        aria-describedby="inputGroupPrepend">
+                                                </div><br>
+                                                <button type="submit" class="btn btn-success">Enviar</button>
                                             </form>
+                                            <script>
+                                                $(document).ready(function() {
+                                                    $("#formEnviar").submit(function(event) {
+                                                        // Prevenir la acción predeterminada del formulario
+                                                        event.preventDefault();
+
+                                                        // Validar el campo de correo electrónico
+                                                        if ($("#email").val() == "") {
+                                                            $("#email").addClass("is-invalid");
+                                                            $("#email").parent().find(".invalid-feedback").remove();
+                                                            $("#email").parent().append(
+                                                                "<div class='invalid-feedback'>Por favor, introduce tu correo electrónico.</div>"
+                                                            );
+                                                        } else if (!isValidEmail($("#email").val())) {
+                                                            $("#email").addClass("is-invalid");
+                                                            $("#email").parent().find(".invalid-feedback").remove();
+                                                            $("#email").parent().append(
+                                                                "<div class='invalid-feedback'>Por favor, introduce un correo electrónico válido.</div>"
+                                                            );
+                                                        } else {
+                                                            $("#email").removeClass("is-invalid");
+                                                            $("#email").addClass("is-valid");
+                                                        }
+
+                                                        // Enviar el formulario si todos los campos son válidos
+                                                        if ($(".is-invalid").length == 0) {
+                                                            $("#formEnviar").unbind("submit").submit();
+                                                        }
+                                                    });
+                                                });
+
+                                                function isValidEmail(email) {
+                                                    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                                    return regex.test(email);
+                                                }
+                                            </script>
                                         </div>
                                     </div>
                                 </div>
@@ -109,13 +152,17 @@
                                         Otro usuario
                                     </div>
                                     <div class="card-body">
-                                        <label for="exampleFormControlInput1" class="form-label">Usuarios</label>
-                                        <select class="form-select">
-                                            @foreach ($usuarios as $usuario)
-                                                <option value="{{ $usuario->email }}">{{ $usuario->nombre }}</option>
-                                            @endforeach
-                                        </select><br>
-                                        <a href="" class="btn btn-success mb-3">Enviar</a>
+                                        <form id="formEnviarUsuario" action="{{ route('enviarCorreo', '') }}"
+                                            class="g-3 needs-validation" method="POST">
+                                            @csrf
+                                            <label for="exampleFormControlInput1" class="form-label">Usuarios</label>
+                                            <select class="form-select">
+                                                @foreach ($usuarios as $usuario)
+                                                    <option value="{{ $usuario->email }}">{{ $usuario->nombre }}</option>
+                                                @endforeach
+                                            </select><br>
+                                            <button type="submit" class="btn btn-success">Enviar</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -141,9 +188,10 @@
                                 @if (session()->has('message'))
                                     <div class="alert alert-success text-center">
                                         {{ session()->get('message') }}
+                                    </div>
                                 @endif
                                 <div class="table-responsive">
-                                    <table id="myTable" class="table text-center">
+                                    <table id="myTable" class="table table-light text-center">
                                         <thead>
                                             <tr>
                                                 <th>Id</th>
@@ -155,10 +203,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php
-                                            // $ventas = json_decode($ventas, true);
-                                            // print_r($ventas);
-                                            ?>
                                             @foreach ($ventas as $venta)
                                                 <?php
                                                 $productos = json_decode($venta['productos'], true);
@@ -191,7 +235,7 @@
                                                         </script>
 
                                                         <div class="collapse" id="productos-{{ $venta['id'] }}">
-                                                            <table class="table">
+                                                            <table class="table table-light">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>Producto</th>
@@ -222,8 +266,23 @@
                                                             <i class="bi bi-filetype-pdf"></i>
                                                         </a>
                                                         <a class="btn btn-success" href="" data-toggle="modal"
-                                                            data-target="#enviarCorreo" data-id="{{ $venta['id'] }}"><i
-                                                                class="bi bi-envelope-at"></i></a>
+                                                            data-target="#enviarCorreo" data-id="{{ $venta['id'] }}"
+                                                            onclick="enviarID(this)"><i class="bi bi-envelope-at"></i></a>
+
+                                                        <script>
+                                                            function enviarID(btnID) {
+                                                                // Obtener el valor del data-id del botón eliminar
+                                                                const id = btnID.getAttribute("data-id");
+
+                                                                // Obtener el elemento form por su id
+                                                                const form = document.getElementById("formEnviar");
+
+                                                                // Actualizar la acción del formulario con la ruta correcta que contenga el data-id
+                                                                form.action = "{{ route('enviarCorreo', '') }}/" + id;
+
+                                                            }
+                                                        </script>
+
                                                         <a class="btn btn-danger" href="" data-toggle="modal"
                                                             data-target="#confirmDeleteModal"
                                                             data-id="{{ $venta['id'] }}"
@@ -242,8 +301,9 @@
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- /.content -->
+    </div>
+    </section>
+    <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
 

@@ -34,6 +34,10 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item d-none d-inline-block">
+                    <i class="bi bi-clock d-inline-block"></i>
+                    <div class="mt-2 mr-4 d-inline-block" id="reloj"></div>
+                </li>
                 <li class="nav-item dropdown">
                     <div class="dropdown">
                         <div class="image mr-4" data-toggle="dropdown">
@@ -759,6 +763,29 @@
                     );
                 }
             }
+        });
+    </script>
+
+    {{-- Reloj --}}
+    <script>
+        $(document).ready(function() {
+            setInterval(function() {
+                var date = new Date();
+                var hours = date.getHours();
+                var minutes = date.getMinutes();
+                var seconds = date.getSeconds();
+                if (hours < 10) {
+                    hours = "0" + hours;
+                }
+                if (minutes < 10) {
+                    minutes = "0" + minutes;
+                }
+                if (seconds < 10) {
+                    seconds = "0" + seconds;
+                }
+                var time = hours + ":" + minutes + ":" + seconds;
+                $('#reloj').html(time);
+            });
         });
     </script>
 </body>

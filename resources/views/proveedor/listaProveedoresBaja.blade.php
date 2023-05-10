@@ -34,6 +34,33 @@
 </style>
 
 @section('menu')
+
+    <!-- Modal de confirmación de alta -->
+    <div class="modal fade" id="confirmAltaModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmAltaModalLabel">Confirmar Alta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas dar de alta a este proveedor?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <form id="altaForm" action="{{ route('altaProveedor', '') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-success">Dar de Alta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -168,32 +195,6 @@
                               </div>
                             </div>
                           </div>
-                        </div>
-                        
-                        <!-- Modal de confirmación de alta -->
-                        <div class="modal fade" id="confirmAltaModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmAltaModalLabel">Confirmar Alta</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas dar de alta a este proveedor?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="altaForm" action="{{ route('altaProveedor', '') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-success">Dar de Alta</button>
-                                    </form>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         `;
                                 $('#usuarios').append(html);

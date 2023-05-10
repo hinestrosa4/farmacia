@@ -64,6 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('createVenta/{venta}', [VentaController::class, 'store'])->name('createVenta');
     Route::delete('/borrarVenta/{venta}', [VentaController::class, 'borrarVenta'])->name('borrarVenta');
     Route::post('enviarFactura/{email}/{venta}', [VentaController::class, 'enviarFactura'])->name('enviarFactura');
+    Route::post('enviarCorreo/{id}', [VentaController::class, 'correoComprador'])->name('enviarCorreo');
 
     /*------ Producto ------*/
     Route::get('/listaProductos', [ProductoController::class, 'listar'])->name('listaProductos');

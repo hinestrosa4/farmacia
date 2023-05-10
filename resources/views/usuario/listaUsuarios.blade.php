@@ -35,6 +35,32 @@
 
 @section('menu')
 
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas dar de baja a este usuario?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" action="{{ route('borrarUsuario', '') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Dar de Baja</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Ascender-->
     <div class="modal fade" id="ascenderModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
         <div class="modal-dialog text-center">
@@ -143,7 +169,8 @@
                         </button>
                     </div>
                     <div class="card-body">
-                        <form id="form" class="g-3 needs-validation" method="POST" action="{{ route('createUser') }}">
+                        <form id="form" class="g-3 needs-validation" method="POST"
+                            action="{{ route('createUser') }}">
                             @csrf
                             <h1>Crear usuario</h1>
                             <br>
@@ -509,32 +536,6 @@
                               </div>
                             </div>
                           </div>
-                        </div>
-                        
-                        <!-- Modal de confirmación de eliminación -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas dar de baja a este usuario?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="{{ route('borrarUsuario', '') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Dar de Baja</button>
-                                    </form>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         `;
                                 $('#usuarios').append(html);

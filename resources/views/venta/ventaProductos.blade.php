@@ -246,10 +246,15 @@
                                     <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${producto.nombre_pre}</li>
                                     </ul>
                                 </div>
+                                </div>
+                                </div>
+                               <div class="card-footer mt-auto">
+                                    <a href="#" class="btn btn-sm btn-primary" style="width:100%;" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                                        <i class="bi bi-cart-plus-fill"></i> Añadir
+                                    </a>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                          </a>
+                              </a>
                         </div>
                         </div>
 
@@ -347,6 +352,11 @@
                                 </div>
                               </div>
                             </div>
+                             <div class="card-footer mt-auto">
+                                    <a href="#" class="btn btn-sm btn-primary" style="width:100%;" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                                        <i class="bi bi-cart-plus-fill"></i> Añadir
+                                    </a>
+                                </div>
                           </div>
                           </a>
                         </div>
@@ -465,6 +475,11 @@
                                 </div>
                               </div>
                             </div>
+                             <div class="card-footer mt-auto">
+                                    <a href="#" class="btn btn-sm btn-primary" style="width:100%;" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                                        <i class="bi bi-cart-plus-fill"></i> Añadir
+                                    </a>
+                                </div>
                           </div>
                           </a>
                         </div>

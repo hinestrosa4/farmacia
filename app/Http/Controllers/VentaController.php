@@ -11,6 +11,7 @@ use App\Models\Tipo;
 use App\Models\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\EmailController;
 
 class VentaController extends Controller
 {
@@ -26,6 +27,19 @@ class VentaController extends Controller
         $ventas = Venta::all()->toArray();
         // dd($ventas);
         return view('venta.listar', compact('ventas', 'usuarios'));
+    }
+
+    public function correoComprador($id)
+    {
+        $data = request()->validate([
+            'email' => 'required',
+        ]);
+
+        $emailController = new EmailController();
+        $emailController->enviarRecibo($data['email'], $id);
+
+        session()->flash('message', 'La factura ha sido enviada correctamente.');
+        return redirect()->route('gestionVentas');
     }
 
     public function ventaProductos()

@@ -26,9 +26,35 @@
 
 @section('menu')
 
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este lote?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" action="{{ route('borrarLote', '') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Eliminar lote</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para crear un lote -->
-    <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label" data-backdrop="static"
-        data-keyboard="false">
+    <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label"
+        data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="card card-success">
@@ -184,7 +210,8 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check form-switch d-flex" style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
+                    <div class="form-check form-switch d-flex"
+                        style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
                         <div class="ml-auto">
                             <a type="button" href="{{ route('gestionLotesEliminados') }}"
                                 class="btn bg-gradient-danger"><i class="bi bi-archive-fill"></i> Lotes eliminados</a>
@@ -280,33 +307,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
-                        
-                        <!-- Modal de confirmación de eliminación -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas eliminar este lote?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="{{ route('borrarLote', '') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Eliminar lote</button>
-                                    </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </div>                                           
                         `;
                                 $('#lotes').append(html);
                             }); //foreach

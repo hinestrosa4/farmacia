@@ -95,6 +95,118 @@
         </div>
     </div>
 
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar a este producto?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" action="{{ route('borrarProducto', '') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para cambiar imagen del producto -->
+    <div class="modal fade" id="cambiarImagenModal" tabindex="-1" aria-labelledby="modalCambiarImagenLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('actualizarImagen') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="producto_id" id="producto_id">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar imagen del producto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3 text-center">
+                            <img src="{{ asset('') }}" class="img-fluid mb-3" style="width:250px"
+                                id="imagen_actual">
+                            <input class="form-control" style="margin-top:20px" type="file" name="imagen"
+                                id="imagen_nueva">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear un lote -->
+    <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label"
+        data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Crear lote
+                        </h3>
+
+                        <button data-dismiss="modal" aria-label="close" class="close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <form id="formLote" class="g-3 needs-validation" method="POST"
+                            action="{{ route('addLote', '') }}">
+                            @csrf
+                            <h1>Crear lote</h1>
+                            <br>
+                            <div class="">
+                                <label for="validationCustom01" class="form-label">Stock</label>
+                                <input type="number" name="stock" class="form-control" id="stock" required
+                                    value="{{ old('stock') }}" placeholder="Introduzca un stock">
+                            </div>
+                            <br>
+                            <div class="">
+                                <label for="validationCustom02" class="form-label">Fecha de vencimiento</label>
+                                <input type="date" name="vencimiento" class="form-control" id="vencimiento" required
+                                    value="{{ old('vencimiento') }}" placeholder="Introduzca una fecha de vencimiento">
+                            </div>
+                            <br>
+                            <div>
+                                <label for="validationCustom01" class="form-label">Proveedor</label>
+                                <select class="form-control" style="width:100%" name="lote_id_prov">
+                                    @foreach ($proveedores as $proveedor)
+                                        <option value={{ $proveedor->id }}
+                                            {{ old('proveedor') == $proveedor->nombre ? 'selected' : '' }}>
+                                            {{ $proveedor->nombre }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <br>
+                            <div class="col-12">
+                                <button id="btnSubmit" class="btn btn-success" type="submit">Crear lote</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para crear un producto -->
     <div class="modal fade" id="crearproducto" tabindex="-1" role="dialog" aria-labelledby="crearproducto-label"
         data-backdrop="static" data-keyboard="false">
@@ -125,7 +237,8 @@
                             <div class="">
                                 <label for="validationCustom02" class="form-label">Concentración</label>
                                 <input type="text" name="concentracion" class="form-control" id="concentracion"
-                                    value="{{ old('concentracion') }}" placeholder="Introduzca una concentración (500mg)">
+                                    value="{{ old('concentracion') }}"
+                                    placeholder="Introduzca una concentración (500mg)">
                             </div>
                             <br>
                             <div class="">
@@ -497,127 +610,13 @@
                                     <i class="bi bi-clipboard2-plus"></i> Crear Lote
                                 </a>
                             @endif
-                            
-                           
                               </div>
                             </div>
                           </div>
                         </div>
-                        
-                        <!-- Modal para crear un lote -->
-                                <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label" data-backdrop="static"
-                                    data-keyboard="false">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="card card-success">
-                                                <div class="card-header">
-                                                    <h3 class="card-title">
-                                                        Crear lote
-                                                    </h3>
-
-                                                    <button data-dismiss="modal" aria-label="close" class="close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="card-body">
-                                                                <form id="formLote" class="g-3 needs-validation" method="POST" action="{{ route('addLote', '') }}">
-                                                                    @csrf
-                                                                    <h1>Crear lote</h1>
-                                                                    <br>
-                                                                    <div class="">
-                                                                        <label for="validationCustom01" class="form-label">Stock</label>
-                                                                        <input type="number" name="stock" class="form-control" id="stock" required
-                                                                            value="{{ old('stock') }}" placeholder="Introduzca un stock">
-                                                                    </div>
-                                                                    <br>
-                                                                    <div class="">
-                                                                        <label for="validationCustom02" class="form-label">Fecha de vencimiento</label>
-                                                                        <input type="date" name="vencimiento" class="form-control" id="vencimiento" required
-                                                                            value="{{ old('vencimiento') }}" placeholder="Introduzca una fecha de vencimiento">
-                                                                    </div>                         
-                                                                    <br>
-                                                                    <div>
-                                                                        <label for="validationCustom01" class="form-label">Proveedor</label>
-                                                                        <select class="form-control" name="lote_id_prov">
-                                                                            @foreach ($proveedores as $proveedor)
-                                                                                <option value={{ $proveedor->id }}
-                                                                                    {{ old('proveedor') == $proveedor->nombre ? 'selected' : '' }}>
-                                                                                    {{ $proveedor->nombre }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                    <br>
-                                                                    <div class="col-12">
-                                                                        <button id="btnSubmit" class="btn btn-success" type="submit">Crear lote</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                        
-                        <!-- Modal de confirmación de eliminación -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas eliminar a este producto?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="{{ route('borrarProducto', '') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                                    </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Modal para cambiar imagen del producto -->
-                        <div class="modal fade" id="cambiarImagenModal" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form action="{{ route('actualizarImagen') }}" method="post" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="producto_id" id="producto_id">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar imagen del producto</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3 text-center">
-                                                <img  src="{{ asset('') }}" class="img-fluid mb-3" style="width:250px" id="imagen_actual">
-                                                <input class="form-control" style="margin-top:20px" type="file" name="imagen" id="imagen_nueva">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                         `;
                                 $('#productos').append(html);
-                            }); //foreach
-                            // } //if
-                            // else {
-                            //     console.log("borrados")
-                            // }
+                            }); //foreach                 
                         } else {
                             // Si no se encontraron resultados, muestra un mensaje de error
                             $('#productos').html(
@@ -725,113 +724,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
-                                                <!-- Modal para crear un lote -->
-                            <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label" data-backdrop="static"
-                                data-keyboard="false">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="card card-success">
-                                            <div class="card-header">
-                                                <h3 class="card-title">
-                                                    Crear lote
-                                                </h3>
-
-                                                <button data-dismiss="modal" aria-label="close" class="close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="card-body">
-                                                            <form id="formLote" class="g-3 needs-validation" method="POST" action="{{ route('addLote', '') }}">
-                                                                @csrf
-                                                                <h1>Crear lote</h1>
-                                                                <br>
-                                                                <div class="">
-                                                                    <label for="validationCustom01" class="form-label">Stock</label>
-                                                                    <input type="number" name="stock" class="form-control" id="stock" required
-                                                                        value="{{ old('stock') }}" placeholder="Introduzca un stock">
-                                                                </div>
-                                                                <br>
-                                                                <div class="">
-                                                                    <label for="validationCustom02" class="form-label">Fecha de vencimiento</label>
-                                                                    <input type="date" name="vencimiento" class="form-control" id="vencimiento" required
-                                                                        value="{{ old('vencimiento') }}" placeholder="Introduzca una fecha de vencimiento">
-                                                                </div>                         
-                                                                <br>
-                                                                <div>
-                                                                    <label for="validationCustom01" class="form-label">Proveedor</label>
-                                                                    <select class="form-control" name="lote_id_prov">
-                                                                        @foreach ($proveedores as $proveedor)
-                                                                            <option value={{ $proveedor->id }}
-                                                                                {{ old('proveedor') == $proveedor->nombre ? 'selected' : '' }}>
-                                                                                {{ $proveedor->nombre }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <br>
-                                                                <div class="col-12">
-                                                                    <button id="btnSubmit" class="btn btn-success" type="submit">Crear lote</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                </div>
-                        <!-- Modal de confirmación de eliminación -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas eliminar a este producto?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="{{ route('borrarProducto', '') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                                    </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Modal para cambiar imagen del producto -->
-                        <div class="modal fade" id="cambiarImagenModal" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form action="{{ route('actualizarImagen') }}" method="post" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="producto_id" id="producto_id">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar imagen del producto</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3 text-center">
-                                                <img  src="{{ asset('') }}" class="img-fluid mb-3" style="width:250px" id="imagen_actual">
-                                                <input class="form-control" style="margin-top:20px" type="file" name="imagen" id="imagen_nueva">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        </div>                          
                         `;
                                         $('#productos').append(html);
                                     }); //foreach
@@ -965,113 +858,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <!-- Modal para crear un lote -->
-                        <div class="modal fade" id="crearLote" tabindex="-1" role="dialog" aria-labelledby="crearLote-label" data-backdrop="static"
-                            data-keyboard="false">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="card card-success">
-                                        <div class="card-header">
-                                            <h3 class="card-title">
-                                                Crear lote
-                                            </h3>
-
-                                            <button data-dismiss="modal" aria-label="close" class="close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                  <div class="card-body">
-                                    <form id="formLote" class="g-3 needs-validation" method="POST" action="{{ route('addLote', '') }}">
-                                        @csrf
-                                        <h1>Crear lote</h1>
-                                        <br>
-                                        <div class="">
-                                            <label for="validationCustom01" class="form-label">Stock</label>
-                                            <input type="number" name="stock" class="form-control" id="stock" required
-                                                value="{{ old('stock') }}" placeholder="Introduzca un stock">
-                                        </div>
-                                        <br>
-                                        <div class="">
-                                            <label for="validationCustom02" class="form-label">Fecha de vencimiento</label>
-                                            <input type="date" name="vencimiento" class="form-control" id="vencimiento" required
-                                                value="{{ old('vencimiento') }}" placeholder="Introduzca una fecha de vencimiento">
-                                        </div>                         
-                                        <br>
-                                        <div>
-                                            <label for="validationCustom01" class="form-label">Proveedor</label>
-                                            <select class="form-control" name="lote_id_prov">
-                                                @foreach ($proveedores as $proveedor)
-                                                    <option value={{ $proveedor->id }}
-                                                        {{ old('proveedor') == $proveedor->nombre ? 'selected' : '' }}>
-                                                        {{ $proveedor->nombre }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <br>
-                                        <div class="col-12">
-                                            <button id="btnSubmit" class="btn btn-success" type="submit">Crear lote</button>
-                                        </div>
-                                    </form>
-                                   </div>
-                                 </div>
-                             </div>
-                          </div>
-                        </div>
-                        <!-- Modal de confirmación de eliminación -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas eliminar a este producto?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <form id="deleteForm" action="{{ route('borrarProducto', '') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                                    </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Modal para cambiar imagen del producto -->
-                        <div class="modal fade" id="cambiarImagenModal" tabindex="-1" aria-labelledby="modalCambiarImagenLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form action="{{ route('actualizarImagen') }}" method="post" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="producto_id" id="producto_id">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="modalCambiarImagenLabel">Cambiar imagen del producto</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3 text-center">
-                                                <img  src="{{ asset('') }}" class="img-fluid mb-3" style="width:250px" id="imagen_actual">
-                                                <input class="form-control" style="margin-top:20px" type="file" name="imagen" id="imagen_nueva">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        </div>                      
                         `;
                                         $('#productos').append(html);
                                     }); //foreach
@@ -1131,7 +918,6 @@
             return false; // Evitar cualquier acción adicional
         });
 
-
         //vaciar carrito
         $('#vaciarCarrito').click(function() {
             event.stopPropagation(); // Evitar cierre del menú desplegable
@@ -1141,7 +927,6 @@
             $('#contador').empty()
             $('#contador').append(carrito.length)
         });
-
 
         //añadir
         // Declarar variable global para el carrito
@@ -1232,8 +1017,6 @@
             // Guardar el carrito en localStorage
             localStorage.setItem('carrito', JSON.stringify(carrito));
         }
-
-
 
         function mostrarImagen(botonImagen) {
             const id_producto = botonImagen.getAttribute("data-id2");
