@@ -574,7 +574,8 @@
                 "</td><td>" + producto.concentracion + "</td><td>" +
                 producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
                 .precio +
-                "€</td><td><button type='button' class='btn btn-danger borrar'>Eliminar</button></td></tr>");
+                "€</td><td><button type='button' class='btn btn-danger borrar'><i class='i bi-x-lg'></i></button></td></tr>"
+                );
         }
 
         //vaciar carrito
@@ -613,7 +614,7 @@
             console.log(carrito);
             $('#contador').empty()
             $('#contador').append(carrito.length)
-            cargarCarrito()
+
             return false; // Evitar cualquier acción adicional
         });
 

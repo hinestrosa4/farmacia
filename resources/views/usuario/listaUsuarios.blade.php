@@ -608,7 +608,7 @@
             console.log(carrito);
             $('#contador').empty()
             $('#contador').append(carrito.length)
-            cargarCarrito()
+
             return false; // Evitar cualquier acción adicional
         });
 

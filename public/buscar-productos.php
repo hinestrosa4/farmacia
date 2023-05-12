@@ -8,7 +8,7 @@ if (isset($_POST['funcion']) && isset($_POST['consulta'])) {
     $funcion = $_POST['funcion'];
     $consulta = $_POST['consulta'];
     $filtro = $_POST['filtro'];
-    
+
     if ($consulta == "todos") { // Si la consulta es "todos", selecciona todos los clientes
         $query = "SELECT p.*, pre.nombre as nombre_pre, lab.nombre as nombre_lab, t.nombre as nombre_tipo FROM producto p
         JOIN presentacion pre on p.producto_pre = pre.id
@@ -18,11 +18,11 @@ if (isset($_POST['funcion']) && isset($_POST['consulta'])) {
         $query = "SELECT p.*, pre.nombre as nombre_pre, lab.nombre as nombre_lab, t.nombre as nombre_tipo FROM producto p
         JOIN presentacion pre on p.producto_pre = pre.id
         JOIN laboratorio lab on p.producto_lab = lab.id
-        JOIN tipo_producto t on p.producto_tipo = t.id WHERE p.nombre LIKE '%".$consulta."%' AND p.deleted_at IS NULL $filtro";
+        JOIN tipo_producto t on p.producto_tipo = t.id WHERE p.nombre LIKE '%" . $consulta . "%' AND p.deleted_at IS NULL $filtro";
     }
-    
+
     $result = mysqli_query($conexion, $query);
-    
+
     // Mostrar los resultados en formato JSON
     if ($result) {
         $filas = array();
@@ -33,7 +33,7 @@ if (isset($_POST['funcion']) && isset($_POST['consulta'])) {
     } else {
         echo json_encode(array("error" => "No se encontraron resultados"));
     }
-    
+
     // Cerrar la conexión a la base de datos
     mysqli_close($conexion);
 }

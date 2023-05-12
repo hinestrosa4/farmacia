@@ -36,4 +36,3 @@ if (isset($_POST['funcion']) && isset($_POST['consulta'])) {
     // Cerrar la conexión a la base de datos
     mysqli_close($conexion);
 }
-?>
