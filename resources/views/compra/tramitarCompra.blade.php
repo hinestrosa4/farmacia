@@ -555,7 +555,7 @@
                     index + "'><td>" + producto.stock + "</td><td>" + producto.nombre +
                     "</td><td>" + producto.concentracion + "</td><td>" +
                     producto.adicional + "</td><td>" + producto.nombre_pre +
-                    "</td><td><input min='1' pattern='^[0-9]+' class='text-center cantidad' style='width:80px; border:none; background-color:white;' type='number' value='1' data-precio='" +
+                    "</td><td><input onkeypress='return (event.charCode >= 48 && event.charCode <= 57)' min='1' pattern='^[0-9]+' class='text-center cantidad' style='width:80px; border:none; background-color:white;' type='number' value='1' data-precio='" +
                     producto.precio + "'></td><td class='precio-total'>" +
                     producto.precio +
                     "€</td></tr>"

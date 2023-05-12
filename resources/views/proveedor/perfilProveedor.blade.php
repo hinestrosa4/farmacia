@@ -102,15 +102,13 @@
                                             <div class="col-md-4">
                                                 <label for="validationCustom02" class="form-label">Dirección</label>
                                                 <input type="text" name="direccion" class="form-control" id="direccion"
-                                                    value="{{ old('direccion') }}"
-                                                    placeholder="Introduzca una fecha de direccion">
+                                                    value="{{ old('direccion') }}" placeholder="Introduzca una direccion">
                                                 {!! $errors->first('direccion', '<span style=color:red>:message</span>') !!}
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="validationCustom02" class="form-label">Teléfono</label>
                                                 <input type="text" name="telefono" class="form-control" id="telefono"
-                                                    value="{{ old('telefono') }}"
-                                                    placeholder="Introduzca una fecha de telefono">
+                                                    value="{{ old('telefono') }}" placeholder="Introduzca un telefono">
                                                 {!! $errors->first('telefono', '<span style=color:red>:message</span>') !!}
                                             </div>
                                             <br>
@@ -145,28 +143,6 @@
             $('#telefono').val(telefono);
         });
 
-
-        $(document).on('click', '.borrar', function(event) {
-            event.preventDefault();
-            event.stopPropagation(); // Evitar cierre del menú desplegable
-            // Obtener el índice del elemento que se debe eliminar
-            const index = $(this).closest('tr').data('index');
-
-            // Eliminar el elemento del array
-            carrito.splice(index, 1);
-
-            // Eliminar el elemento del DOM
-            $(this).closest('tr').remove();
-
-            // Guardar el carrito actualizado en localStorage
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-            console.log(carrito);
-            $('#contador').empty()
-            $('#contador').append(carrito.length)
-            return false; // Evitar cualquier acción adicional
-        });
-
-
         //vaciar carrito
         $('#vaciarCarrito').click(function() {
             event.stopPropagation(); // Evitar cierre del menú desplegable
@@ -177,31 +153,78 @@
             $('#contador').append(carrito.length)
         });
 
+        //borrar individual
+        $(document).on('click', '.borrar', function(event) {
+            event.preventDefault();
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            // Obtener el id del producto que se debe eliminar
+            const id = $(this).closest('tr').data('id');
 
-        //añadir
-        // Declarar variable global para el carrito
-        let carrito = [];
+            // Encontrar el índice del producto con ese id en el array
+            const index = carrito.findIndex(item => item.id === id);
 
-        $(document).ready(function() {
-            // Cargar el carrito desde el almacenamiento local
-            if (localStorage.getItem("carrito")) {
-                carrito = JSON.parse(localStorage.getItem("carrito"));
+            // Eliminar el elemento del array
+            carrito.splice(index, 1);
 
-                $('#contador').empty()
-                $('#contador').append(carrito.length)
+            // Eliminar el elemento del DOM
+            $(this).closest('tr').remove();
 
-                for (let i = 0; i < carrito.length; i++) {
-                    const producto = carrito[i];
-                    console.log(producto);
-                    const index = i;
-                    $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre +
-                        "</td><td>" + producto.concentracion + "</td><td>" +
-                        producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
-                        .precio +
-                        "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
-                    );
-                }
+            // Actualizar los índices de los elementos en la tabla
+            $('#cestaProductos tr:not(:first)').each(function(index, elemento) {
+                $(elemento).attr('data-index', index);
+            });
+
+            // Guardar el carrito actualizado en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            console.log(carrito);
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+            cargarCarrito()
+            return false; // Evitar cualquier acción adicional
+        });
+
+        // Cargar el carrito desde el almacenamiento local
+        if (localStorage.getItem("carrito")) {
+            carrito = JSON.parse(localStorage.getItem("carrito"));
+
+            $('#contador').empty();
+            $('#contador').append(carrito.length);
+            for (let i = 0; i < carrito.length; i++) {
+                $('#cestaProductos').append("<tr data-id='" + carrito[i].id + "'><td>" + carrito[i]
+                    .nombre +
+                    "</td><td>" + carrito[i].concentracion + "</td><td>" +
+                    carrito[i].adicional + "</td><td>" + carrito[i].nombre_pre + "</td><td>" +
+                    carrito[i].precio +
+                    "€</td><td><button type='button' class='btn btn-danger borrar'><i class='i bi-x-lg'></i></button></td></tr>"
+                );
             }
+        }
+
+        // Función para eliminar un producto del carrito
+        function removeProduct(id) {
+            const index = carrito.findIndex(producto => producto.id === id);
+            if (index !== -1) {
+                carrito.splice(index, 1);
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+                $('#contador').empty();
+                $('#contador').append(carrito.length);
+                $(`tr[data-id=${id}]`).remove();
+            }
+        }
+
+        // Evento para eliminar un producto del carrito al hacer clic en el botón "Eliminar"
+        $('#cestaProductos').on('click', '.borrar', function() {
+            const id = $(this).closest('tr').data('id');
+            removeProduct(id);
+        });
+
+        // Evento para vaciar el carrito al hacer clic en el botón "Vaciar cesta"
+        $('#vaciarCesta').on('click', function() {
+            carrito = [];
+            localStorage.removeItem('carrito');
+            $('#contador').empty();
+            $('#contador').append(carrito.length);
+            $('#cestaProductos').empty();
         });
     </script>
 

@@ -484,7 +484,6 @@
                           </a>
                         </div>
                         </div>
-
                         `;
                                         $('#productos').append(html);
                                     }); //foreach
@@ -526,11 +525,77 @@
 
         let carrito = [];
 
+        //añadir
+        // Función para añadir un producto al carrito
+        function addCarrito(elemento) {
+            event.preventDefault(); // previene que la página se mueva hacia arriba al hacer clic en el botón
+            const producto = JSON.parse(elemento.dataset.info);
+            const presentacionNombre = elemento.dataset.id;
+
+            // Verificar si el stock del producto está agotado
+            if (producto.stock == "0") {
+                $('#productoAgotado').modal('show');
+                return;
+            }
+
+            // Verificar si el producto ya está en el carrito
+            const productoExistente = carrito.find(item => item.id === producto.id);
+            if (productoExistente) {
+                $('#productoExistente').modal('show');
+                return;
+            }
+
+            // Agregar el producto al array carrito
+            carrito.push({
+                id: producto.id,
+                nombre: producto.nombre,
+                concentracion: producto.concentracion,
+                adicional: producto.adicional,
+                precio: producto.precio,
+                stock: producto.stock,
+                imagen: producto.imagen,
+                producto_lab: producto.producto_lab,
+                producto_tipo: producto.producto_tipo,
+                producto_pre: producto.producto_pre,
+                nombre_pre: producto.nombre_pre,
+                nombre_lab: producto.nombre_lab,
+                nombre_tipo: producto.nombre_tipo
+            });
+
+            // Guardar el carrito en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+
+            // Actualizar el contador de productos
+            $('#contador').empty();
+            $('#contador').append(carrito.length);
+
+            // Mostrar el producto en la tabla de la vista
+            $('#cestaProductos').append("<tr data-id='" + producto.id + "'><td>" + producto.nombre +
+                "</td><td>" + producto.concentracion + "</td><td>" +
+                producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
+                .precio +
+                "€</td><td><button type='button' class='btn btn-danger borrar'>Eliminar</button></td></tr>");
+        }
+
+        //vaciar carrito
+        $('#vaciarCarrito').click(function() {
+            event.stopPropagation(); // Evitar cierre del menú desplegable
+            $('#cestaProductos tr:not(:first)').remove();
+            carrito = [];
+            localStorage.removeItem('carrito');
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
+        });
+
+        //borrar individual
         $(document).on('click', '.borrar', function(event) {
             event.preventDefault();
             event.stopPropagation(); // Evitar cierre del menú desplegable
-            // Obtener el índice del elemento que se debe eliminar
-            const index = $(this).closest('tr').data('index');
+            // Obtener el id del producto que se debe eliminar
+            const id = $(this).closest('tr').data('id');
+
+            // Encontrar el índice del producto con ese id en el array
+            const index = carrito.findIndex(item => item.id === id);
 
             // Eliminar el elemento del array
             carrito.splice(index, 1);
@@ -552,115 +617,50 @@
             return false; // Evitar cualquier acción adicional
         });
 
+        // Cargar el carrito desde el almacenamiento local
+        if (localStorage.getItem("carrito")) {
+            carrito = JSON.parse(localStorage.getItem("carrito"));
 
-        //vaciar carrito
-        $('#vaciarCarrito').click(function() {
-            event.stopPropagation(); // Evitar cierre del menú desplegable
-            $('#cestaProductos tr:not(:first)').remove();
-            carrito = [];
-            localStorage.removeItem('carrito');
-            $('#contador').empty()
-            $('#contador').append(carrito.length)
-        });
-
-        //añadir
-        cargarCarrito()
-
-        function cargarCarrito() {
-            // Cargar el carrito desde el almacenamiento local
-            if (localStorage.getItem("carrito")) {
-                carrito = JSON.parse(localStorage.getItem("carrito"));
-
-                $('#contador').empty()
-                $('#contador').append(carrito.length)
-
-                crearTablaCarrito();
-            }
-        }
-
-        function crearTablaCarrito() {
-            $('#cestaProductos tr:not(:first)').remove();
+            $('#contador').empty();
+            $('#contador').append(carrito.length);
 
             for (let i = 0; i < carrito.length; i++) {
-                const producto = carrito[i];
-                console.log(producto);
-                const index = i;
-                $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre +
-                    "</td><td>" + producto.concentracion + "</td><td>" +
-                    producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
-                    .precio +
-                    "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
+                $('#cestaProductos').append("<tr data-id='" + carrito[i].id + "'><td>" + carrito[i]
+                    .nombre +
+                    "</td><td>" + carrito[i].concentracion + "</td><td>" +
+                    carrito[i].adicional + "</td><td>" + carrito[i].nombre_pre + "</td><td>" +
+                    carrito[i].precio +
+                    "€</td><td><button type='button' class='btn btn-danger borrar'><i class='i bi-x-lg'></i></button></td></tr>"
                 );
             }
         }
 
-
-
-
-
-        // Función para añadir un producto al carrito
-        function addCarrito(btnAdd) {
-            event.preventDefault();
-            const JSONproducto = btnAdd.getAttribute("data-info");
-            const presentacionNombre = btnAdd.getAttribute("data-id");
-            const producto = JSON.parse(JSONproducto);
-            // console.log(producto);
-            // Comprobar si el producto ya está en el carrito
-            const productoYaEnCarrito = carrito.some(item => item.nombre === producto.nombre && item.concentracion ===
-                producto.concentracion && item.adicional === producto.adicional);
-
-            // Comprobar si el stock del producto es 0
-            if (producto.stock == "0") {
-                // Mostrar un modal para indicar que el producto está agotado
-                $('#productoAgotado').modal('show');
-                return;
-            }
-
-            if (productoYaEnCarrito) {
-                // Mostrar un modal para indicar que el producto ya está en el carrito
-                $('#productoExistente').modal('show');
-                return;
-            }
-
-            // Añadir el producto al carrito
-            carrito.push(producto);
-            console.log(carrito);
-
-            //contador de productos de la cesta
-            $('#contador').empty()
-            $('#contador').append(carrito.length)
-
-            const index = carrito.length - 1;
-            $('#cestaProductos').append("<tr data-index='" + index + "'><td>" + producto.nombre + "</td><td>" + producto
-                .concentracion + "</td><td>" +
-                producto.adicional + "</td><td>" + presentacionNombre + "</td><td>" + producto.precio +
-                "€</td><td><button type='button' class='btn btn-danger borrar'><i class='bi bi-x-lg'></i></button></td></tr>"
-            );
-
-            $('#vaciarCarrito').click(function() {
-                $('#cestaProductos tr:not(:first)').remove();
-                carrito = [];
-                localStorage.removeItem('carrito');
-            });
-
-            $(document).on('click', '.borrar', function(event) {
-                event.preventDefault();
-                event.stopPropagation();
-
-                // Obtener el índice del elemento que se debe eliminar
-                const index = $(this).closest('tr').data('index');
-
-                // Eliminar el elemento del array
+        // Función para eliminar un producto del carrito
+        function removeProduct(id) {
+            const index = carrito.findIndex(producto => producto.id === id);
+            if (index !== -1) {
                 carrito.splice(index, 1);
-
-                // Eliminar el elemento del DOM
-                $(this).closest('tr').remove();
-                console.log(carrito);
-            });
-
-            // Guardar el carrito en localStorage
-            localStorage.setItem('carrito', JSON.stringify(carrito));
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+                $('#contador').empty();
+                $('#contador').append(carrito.length);
+                $(`tr[data-id=${id}]`).remove();
+            }
         }
+
+        // Evento para eliminar un producto del carrito al hacer clic en el botón "Eliminar"
+        $('#cestaProductos').on('click', '.borrar', function() {
+            const id = $(this).closest('tr').data('id');
+            removeProduct(id);
+        });
+
+        // Evento para vaciar el carrito al hacer clic en el botón "Vaciar cesta"
+        $('#vaciarCesta').on('click', function() {
+            carrito = [];
+            localStorage.removeItem('carrito');
+            $('#contador').empty();
+            $('#contador').append(carrito.length);
+            $('#cestaProductos').empty();
+        });
 
         function mostrarImagen(botonImagen) {
             const id_producto = botonImagen.getAttribute("data-id2");

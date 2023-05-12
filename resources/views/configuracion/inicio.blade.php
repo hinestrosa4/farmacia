@@ -45,7 +45,8 @@
         <section class="container mt-2">
             <div class="row">
                 <div class="col-12 mb-3">
-                    <a href="{{ route('listarImagenes') }}" class="btn btn-primary btn-block">Imágenes</a>
+                    <a href="{{ route('listarImagenes') }}" id="confImagenes" style="display:none"
+                        class="btn btn-primary btn-block">Imágenes</a>
                 </div>
             </div>
             {{-- <div class="row">
@@ -67,6 +68,10 @@
     </div>
 
     <script>
+        $(document).ready(function() {
+            $('#confImagenes').slideDown('slow');
+        })
+
         $(document).on('click', '.borrar', function(event) {
             event.preventDefault();
             event.stopPropagation(); // Evitar cierre del menú desplegable

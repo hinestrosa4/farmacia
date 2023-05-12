@@ -28,7 +28,7 @@ class EmailController extends Controller
         $venta = Venta::findOrFail($venta_id);
 
         $pdf = PDF::loadView('factura.factura', compact('venta'));
-        $pdf_content = $pdf->output();
+        $pdf_content = $pdf->stream();
 
         Mail::send('email.reciboPDF', ['venta' => $venta], function ($message) use ($email, $pdf_content) {
             $message->to($email)
@@ -38,6 +38,7 @@ class EmailController extends Controller
 
         return redirect()->back();
     }
+
 
     function generatePass()
     {
