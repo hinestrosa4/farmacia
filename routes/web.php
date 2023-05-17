@@ -50,6 +50,10 @@ Route::post('recuperarPass', [RecuperarPassController::class, 'store'])->name('r
 //Factura
 Route::get('/generatePDF/{venta}', FacturaController::class)->name('generatePDF');
 
+// Route::get('/grafico', function () {
+//     return view('grafico.grafico');
+// });
+
 Route::middleware(['auth'])->group(function () {
 
     /*------ Calendario ------*/
@@ -60,6 +64,7 @@ Route::middleware(['auth'])->group(function () {
 
     /*------ Venta ------*/
     Route::get('/ventaProductos', [VentaController::class, 'ventaProductos'])->name('ventaProductos');
+    Route::get('/graficos', [VentaController::class, 'getGraficos'])->name('graficos');
     Route::get('/gestionVentas', VentaController::class)->name('gestionVentas');
     Route::post('createVenta/{venta}', [VentaController::class, 'store'])->name('createVenta');
     Route::delete('/borrarVenta/{venta}', [VentaController::class, 'borrarVenta'])->name('borrarVenta');

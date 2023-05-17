@@ -29,6 +29,11 @@ class VentaController extends Controller
         return view('venta.listar', compact('ventas', 'usuarios'));
     }
 
+    public function getGraficos(Request $request)
+    {
+        return view('grafico.grafico');
+    }
+
     public function correoComprador($id)
     {
         $data = request()->validate([

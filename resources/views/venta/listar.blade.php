@@ -162,8 +162,16 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Historial de Ventas</h4>
+                                <div class="row">
+                                    <div class="col-6 text-left">
+                                        <h4>Historial de Ventas</h4>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <a class="btn btn-primary" href="{{ route('graficos') }}">Mostrar gráficos</a>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="card-body">
                                 @if (session()->has('message'))
                                     <div class="alert alert-success text-center">

@@ -294,20 +294,20 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-green">
-                        <h5 class="modal-title" id="exampleModalLabel">Recibo</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Confirmar compra</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        ¿Deseas imprimir el recibo?
+                        ¿Deseas confirmar la compra?
                     </div>
                     <div class="modal-footer">
-                        <a href="{{ route('listaProductos') }}" class="btn btn-danger text-white">No</a>
+                        <a href="{{ route('ventaProductos') }}" class="btn btn-danger text-white">No</a>
                         <form id="formEnviar" action="{{ route('createVenta', '') }}" method="POST">
                             @csrf
                             <input type="hidden" name="venta" id="venta">
-                            <button type="submit" class="btn btn-success text-white" onclick="abrirPDF()">Si</button>
+                            <button type="submit" class="btn btn-success text-white">Si</button>
                         </form>
                     </div>
                 </div>
@@ -394,8 +394,7 @@
                 timeZone: "Europe/Madrid"
             });
 
-            // venta.push(generarCodigoTicket())
-            venta.push(new Date(fechaHoraEspaña).toISOString());
+            venta.push(fechaHoraEspaña);
             venta.push($('#cliente').val())
             venta.push("efectivo")
             venta.push($('.totalDescuento').text())
