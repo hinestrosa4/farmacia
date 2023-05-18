@@ -209,23 +209,15 @@
                             </div>
                             <div class="card-footer" >
                               <div class="text-right">
-                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
                                 <a href="#" class="btn btn-sm btn-success mt-1 mr-1" data-toggle="modal" data-target="#confirmAltaModal" data-id="${usuario.id}" onclick="actualizarAccionFormulario(this)">
                                     <i class="bi bi-check2-circle"></i> Alta
                                 </a>
-                                @endif
+                              
                               </div>
                             </div>
                           </div>
                         </div>             
                         `;
-
-
-                                <
-                                option value = "${tipoID}" > $ {
-                                    tipo
-                                } < /option>
-
                                 $('#usuarios').append(html);
                             }); //foreach
                             // } //if

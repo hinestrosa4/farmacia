@@ -549,12 +549,10 @@
                                         <div class="card card-success">
                                             <div class="card-header">
                                                 <div class="card-title">Buscar laboratorio
-                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                        <button type="button" data-toggle="modal"
-                                                            data-target="#crearlaboratorio"
-                                                            class="btn bg-gradient-primary btn-sm m-2">Crear
-                                                            laboratorio</button>
-                                                    @endif
+                                                    <button type="button" data-toggle="modal"
+                                                        data-target="#crearlaboratorio"
+                                                        class="btn bg-gradient-primary btn-sm m-2">Crear
+                                                        laboratorio</button>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="text" id="buscar-laboratorio"
@@ -578,9 +576,7 @@
                                                             <tr>
                                                                 <th scope="col">#</th>
                                                                 <th scope="col">Laboratorio</th>
-                                                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                    <th scope="col">Acciones</th>
-                                                                @endif
+                                                                <th scope="col">Acciones</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -588,22 +584,21 @@
                                                                 <tr class="laboratorio">
                                                                     <td>{{ $index + 1 }}</td>
                                                                     <td class="nombreLab">{{ $laboratorio->nombre }}</td>
-                                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                        <td>
-                                                                            <a class="btn btn-danger" data-toggle="modal"
-                                                                                data-target="#confirmLab"
-                                                                                data-id="{{ $laboratorio->id }}"
-                                                                                onclick="pasarIdLab(this)">
-                                                                                <i class="bi bi-trash"></i>
-                                                                            </a>
-                                                                            <a class="btn btn-warning" data-toggle="modal"
-                                                                                data-target="#modificarLab"
-                                                                                data-id="{{ $laboratorio->id }}"
-                                                                                onclick="pasarIdLab(this), datoAntiguo(this)">
-                                                                                <i class="bi bi-pencil-square"></i>
-                                                                            </a>
-                                                                        </td>
-                                                                    @endif
+                                                                    <td>
+                                                                        <a class="btn btn-danger" data-toggle="modal"
+                                                                            data-target="#confirmLab"
+                                                                            data-id="{{ $laboratorio->id }}"
+                                                                            onclick="pasarIdLab(this)">
+                                                                            <i class="bi bi-trash"></i>
+                                                                        </a>
+                                                                        <a class="btn btn-warning" data-toggle="modal"
+                                                                            data-target="#modificarLab"
+                                                                            data-id="{{ $laboratorio->id }}"
+                                                                            onclick="pasarIdLab(this), datoAntiguo(this)">
+                                                                            <i class="bi bi-pencil-square"></i>
+                                                                        </a>
+                                                                    </td>
+
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
@@ -634,11 +629,9 @@
                                         <div class="card card-success">
                                             <div class="card-header">
                                                 <div class="card-title">Buscar tipo
-                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                        <button type="button" data-toggle="modal"
-                                                            data-target="#creartipo"
-                                                            class="btn bg-gradient-primary btn-sm m-2">Crear tipo</button>
-                                                    @endif
+                                                    <button type="button" data-toggle="modal" data-target="#creartipo"
+                                                        class="btn bg-gradient-primary btn-sm m-2">Crear tipo</button>
+
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="text" id="buscar-tipo"
@@ -662,9 +655,9 @@
                                                             <tr>
                                                                 <th scope="col">#</th>
                                                                 <th scope="col">Tipo</th>
-                                                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                    <th scope="col">Acciones</th>
-                                                                @endif
+
+                                                                <th scope="col">Acciones</th>
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -672,20 +665,19 @@
                                                                 <tr class="tipo">
                                                                     <td>{{ $index + 1 }}</td>
                                                                     <td class="nombreLab">{{ $tipo->nombre }}</td>
-                                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                        <td><a class="btn btn-danger" data-toggle="modal"
-                                                                                data-target="#confirmTipo"
-                                                                                data-id="{{ $tipo->id }}"
-                                                                                onclick="pasarIdTipo(this)"><i
-                                                                                    class="bi bi-trash"></i></a> <a
-                                                                                class="btn btn-warning"
-                                                                                data-toggle="modal"
-                                                                                data-target="#modificarTipo"
-                                                                                data-id="{{ $tipo->id }}"
-                                                                                onclick="pasarIdLab(this), datoAntiguoTipo(this)"><i
-                                                                                    class="bi bi-pencil-square"></i></a>
-                                                                        </td>
-                                                                    @endif
+
+                                                                    <td><a class="btn btn-danger" data-toggle="modal"
+                                                                            data-target="#confirmTipo"
+                                                                            data-id="{{ $tipo->id }}"
+                                                                            onclick="pasarIdTipo(this)"><i
+                                                                                class="bi bi-trash"></i></a> <a
+                                                                            class="btn btn-warning" data-toggle="modal"
+                                                                            data-target="#modificarTipo"
+                                                                            data-id="{{ $tipo->id }}"
+                                                                            onclick="pasarIdLab(this), datoAntiguoTipo(this)"><i
+                                                                                class="bi bi-pencil-square"></i></a>
+                                                                    </td>
+
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
@@ -698,12 +690,11 @@
                                         <div class="card card-success">
                                             <div class="card-header">
                                                 <div class="card-title">Buscar presentación
-                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                        <button type="button" data-toggle="modal"
-                                                            data-target="#crearpresentacion"
-                                                            class="btn bg-gradient-primary btn-sm m-2">Crear
-                                                            presentacion</button>
-                                                    @endif
+                                                    <button type="button" data-toggle="modal"
+                                                        data-target="#crearpresentacion"
+                                                        class="btn bg-gradient-primary btn-sm m-2">Crear
+                                                        presentacion</button>
+
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="text" id="buscar-presentacion"
@@ -726,9 +717,9 @@
                                                             <tr>
                                                                 <th scope="col">#</th>
                                                                 <th scope="col">Presentación</th>
-                                                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                    <th scope="col">Acciones</th>
-                                                                @endif
+
+                                                                <th scope="col">Acciones</th>
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -736,20 +727,19 @@
                                                                 <tr class="presentacion">
                                                                     <td>{{ $index + 1 }}</td>
                                                                     <td class="nombreLab">{{ $presentacion->nombre }}</td>
-                                                                    @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                                                                        <td><a class="btn btn-danger" data-toggle="modal"
-                                                                                data-target="#confirmPre"
-                                                                                data-id="{{ $presentacion->id }}"
-                                                                                onclick="pasarIdPre(this)"><i
-                                                                                    class="bi bi-trash"></i></a> <a
-                                                                                class="btn btn-warning"
-                                                                                data-toggle="modal"
-                                                                                data-target="#modificarPre"
-                                                                                data-id="{{ $presentacion->id }}"
-                                                                                onclick="pasarIdLab(this), datoAntiguoPre(this)"><i
-                                                                                    class="bi bi-pencil-square"></i></a>
-                                                                        </td>
-                                                                    @endif
+
+                                                                    <td><a class="btn btn-danger" data-toggle="modal"
+                                                                            data-target="#confirmPre"
+                                                                            data-id="{{ $presentacion->id }}"
+                                                                            onclick="pasarIdPre(this)"><i
+                                                                                class="bi bi-trash"></i></a> <a
+                                                                            class="btn btn-warning" data-toggle="modal"
+                                                                            data-target="#modificarPre"
+                                                                            data-id="{{ $presentacion->id }}"
+                                                                            onclick="pasarIdLab(this), datoAntiguoPre(this)"><i
+                                                                                class="bi bi-pencil-square"></i></a>
+                                                                    </td>
+
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>

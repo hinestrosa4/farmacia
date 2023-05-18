@@ -226,10 +226,8 @@
                 <div class="row mb-2 mr-6">
                     <div class="col-sm-6">
                         <h1>Gestión de proveedores</h1>
-                        @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                            <button type="button" data-toggle="modal" data-target="#crearProveedor"
-                                class="btn bg-gradient-primary" style="margin-top: 20px">Crear un proveedor</button>
-                        @endif
+                        <button type="button" data-toggle="modal" data-target="#crearProveedor"
+                            class="btn bg-gradient-primary" style="margin-top: 20px">Crear un proveedor</button>
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-right">
@@ -346,14 +344,12 @@
                             </div>
                             <div class="card-footer">
                               <div class="text-right">
-                                @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
                                 <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${proveedor.id}" onclick="actualizarAccionFormulario(this)">
                                     <i class="bi bi-x-circle"></i> Baja
                                 </a>
                                 <a href="{{ route('perfilProveedor', '') }}/${proveedor.id}" class="btn btn-sm btn-info mt-1" id="perfil" data-id="${proveedor.id}">
                                     <i class="fas fa-user"></i> Perfil
                                     </a>
-                                @endif
                               </div>
                             </div>
                           </div>

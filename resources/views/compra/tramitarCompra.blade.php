@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-right">
-                            <li class="breadcrumb-item"><a href="{{ route('listaProductos') }}">Inicio</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('ventaProductos') }}">Inicio</a></li>
                             <li class="breadcrumb-item active">Tramitar compra</li>
                         </ol>
                     </div>
@@ -178,7 +178,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="{{ route('listaProductos') }}" class="btn btn-primary" style="width:100%">Seguir
+                            <a href="{{ route('ventaProductos') }}" class="btn btn-primary" style="width:100%">Seguir
                                 comprando</a>
                         </div>
                     </div>
@@ -307,7 +307,7 @@
                         <form id="formEnviar" action="{{ route('createVenta', '') }}" method="POST">
                             @csrf
                             <input type="hidden" name="venta" id="venta">
-                            <button type="submit" class="btn btn-success text-white">Si</button>
+                            <button onclick="vaciarCesta()" type="submit" class="btn btn-success text-white">Si</button>
                         </form>
                     </div>
                 </div>
@@ -348,7 +348,7 @@
             localStorage.setItem('carrito', JSON.stringify(carrito));
 
             // Redirigir a la página de listaProducto
-            window.location.href = "{{ route('listaProductos') }}";
+            window.location.href = "{{ route('ventaProductos') }}";
         }
 
         function generarCodigoTicket() {
@@ -359,6 +359,13 @@
                 codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
             }
             return codigo;
+        }
+
+        function vaciarCesta() {
+            carrito = [];
+            localStorage.removeItem('carrito');
+            $('#contador').empty()
+            $('#contador').append(carrito.length)
         }
 
         function pasarVenta() {
@@ -388,13 +395,9 @@
             console.log(producto);
 
             // console.log(producto);
-            var now = new Date();
-            var timezoneOffset = now.getTimezoneOffset() * 60000; // convierte la diferencia horaria a milisegundos
-            var fechaHoraEspaña = new Date(now - timezoneOffset).toLocaleString("es-ES", {
-                timeZone: "Europe/Madrid"
-            });
+            const fechaHoraActual = new Date().toISOString();
 
-            venta.push(fechaHoraEspaña);
+            venta.push(fechaHoraActual);
             venta.push($('#cliente').val())
             venta.push("efectivo")
             venta.push($('.totalDescuento').text())
@@ -402,6 +405,8 @@
             venta.push(producto); // Encierra el array de productos dentro de otro array
             console.log(venta);
             ventaS = JSON.stringify(venta);
+
+
         }
 
         $('#tablaProductos').on('change', '.cantidad', function() {

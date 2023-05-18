@@ -25,19 +25,19 @@ class LoginController extends Controller
 
             if ($usuario->tipo === 1) {
                 session(['administrador' => $time]);
-                return redirect()->route('listaProductos', $usuario->id);
+                return redirect()->route('ventaProductos', $usuario->id);
             }
             if ($usuario->tipo === 2) {
                 session(['farmaceutico' => $time]);
-                return redirect()->route('listaProductos', $usuario->id);
+                return redirect()->route('ventaProductos', $usuario->id);
             }
             if ($usuario->tipo === 3) {
                 session(['tecnico' => $time]);
-                return redirect()->route('listaProductos', $usuario->id);
+                return redirect()->route('ventaProductos', $usuario->id);
             }
             if ($usuario->tipo === 4) {
                 session(['auxiliar' => $time]);
-                return redirect()->route('listaProductos', $usuario->id);
+                return redirect()->route('ventaProductos', $usuario->id);
             }
             // else {
             //     session(['operario' => $usuario->role]);

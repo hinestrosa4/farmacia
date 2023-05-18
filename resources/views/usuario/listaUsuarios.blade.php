@@ -377,10 +377,9 @@
                 <div class="row mb-2 mr-6">
                     <div class="col-sm-6">
                         <h1>Gestión de usuarios</h1>
-                        @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                            <button type="button" data-toggle="modal" data-target="#crearUsuario"
-                                class="btn bg-gradient-primary" style="margin-top: 20px">Crear usuario</button>
-                        @endif
+                        <button type="button" data-toggle="modal" data-target="#crearUsuario"
+                            class="btn bg-gradient-primary" style="margin-top: 20px">Crear usuario</button>
+
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-right">
@@ -529,10 +528,8 @@
                                 <a href="{{ route('datosPersonales', '') }}/${usuario.id}" class="btn btn-sm btn-info mt-1" id="perfil" data-id="${usuario.id}">
                                     <i class="fas fa-user"></i> Perfil
                                     </a>
-                            @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
                                 ${ascender}
                                 ${descender}
-                            @endif
                               </div>
                             </div>
                           </div>
