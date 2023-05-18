@@ -30,9 +30,9 @@ use App\Http\Controllers\RecuperarPassController;
 //     return view('login.login');
 // });
 
-Route::get('/faq', function () {
-    return view('faq');
-});
+// Route::get('/faq', function () {
+//     return view('faq');
+// });
 
 //Login
 Route::get('/', LoginController::class)->name('login');

@@ -126,7 +126,6 @@ class UsuarioController extends Controller
         return redirect()->route('gestionUsuario');
     }
 
-
     public function borrarUsuario(Usuario $usuario)
     {
         $usuario->delete();
@@ -141,7 +140,6 @@ class UsuarioController extends Controller
         session()->flash('message', 'El usuario ha sido dado de alta correctamente.');
         return redirect()->route('gestionUsuarioBaja');
     }
-    
 }
 
     //    public function listar()

@@ -31,7 +31,7 @@ class VentaController extends Controller
 
     public function getGraficos(Request $request)
     {
-        return view('grafico.grafico');
+        return view('venta.grafico');
     }
 
     public function correoComprador($id)

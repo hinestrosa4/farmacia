@@ -167,7 +167,8 @@
                                         <h4>Historial de Ventas</h4>
                                     </div>
                                     <div class="col-6 text-right">
-                                        <a class="btn btn-primary" href="{{ route('graficos') }}">Mostrar gráficos</a>
+                                        <a class="btn btn-dark" href="{{ route('graficos') }}">Mostrar gráficos <i
+                                                class="bi bi-clipboard-data"></i></a>
                                     </div>
                                 </div>
                             </div>
