@@ -6,7 +6,6 @@ use App\Models\Laboratorio;
 use App\Models\Tipo;
 use App\Models\Presentacion;
 use Illuminate\Http\Request;
-use DataTables;
 
 class AtributoController extends Controller
 {
@@ -116,17 +115,4 @@ class AtributoController extends Controller
         session()->flash('messagePre', 'La presentación ha sido modificado correctamente');
         return redirect()->route('gestionAtributos');
     }
-
-
-    // public function confirmarBorrar(Cliente $cliente)
-    // {
-    //     return view('confirmacionBorrarCliente', compact('cliente'));
-    // }
-
-    // public function borrarCliente(Cliente $cliente)
-    // {
-    //     $cliente->delete();
-    //     session()->flash('message', 'El cliente ha sido borrada correctamente.');
-    //     return redirect()->route('listaClientes');
-    // }
 }

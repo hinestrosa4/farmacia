@@ -117,13 +117,13 @@
                                     <h6 class="mb-0 text-sm">Correo electrónico</h6>
                                 </label>
                                 <input class="mb-4" type="text" name="email"
-                                    placeholder="Enter a valid email address">
+                                    placeholder="Introduce su correo electrónico">
                             </div>
                             <div class="row px-3">
                                 <label class="mb-1">
                                     <h6 class="mb-0 text-sm">Contraseña</h6>
                                 </label>
-                                <input type="password" name="password" placeholder="Enter password">
+                                <input type="password" name="password" placeholder="Introduzca su contraseña">
                             </div>
                             <div class="row px-3 pt-2 mb-4">
                                 <a id="olvidoPass" data-toggle="modal" style="font-size:15px"

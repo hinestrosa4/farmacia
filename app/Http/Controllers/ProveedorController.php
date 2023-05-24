@@ -28,14 +28,12 @@ class ProveedorController extends Controller
             'nombre' => '',
             'telefono' => '',
             'email' => '',
-            'direccion' => '', 
+            'direccion' => '',
         ]);
 
         Proveedor::create($datos);
         session()->flash('message', 'El proveedor se ha creado correctamente');
         return redirect()->route('listaProveedores');
-
-        //return view('formRegCliente');
     }
 
     public function update($id)
@@ -57,13 +55,13 @@ class ProveedorController extends Controller
         // dd($proveedor);
         return view('proveedor.perfilProveedor', compact('proveedor'));
     }
-    
+
     public function listaProveedoresBaja()
     {
         $proveedor = request()->user();
         return view('proveedor.listaProveedoresBaja', compact('proveedor'));
     }
-    
+
     public function borrarProveedor(Proveedor $proveedor)
     {
         $proveedor->delete();

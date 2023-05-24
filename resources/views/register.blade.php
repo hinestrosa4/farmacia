@@ -78,17 +78,19 @@
                                     </div>
                                 </div>
                                 <div class="row mb-4">
-                                    <div class="col-md-6"> <label for="validationCustomUsername"
-                                            class="form-label">Correo
+                                    <div class="col-md-6">
+                                        <label for="validationCustomUsername" class="form-label">Correo
                                             electrónico</label>
                                         <div class="input-group has-validation">
-                                            <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                            <span class="input-group-text" id="inputGroupPrepend"
+                                                style="height: 40px; text-align: center;">@</span>
                                             <input type="text" name="email" class="form-control" id="email"
                                                 value="{{ old('email') }}" placeholder="Correo electrónico"
                                                 aria-describedby="inputGroupPrepend">
                                         </div>
-                                        {!! $errors->first('email', '<span style=color:red>:message</span>') !!}
+                                        {!! $errors->first('email', '<span style="color:red;">:message</span>') !!}
                                     </div>
+
                                     <div class="col-md-6"> <label for="validationCustom01"
                                             class="form-label">Contraseña</label>
                                         <input type="password" name="password" class="form-control" id="password"

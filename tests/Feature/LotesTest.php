@@ -8,6 +8,37 @@ class LotesTest extends TestCase
 {
     //Menu principal, noticias
 
+    public function test_addLote()
+    {
+        // Autenticar al usuario
+        $user = Usuario::where('email', 'pedro@gmail.com')->first();
+        $this->actingAs($user);
+
+        $this->withoutExceptionHandling(); // Opcional, para mostrar detalles de excepciones en caso de error
+
+        // Simular datos de entrada
+        $datos = [
+            'stock' => 10,
+            'vencimiento' => '2023-12-31',
+            'lote_id_prod' => 25,
+            'lote_id_prov' => 1,
+        ];
+
+        // Enviar una solicitud POST a la ruta 'createProveedor' con los datos de entrada
+        $response = $this->post(route('createLote'), $datos);
+
+        // Verificar que se haya redireccionado correctamente
+        $response->assertRedirect(route('listaLotes'));
+
+        // Verificar que el proveedor se haya creado en la base de datos
+        $this->assertDatabaseHas('lote', [
+            'stock' => 10,
+            'vencimiento' => '2023-12-31',
+            'lote_id_prod' => 25,
+            'lote_id_prov' => 1,
+        ]);
+    }
+
     public function test_listaLotes()
     {
         // Autenticar al usuario

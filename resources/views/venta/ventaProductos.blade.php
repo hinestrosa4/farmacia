@@ -575,7 +575,7 @@
                 producto.adicional + "</td><td>" + producto.nombre_pre + "</td><td>" + producto
                 .precio +
                 "€</td><td><button type='button' class='btn btn-danger borrar'><i class='i bi-x-lg'></i></button></td></tr>"
-                );
+            );
         }
 
         //vaciar carrito

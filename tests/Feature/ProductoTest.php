@@ -8,6 +8,51 @@ class ProductoTest extends TestCase
 {
     //Menu principal, noticias
 
+    public function addProducto()
+    {
+        // Autenticar al usuario
+        $user = Usuario::where(
+            'email',
+            'pedro@gmail.com'
+        )->first();
+
+        $this->actingAs($user);
+
+        $this->withoutExceptionHandling(); // Opcional, para mostrar detalles de excepciones en caso de error
+
+        // Simular datos de entrada
+        $datos = [
+            'nombre' => 'Nombre',
+            'concentracion' => '10 mg',
+            'adicional' => '10',
+            'precio' => 9,
+            'stock' => 0,
+            'imagen' => 'img/productos/sinFoto.png',
+            'producto_lab' => 7,
+            'producto_tipo' => 1,
+            'producto_pre' => 2,
+        ];
+
+        // Enviar una solicitud POST a la ruta 'createProveedor' con los datos de entrada
+        $response = $this->post(route('createProduct'), $datos);
+
+        // Verificar que se haya redireccionado correctamente
+        $response->assertRedirect(route('listaProductos'));
+
+        // Verificar que el proveedor se haya creado en la base de datos
+        $this->assertDatabaseHas('producto', [
+            'nombre' => 'Nombre',
+            'concentracion' => '10mg',
+            'adicional' => '10',
+            'precio' => 9,
+            'stock' => 0,
+            'imagen' => 'img/productos/sinFoto.png',
+            'producto_lab' => 7,
+            'producto_tipo' => 1,
+            'producto_pre' => 2,
+        ]);
+    }
+
     public function test_listaProductos()
     {
         // Autenticar al usuario

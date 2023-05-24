@@ -3,6 +3,9 @@
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Usuario;
+use App\Models\Laboratorio;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
+
 
 class AtributosTest extends TestCase
 {
@@ -24,19 +27,98 @@ class AtributosTest extends TestCase
         $response->assertViewIs('atributos.listar');
     }
 
-    public function test_createLab()
+    public function testStoreLab()
     {
+        // Autenticar al usuario
         $user = Usuario::where('email', 'pedro@gmail.com')->first();
+        $this->actingAs($user);
 
-        $response = $this->actingAs($user)
-            ->post('laboratorio', [
-                'nombre' => 'Laboratorio2',
-            ]);
+        $this->withoutExceptionHandling(); // Opcional, para mostrar detalles de excepciones en caso de error
 
-        $response = $this->get(route('createLab'));
+        // Simular datos de entrada
+        $datos = [
+            'nombre' => 'LaboratorioPrueba',
+        ];
 
-        $response->assertStatus(200);
+        // Enviar una solicitud POST a la ruta 'createLab' con los datos de entrada
+        $response = $this->post(route('createLab'), $datos);
 
-        $response->assertViewIs('atributos.listar');
+        // Verificar que se haya redireccionado correctamente
+        $response->assertRedirect(route('gestionAtributos'));
+
+        // Verificar que el laboratorio se haya creado en la base de datos
+        $this->assertDatabaseHas('laboratorio', [
+            'nombre' => 'LaboratorioPrueba',
+        ]);
+    }
+
+    public function BorrarLab()
+    {
+        // Autenticar al usuario
+        $user = Usuario::where('email', 'pedro@gmail.com')->first();
+        $this->actingAs($user);
+
+        // Crear un laboratorio de prueba
+        $laboratorio = Laboratorio::create([
+            'nombre' => 'Laboratorio de prueba',
+        ]);
+
+        // Enviar una solicitud de eliminación al método borrarLab del controlador
+        $response = $this->delete(route('borrarLab', ['laboratorio' => $laboratorio]));
+
+        // Verificar que el laboratorio haya sido borrado
+        $this->assertDatabaseMissing('laboratorio', ['id' => $laboratorio->id]);
+    }
+
+    public function testStoreTipo()
+    {
+
+        // Autenticar al usuario
+        $user = Usuario::where('email', 'pedro@gmail.com')->first();
+        $this->actingAs($user);
+
+        $this->withoutExceptionHandling(); // Opcional, para mostrar detalles de excepciones en caso de error
+
+        // Simular datos de entrada
+        $datos = [
+            'nombre' => 'TipoPrueba',
+        ];
+
+        // Enviar una solicitud POST a la ruta 'createLab' con los datos de entrada
+        $response = $this->post(route('createTipo'), $datos);
+
+        // Verificar que se haya redireccionado correctamente
+        $response->assertRedirect(route('gestionAtributos'));
+
+        // Verificar que el laboratorio se haya creado en la base de datos
+        $this->assertDatabaseHas('tipo_producto', [
+            'nombre' => 'TipoPrueba',
+        ]);
+    }
+
+    public function testStorePre()
+    {
+
+        // Autenticar al usuario
+        $user = Usuario::where('email', 'pedro@gmail.com')->first();
+        $this->actingAs($user);
+
+        $this->withoutExceptionHandling(); // Opcional, para mostrar detalles de excepciones en caso de error
+
+        // Simular datos de entrada
+        $datos = [
+            'nombre' => 'PrePrueba',
+        ];
+
+        // Enviar una solicitud POST a la ruta 'createLab' con los datos de entrada
+        $response = $this->post(route('createPresentacion'), $datos);
+
+        // Verificar que se haya redireccionado correctamente
+        $response->assertRedirect(route('gestionAtributos'));
+
+        // Verificar que el laboratorio se haya creado en la base de datos
+        $this->assertDatabaseHas('presentacion', [
+            'nombre' => 'PrePrueba',
+        ]);
     }
 }

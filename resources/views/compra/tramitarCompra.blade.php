@@ -239,8 +239,8 @@
                         <div class="card-body">
                             <a href="#" id="metodoPagoEfectivo" class="btn btn-success mb-2" style="width:100%"><i
                                     class="bi bi-cash"></i> Efectivo</a>
-                            <a href="#" id="metodoPagoPayPal" class="btn btn-primary" style="width:100%"><i
-                                    class="bi bi-paypal"></i> PayPal</a>
+                            {{-- <a href="#" id="metodoPagoPayPal" class="btn btn-primary" style="width:100%"><i
+                                    class="bi bi-paypal"></i> PayPal</a> --}}
                         </div>
                     </div>
                 </div>
@@ -395,9 +395,16 @@
             console.log(producto);
 
             // console.log(producto);
-            const fechaHoraActual = new Date().toISOString();
+            const fechaHoraActual = new Date();
+            const fechaHoraEspañaFormatoUTC = fechaHoraActual.getFullYear().toString().padStart(4, '0') + '-' +
+                (fechaHoraActual.getMonth() + 1).toString().padStart(2, '0') + '-' +
+                fechaHoraActual.getDate().toString().padStart(2, '0') + 'T' +
+                fechaHoraActual.getHours().toString().padStart(2, '0') + ':' +
+                fechaHoraActual.getMinutes().toString().padStart(2, '0') + ':' +
+                fechaHoraActual.getSeconds().toString().padStart(2, '0') + '.' +
+                fechaHoraActual.getMilliseconds().toString().padStart(3, '0') + 'Z';
 
-            venta.push(fechaHoraActual);
+            venta.push(fechaHoraEspañaFormatoUTC);
             venta.push($('#cliente').val())
             venta.push("efectivo")
             venta.push($('.totalDescuento').text())
@@ -405,8 +412,6 @@
             venta.push(producto); // Encierra el array de productos dentro de otro array
             console.log(venta);
             ventaS = JSON.stringify(venta);
-
-
         }
 
         $('#tablaProductos').on('change', '.cantidad', function() {
