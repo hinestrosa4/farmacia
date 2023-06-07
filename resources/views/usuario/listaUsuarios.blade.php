@@ -615,8 +615,10 @@
 
             $('#contador').empty();
             $('#contador').append(carrito.length);
+
             for (let i = 0; i < carrito.length; i++) {
-                $('#cestaProductos').append("<tr data-id='" + carrito[i].id + "'><td>" + carrito[i]
+                $('#cestaProductos').append("<tr data-id='" + carrito[i].id + "'><td><img src='" + carrito[i].imagen +
+                    "' width='50px'></td><td>" + carrito[i]
                     .nombre +
                     "</td><td>" + carrito[i].concentracion + "</td><td>" +
                     carrito[i].adicional + "</td><td>" + carrito[i].nombre_pre + "</td><td>" +
@@ -625,7 +627,6 @@
                 );
             }
         }
-
         // Función para eliminar un producto del carrito
         function removeProduct(id) {
             const index = carrito.findIndex(producto => producto.id === id);

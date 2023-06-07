@@ -707,7 +707,6 @@
                                         let presentacionNombre = presentaciones[indice]
                                         let laboratorioNombre = laboratorios[indice]
                                         let tipoNombre = tipos[indice]
-
                                         let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                           <div class="card bg-light d-flex flex-fill">
                             <div class="card-header border-bottom-0 mb-4" style="background-color: ${producto.stock < 50 ? '#FF9A9A' : ''} ${producto.stock >= 50 && producto.stock < 100 ? '#FACC59' : ''} ${producto.stock >= 100 ? '#B1FF9A' : ''}">
@@ -743,18 +742,15 @@
                                 </a>
                                 <a href="{{ route('detallesProducto', '') }}/${producto.id}" class="btn btn-sm btn-warning mt-1">
                                 <i class="bi bi-pencil-square"></i> Editar
-                            </a>
-                            <a href="#" class="btn btn-sm btn-success mt-1" data-toggle="modal" data-target="#crearLote" data-id="${producto.id}" onclick="actualizarAccionFormularioLote(this)">
+                                </a>
+                                <a href="#" class="btn btn-sm btn-success mt-1" data-toggle="modal" data-target="#crearLote" data-id="${producto.id}" onclick="actualizarAccionFormularioLote(this)">
                                     <i class="bi bi-clipboard2-plus"></i> Crear Lote
                                 </a>
                             
-                            <a href="#" class="btn btn-sm btn-primary mt-1" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                                <i class="bi bi-cart-plus-fill"></i> Añadir
-                            </a>
                               </div>
                             </div>
                           </div>
-                        </div>                          
+                        </div>
                         `;
                                         $('#productos').append(html);
                                     }); //foreach
@@ -877,18 +873,15 @@
                                 </a>
                                 <a href="{{ route('detallesProducto', '') }}/${producto.id}" class="btn btn-sm btn-warning mt-1">
                                 <i class="bi bi-pencil-square"></i> Editar
-                            </a>
-                            <a href="#" class="btn btn-sm btn-success mt-1" data-toggle="modal" data-target="#crearLote" data-id="${producto.id}" onclick="actualizarAccionFormularioLote(this)">
+                                </a>
+                                <a href="#" class="btn btn-sm btn-success mt-1" data-toggle="modal" data-target="#crearLote" data-id="${producto.id}" onclick="actualizarAccionFormularioLote(this)">
                                     <i class="bi bi-clipboard2-plus"></i> Crear Lote
                                 </a>
                             
-                            <a href="#" class="btn btn-sm btn-primary mt-1" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                                <i class="bi bi-cart-plus-fill"></i> Añadir
-                            </a>
                               </div>
                             </div>
                           </div>
-                        </div>                      
+                        </div>
                         `;
                                         $('#productos').append(html);
                                     }); //foreach
@@ -975,7 +968,8 @@
             $('#contador').append(carrito.length);
 
             for (let i = 0; i < carrito.length; i++) {
-                $('#cestaProductos').append("<tr data-id='" + carrito[i].id + "'><td>" + carrito[i]
+                $('#cestaProductos').append("<tr data-id='" + carrito[i].id + "'><td><img src='" + carrito[i].imagen +
+                    "' width='50px'></td><td>" + carrito[i]
                     .nombre +
                     "</td><td>" + carrito[i].concentracion + "</td><td>" +
                     carrito[i].adicional + "</td><td>" + carrito[i].nombre_pre + "</td><td>" +

@@ -79,6 +79,11 @@
         background-color: #000;
         transform: translate(-50%, -50%);
     }
+
+    .nav-link.dentro {
+        background-color: #bebebe;
+        /* Establece el fondo gris clarito */
+    }
 </style>
 
 
@@ -130,6 +135,7 @@
                             <div class="dropdown-container">
                                 <table id="cestaProductos" class="table">
                                     <tr>
+                                        <th>Producto</th>
                                         <th>Nombre</th>
                                         <th>Concentración</th>
                                         <th>Adicional</th>
@@ -205,13 +211,13 @@
                                 {{ Auth::user()->nombre }}</a>
                             <span>
                                 @if (Auth::user()->tipo == 1)
-                                    <span style="color:rgb(190, 255, 164)">Administrador</span>
+                                    <span style="color:rgb(66, 153, 30)">Administrador</span>
                                 @elseif (Auth::user()->tipo == 2)
-                                    <span style="color:rgb(184, 243, 160)">Farmacéutico</span>
+                                    <span style="color:rgb(66, 153, 30)">Farmacéutico</span>
                                 @elseif (Auth::user()->tipo == 3)
-                                    <span style="color:rgb(158, 212, 137)">Ténico</span>
+                                    <span style="color:rgb(66, 153, 30)">Ténico</span>
                                 @else
-                                    <span style="color:rgb(160, 214, 139)">Auxiliar</span>
+                                    <span style="color:rgb(66, 153, 30)">Auxiliar</span>
                                 @endif
                             </span>
                         </div>
@@ -237,74 +243,67 @@
                         data-accordion="false">
                         <li class="nav-header">VENTA</li>
                         <li class="nav-item">
-                            <a href="{{ route('ventaProductos') }}" class="nav-link">
+                            <a href="{{ route('ventaProductos') }}"
+                                class="nav-link{{ request()->is('ventaProductos') ? ' dentro' : '' }}">
                                 <i class="bi bi-bag"></i>
-                                <p class="">
-                                    Venta de productos
-                                </p>
+                                <p>Venta de productos</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('gestionVentas') }}" class="nav-link">
+                            <a href="{{ route('gestionVentas') }}"
+                                class="nav-link{{ request()->is('gestionVentas') ? ' dentro' : '' }}">
                                 <i class="bi bi-currency-dollar"></i>
-                                <p class="">
-                                    Gestión de ventas
-                                </p>
+                                <p>Gestión de ventas</p>
                             </a>
                         </li>
                         <li class="nav-header">AGENDA</li>
                         <li class="nav-item">
-                            <a href="{{ route('calendario') }}" class="nav-link">
+                            <a href="{{ route('calendario') }}"
+                                class="nav-link{{ request()->is('calendario') ? ' dentro' : '' }}">
                                 <i class="bi bi-calendar-event"></i>
-                                <p class="ml-1">
-                                    Calendario
-                                </p>
+                                <p>Calendario</p>
                             </a>
                         </li>
                         <li class="nav-header">ALMACEN</li>
                         <li class="nav-item">
-                            <a href="{{ route('listaProductos') }}" class="nav-link">
+                            <a href="{{ route('listaProductos') }}"
+                                class="nav-link{{ request()->is('listaProductos') ? ' dentro' : '' }}">
                                 <i class="bi bi-boxes"></i>
-                                <p class="ml-1">
-                                    Gestión de productos
-                                </p>
+                                <p>Gestión de productos</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('listaLotes') }}" class="nav-link">
+                            <a href="{{ route('listaLotes') }}"
+                                class="nav-link{{ request()->is('listaLotes') ? ' dentro' : '' }}">
                                 <i class="bi bi-archive-fill"></i>
-                                <p class="ml-1">
-                                    Gestión de lotes
-                                </p>
+                                <p>Gestión de lotes</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('listaProveedores') }}" class="nav-link">
+                            <a href="{{ route('listaProveedores') }}"
+                                class="nav-link{{ request()->is('listaProveedores') ? ' dentro' : '' }}">
                                 <i class="bi bi-people-fill"></i>
-                                <p class="ml-1">
-                                    Gestión de proveedores
-                                </p>
+                                <p>Gestión de proveedores</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('gestionAtributos') }}" class="nav-link">
+                            <a href="{{ route('gestionAtributos') }}"
+                                class="nav-link{{ request()->is('gestionAtributos') ? ' dentro' : '' }}">
                                 <i class="bi bi-inboxes"></i>
-                                <p class="ml-1">
-                                    Gestión de atributos
-                                </p>
+                                <p>Gestión de atributos</p>
                             </a>
                         </li>
                         <li class="nav-header">USUARIO</li>
                         <li class="nav-item">
-                            <a href="{{ route('gestionUsuario') }}" class="nav-link">
+                            <a href="{{ route('gestionUsuario') }}"
+                                class="nav-link{{ request()->is('gestionUsuario') ? ' dentro' : '' }}">
                                 <i class="bi bi-person-lines-fill"></i>
-                                <p class="ml-1">
-                                    Gestión de usuarios
-                                </p>
+                                <p>Gestión de usuarios</p>
                             </a>
                         </li>
                     </ul>
                 </nav>
+
             </div>
         </aside>
         @yield('menu')
