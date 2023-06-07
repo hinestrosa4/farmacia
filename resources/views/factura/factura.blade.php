@@ -21,6 +21,7 @@
         <div class="mt-4">
             <span><b>Factura Ident.: </b>{{ $venta['id'] }}</span><br>
             <span><b>Cliente: </b>{{ $venta['cliente'] }}</span><br>
+            {{-- <span><b>Vendedor: </b>{{ $venta['vendedor'] }}</span><br> --}}
             <span><b>Fecha: </b>{{ (new DateTime($venta['fecha']))->format('d/m/Y H:i:s') }}
             </span><br>
             <span><b>Método de Pago: </b>{{ $venta['metodoPago'] }}</span>

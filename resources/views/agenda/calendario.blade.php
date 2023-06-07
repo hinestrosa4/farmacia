@@ -10,10 +10,78 @@
 <link rel="stylesheet" href={{ asset('templates/dist/css/adminlte.min.css') }}>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
+<link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
+<script src='https://unpkg.com/react@17.0.2/umd/react.development.js'></script>
+<script src='https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js'></script>
+
 <style>
+    .dropdown-item:hover {
+        color: rgb(255, 255, 255);
+        background-color: rgb(78, 78, 78);
+    }
+
     body {
         padding-top: 56px;
         /* altura del navbar */
+    }
+
+    .analog-clock {
+        position: relative;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid #000;
+        overflow: hidden;
+        /* Agregamos esta propiedad para recortar las agujas que se salen del círculo */
+    }
+
+    .hour-hand,
+    .minute-hand,
+    .second-hand {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background-color: #000;
+        transform-origin: bottom center;
+    }
+
+    .hour-hand {
+        width: 1.2px;
+        height: 8px;
+        margin-left: -0.5px;
+        border-radius: 2px;
+        z-index: 3;
+        transform: translateX(-50%);
+    }
+
+    .minute-hand {
+        width: 1.2px;
+        height: 13px;
+        margin-left: -0.5px;
+        border-radius: 2px;
+        z-index: 2;
+        transform: translateX(-50%);
+    }
+
+    .second-hand {
+        width: 1.1px;
+        height: 16px;
+        margin-left: -0.5px;
+        border-radius: 2px;
+        z-index: 1;
+        transform: translateX(-50%);
+    }
+
+    .center-dot {
+        position: absolute;
+        top: 50%;
+        left: 48%;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: #000;
+        transform: translate(-50%, -50%);
     }
 </style>
 
@@ -34,17 +102,25 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item d-none d-inline-block">
-                    <i class="bi bi-clock d-inline-block"></i>
-                    <div class="mt-2 mr-4 d-inline-block" id="reloj"></div>
+                <li class="nav-item d-none d-inline-block mr-3" style="margin-top: 12px">
+                    <div class="analog-clock d-inline-block">
+                        <div class="hour-hand" id="hour-hand"></div>
+                        <div class="minute-hand" id="minute-hand"></div>
+                        <div class="second-hand" id="second-hand"></div>
+                        <div class="center-dot"></div>
+                    </div>
                 </li>
+                <li class="nav-item d-none d-inline-block mr-4 mt-3">
+                    <div class="d-inline-block" id="reloj"></div>
+                </li>
+
                 <li class="nav-item dropdown">
                     <div class="dropdown">
-                        <div class="image mr-4" data-toggle="dropdown">
+                        <div class="image mt-2 mr-4" data-toggle="dropdown">
                             <img src="{{ asset('img/carrito.png') }}" class="img" alt="{{ Auth::user()->nombre }}"
                                 width="40px">
-                            <span id="contador" style="margin-left: -8px;margin-top:-8px"
-                                class="position-absolute translate-middle badge rounded-pill bg-danger">
+                            <span id="contador"
+                                class="position-absolute top-0 start-55 translate-middle badge rounded-pill bg-danger">
                                 0
                             </span>
                         </div>
@@ -52,7 +128,7 @@
                             <h4 class="text-center">Carrito de la compra</h4>
                             <div class="dropdown-divider"></div>
                             <div class="dropdown-container">
-                                <table id="cestaProductos" class="table text-center">
+                                <table id="cestaProductos" class="table">
                                     <tr>
                                         <th>Nombre</th>
                                         <th>Concentración</th>
@@ -79,7 +155,7 @@
                 </li>
                 <li class="nav-item dropdown">
                     <div class="dropdown">
-                        <div class="image mr-4" data-toggle="dropdown">
+                        <div class="image mt-1 mr-4" data-toggle="dropdown">
                             <img src="@if (Auth::user()->sexo == 'hombre') {{ asset('img/avatares/avatarUser.png') }}
                             @elseif (Auth::user()->sexo == 'mujer')
                             {{ asset('img/avatares/avatarUserMujer.png') }} @endif"
@@ -411,6 +487,7 @@
         }
     </style>
     <script>
+        // Obtener todos los eventos
         let eventos = [];
         $.ajax({
             url: 'calendario.php',
@@ -496,7 +573,6 @@
             }
         });
 
-
         console.log(eventos);
 
         function showCalendar() {
@@ -512,6 +588,7 @@
 
                     // Al hacer click en el botón de eliminar del modal, enviar solicitud AJAX para borrar el evento
                     $('#btnEliminarEvento').click(function() {
+                        console.log(info);
                         var eventId = info.event.id;
 
                         $.ajax({
@@ -536,7 +613,6 @@
                         });
                     });
                 },
-
                 locale: 'es',
                 firstDay: 1,
                 timeZone: 'local',
@@ -584,6 +660,7 @@
                 events: eventos,
                 editable: true,
                 droppable: true, // this allows things to be dropped onto the calendar !!!
+
                 drop: function(info) {
                     //YYYY-MM-DDThh:mm:ssTZD
                     var fecha = moment(info.date).format('YYYY-MM-DD');
@@ -614,11 +691,9 @@
                             end: fecha
                         },
                         success: function(respuesta) {},
-
                     });
                 },
-            });
-
+            })
             calendar.render();
         }
 
@@ -795,24 +870,33 @@
 
     {{-- Reloj --}}
     <script>
-        $(document).ready(function() {
-            setInterval(function() {
-                var date = new Date();
-                var hours = date.getHours();
-                var minutes = date.getMinutes();
-                var seconds = date.getSeconds();
-                if (hours < 10) {
-                    hours = "0" + hours;
-                }
-                if (minutes < 10) {
-                    minutes = "0" + minutes;
-                }
-                if (seconds < 10) {
-                    seconds = "0" + seconds;
-                }
-                var time = hours + ":" + minutes + ":" + seconds;
-                $('#reloj').html(time);
-            });
-        });
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            const hourHand = document.getElementById("hour-hand");
+            const minuteHand = document.getElementById("minute-hand");
+            const secondHand = document.getElementById("second-hand");
+
+            const hourAngle = (hours % 12) * 30 + (minutes / 60) * 30;
+            const minuteAngle = (minutes / 60) * 360;
+            const secondAngle = (seconds / 60) * 360;
+
+            hourHand.style.transform = `translate(-50%, -100%) rotate(${hourAngle}deg)`;
+            minuteHand.style.transform = `translate(-50%, -100%) rotate(${minuteAngle}deg)`;
+            secondHand.style.transform = `translate(-50%, -100%) rotate(${secondAngle}deg)`;
+
+            // Actualizar el reloj digital
+            const relojDigital = document.getElementById("reloj");
+            relojDigital.textContent = now.toLocaleTimeString();
+        }
+
+        // Actualizar el reloj cada segundo
+        setInterval(updateClock, 1000);
+
+        // Actualizar el reloj al cargar la página
+        updateClock();
     </script>
 </body>

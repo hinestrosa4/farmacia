@@ -227,7 +227,7 @@
                     <div class="col-sm-6">
                         <h1>Gestión de proveedores</h1>
                         <button type="button" data-toggle="modal" data-target="#crearProveedor"
-                            class="btn bg-gradient-primary" style="margin-top: 20px">Crear un proveedor</button>
+                            class="btn bg-gradient-primary" style="margin-top: 20px">Crear proveedor</button>
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-right">

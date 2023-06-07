@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Mail;
 use PDF;
 use App\Models\Venta;
 use App\Models\Cliente;
+use App\Models\Usuario;
+
 
 class FacturaController extends Controller
 {
@@ -23,7 +25,10 @@ class FacturaController extends Controller
         // $cuota = Cuota::findOrFail($id);
 
         $venta = Venta::where('id', $ventaID)->first();
-        // dd($venta);
+        $vendedor = Usuario::find($venta['vendedor']);
+        $venta['vendedor'] = $vendedor->nombre;
+
+        // dd($venta['vendedor']);
 
         // $pdf = PDF::loadView('factura', compact('cuota', 'cliente', 'tipo_cambio'));
         $pdf = PDF::loadView('factura.factura', compact('venta'));

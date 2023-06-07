@@ -49,6 +49,47 @@
         border-radius: 50%;
         background-color: rgb(224, 0, 0);
     }
+
+    .card-productos:hover {
+        border: 1px solid #a6a6a6;
+    }
+
+    .enlace-card {
+        color: black
+    }
+
+    .enlace-card:hover {
+        color: black
+    }
+
+    .card-productos {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .card-productos {
+        position: relative;
+    }
+
+    .discount-badge {
+        position: absolute;
+        top: 20;
+        right: 8;
+        background-color: #FF7800;
+        border-top-left-radius: 12px;
+        color: white;
+        font-weight: bold;
+        padding: 5px;
+        font-size: 16px;
+    }
 </style>
 
 @section('menu')
@@ -218,47 +259,42 @@
                                 let imagen = producto.imagen == null ?
                                     "img/productos/sinFoto.png" : producto
                                     .imagen;
+                                let descuento = producto.descuento != null ?
+                                    "<span class='discount-badge'>-" + producto.descuento + "%</span>" :
+                                    ""
                                 let presentacionNombre = presentaciones[indice]
                                 let laboratorioNombre = laboratorios[indice]
                                 let tipoNombre = tipos[indice]
-
+                                let precioTa = ((producto.descuento / 100) * producto.precio) +
+                                    parseFloat(producto.precio)
+                                let precioTachado = parseFloat(precioTa).toFixed(2)
+                                let tachado = producto.descuento != null ?
+                                    "<span class='mb-4' style='text-decoration:line-through;text-decoration-thickness: 1px;font-size:16px;color:#979B96'>" +
+                                    precioTachado + " €<span>" :
+                                    ""
                                 let html = `
-                                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-                          <div class="card bg-light d-flex flex-fill">
-                            <a href="#" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                            <div class="card-header border-bottom-0 mb-4" style="background-color: ${producto.stock < 50 ? '#FF9A9A' : ''} ${producto.stock >= 50 && producto.stock < 100 ? '#FACC59' : ''} ${producto.stock >= 100 ? '#B1FF9A' : ''}">
-                            <i class="bi bi-boxes"></i> ${producto.stock}
-                            </div>
+                                    <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                                        <div class="card bg-light d-flex flex-fill card-productos">
+                                            <a href="#" onclick="addCarrito(this)" class="enlace-card" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                                                <div class="card-body">
+                                                    <div class="text-center">
+                                                        <img width=60% style="margin-bottom:20px" src="${imagen}" class="img mt-4" alt="Product Image">
+                                                    </div>
 
-                            <div class="card-body pt-0">
-                              <div class="row">
-                                <div class="col-12">
-                                    <div class="text-center">
-                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
+                                                    <p class="">${producto.nombre} ${presentacionNombre} ${producto.concentracion}</p>
+                                                    <span class="price mr-3" style="font-size:20px; font-weight:bold">${producto.precio} €</span>
+                                                    ${tachado}
+                                                    
+                                                    <div class="mt-3">
+                                                        <a href="#" class="btn btn-sm mt-4" style="width:100%;background-color:#C4F6B0" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                                                        <i class="bi bi-cart-plus-fill"></i> Comprar</a>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        ${descuento}
                                     </div>
-                                  <h2 class=""><b>${producto.nombre}</b></h2>
-                                  <h5>${producto.precio} €</h5>
-                                  <ul class="ml-2 fa-ul">
-                                    <li style="margin-left:-15px"><i class="fas fa-mortar-pestle"></i><strong> Concentración:</strong> ${producto.concentracion}</li>
-                                    <li style="margin-left:-15px"<i class="fas fa-prescription-bottle-alt"></i><strong> Adicional:</strong> ${producto.adicional}</li>
-                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${producto.nombre_lab}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${producto.nombre_tipo}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${producto.nombre_pre}</li>
-                                    </ul>
-                                </div>
-                                </div>
-                                </div>
-                               <div class="card-footer mt-auto">
-                                    <a href="#" class="btn btn-sm btn-primary" style="width:100%;" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                                        <i class="bi bi-cart-plus-fill"></i> Añadir
-                                    </a>
-                                </div>
-                              </div>
-                              </a>
-                        </div>
-                        </div>
-
-                        `;
+                                `;
                                 $('#productos').append(html);
                             }); //foreach
                             // } //if

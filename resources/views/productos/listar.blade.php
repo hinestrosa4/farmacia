@@ -198,7 +198,7 @@
                             </div>
                             <br>
                             <div class="col-12">
-                                <button id="btnSubmit" class="btn btn-success" type="submit">Crear lote</button>
+                                <button id="btnSubmitLote" class="btn btn-success" type="submit">Crear lote</button>
                             </div>
                         </form>
                     </div>
@@ -280,6 +280,7 @@
                                 </select>
                             </div>
                             <br>
+
                             <div>
                                 <label for="validationCustom01" class="form-label">Presentación</label>
                                 <select class="form-control" name="producto_pre"
@@ -293,6 +294,28 @@
                                 </select>
                             </div>
                             <br>
+                            <label for="validationCustom01" class="form-label">Descuento</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault1">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault2" checked>
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    No
+                                </label>
+                            </div>
+
+                            <div id="inputDescuento" style="display: none;">
+                                <input type="number" name="descuento" class="form-control" id="descuento"
+                                    value="{{ old('descuento') }}" placeholder="Introduzca un descuento (sin %)">
+                            </div>
+
+                            <br>
                             <div>
                                 <label for="imagen" class="form-label">Imagen</label>
                                 <input type="file" name="imagen" id="imagen" class="form-control">
@@ -305,6 +328,13 @@
 
                         <script>
                             $(document).ready(function() {
+                                $('input[type="radio"]').change(function() {
+                                    if ($(this).attr('id') === 'flexRadioDefault1') {
+                                        $('#inputDescuento').slideDown('slow');
+                                    } else {
+                                        $('#inputDescuento').slideUp('slow');
+                                    }
+                                });
                                 $("#form").submit(function(event) {
                                     // Prevenir la acción predeterminada del formulario
                                     event.preventDefault();

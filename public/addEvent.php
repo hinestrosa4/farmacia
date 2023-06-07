@@ -1,7 +1,20 @@
 <?php
 // Conectar a la base de datos
-$conexion = mysqli_connect("localhost", "root", "", "farmacia");
-// $conexion = mysqli_connect("localhost", "rafaelhinestrosa", "Yv4*1z6c", "rafaelhinestrosa");
+require __DIR__ . '/../vendor/autoload.php';
+
+use Dotenv\Dotenv;
+
+// Carga el archivo .env
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+$conexion = mysqli_connect(
+  $_ENV['DB_HOST'],
+  $_ENV['DB_USERNAME'],
+  $_ENV['DB_PASSWORD'],
+  $_ENV['DB_DATABASE'],
+  $_ENV['DB_PORT']
+);
 
 // Paso 2: Obtener los datos enviados por AJAX
 $titulo = $_POST["title"];

@@ -49,11 +49,14 @@ class ProductoController extends Controller
             'concentracion' => '',
             'adicional' => '',
             'precio' => '',
+            'descuento' => '',
             'imagen' => '',
             'producto_lab' => '',
             'producto_tipo' => '',
             'producto_pre' => '',
         ]);
+
+        // dd($datos);
 
         if (request()->hasFile('imagen')) {
             $nombre_imagen = request()->file('imagen')->getClientOriginalName();
@@ -154,6 +157,7 @@ class ProductoController extends Controller
             'concentracion' => 'required',
             'adicional' => 'required',
             'precio' => 'required',
+            'descuento' => '',
             'producto_lab' => '',
             'producto_tipo' => '',
             'producto_pre' => '',

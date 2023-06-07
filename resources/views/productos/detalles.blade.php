@@ -98,6 +98,16 @@
                                             <b style="color:#0B7300">Precio</b><span class="float-right"
                                                 style="color:rgb(26, 57, 255)">{{ $producto->precio }}€</span>
                                         </li>
+                                        <li class="list-group-item">
+                                            <b style="color:#0B7300">Descuento</b><span class="float-right"
+                                                style="color:rgb(26, 57, 255)">
+                                                @if ($producto->descuento == null)
+                                                    Sin descuento
+                                                @else
+                                                    {{ $producto->descuento }}%
+                                                @endif
+                                            </span>
+                                        </li>
                                     </ul>
                                     <button class="btn btn-block bg-gradient-danger" id="editarBtn">Editar</button>
                                 </div>
@@ -144,6 +154,28 @@
                                                 <input type="number" step="0.01" name="precio" class="form-control"
                                                     id="precio" placeholder="Precio" value="{{ old('precio') }}">
                                                 {!! $errors->first('precio', '<span style=color:red>:message</span>') !!}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="validationCustom01" class="form-label">Descuento</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="flexRadioDefault" id="flexRadioDefault1">
+                                                    <label class="form-check-label mr-4" for="flexRadioDefault1">
+                                                        Si
+                                                    </label>
+
+                                                    <input class="form-check-input ml-2" type="radio"
+                                                        name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                                    <label class="form-check-label ml-4" for="flexRadioDefault2">
+                                                        No
+                                                    </label>
+                                                </div>
+
+                                                <div id="inputDescuento" style="display: none;width:100%">
+                                                    <input type="number" name="descuento" class="form-control"
+                                                        id="descuento" value="{{ old('descuento') }}"
+                                                        placeholder="Descuento (sin %)">
+                                                </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="validationCustom01" class="form-label">Laboratorio</label>
@@ -204,6 +236,13 @@
     <script>
         $(document).ready(function() {
             $('select').select2();
+            $('input[type="radio"]').change(function() {
+                if ($(this).attr('id') === 'flexRadioDefault1') {
+                    $('#inputDescuento').slideDown('slow');
+                } else {
+                    $('#inputDescuento').slideUp('slow');
+                }
+            });
         });
     </script>
     <script>
@@ -214,6 +253,8 @@
         var laboratorio = "{{ $producto->producto_lab }}";
         var tipo = "{{ $producto->producto_tipo }}";
         var presentacion = "{{ $producto->producto_pre }}";
+        var descuento = "{{ $producto->descuento }}";
+
 
         // Agregar listener al botón de "Editar"
         $('#editarBtn').click(function() {
@@ -225,6 +266,8 @@
             $('#laboratorio').val(laboratorio);
             $('#tipo').val(tipo);
             $('#presentacion').val(presentacion);
+            $('#descuento').val(descuento);
+
         });
 
         //vaciar carrito

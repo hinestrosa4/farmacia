@@ -30,9 +30,9 @@ use App\Http\Controllers\RecuperarPassController;
 //     return view('login.login');
 // });
 
-// Route::get('/faq', function () {
-//     return view('faq');
-// });
+Route::get('/chat', function () {
+    return view('chat');
+});
 
 //Login
 Route::get('/', LoginController::class)->name('login');
@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
 
     /*------ Tramitar compra ------*/
     Route::get('/tramitarCompra', CompraController::class)->name('tramitarCompra');
+    // Route::post('/pagoTarjeta', [CompraController::class, 'pagoTarjeta'])->name('pagoTarjeta');
 
     /*------ Venta ------*/
     Route::get('/ventaProductos', [VentaController::class, 'ventaProductos'])->name('ventaProductos');

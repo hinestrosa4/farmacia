@@ -1,10 +1,17 @@
 <?php
-// Conectar a la base de datos
-$host = 'localhost';
-$dbname = 'farmacia';
-$user = 'root';
-$password = '';
 
+require __DIR__ . '/../vendor/autoload.php';
+
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+// Conectar a la base de datos
+$host = $_ENV['DB_HOST'];
+$dbname = $_ENV['DB_DATABASE'];
+$user = $_ENV['DB_USERNAME'];
+$password = $_ENV['DB_PASSWORD'];
 
 try {
     $conexion = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);

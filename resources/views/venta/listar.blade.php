@@ -34,7 +34,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Gestión de Ventas</h1>
+                        <h1>Gestión de ventas</h1>
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-sm-right">
@@ -183,10 +183,11 @@
                                     <table id="myTable" class="table table-light text-center">
                                         <thead>
                                             <tr>
-                                                <th>Id</th>
+                                                {{-- <th>Id</th> --}}
                                                 <th style="border-spacing:10px">Productos</th>
                                                 <th>Total</th>
                                                 <th>Cliente</th>
+                                                <th>Vendedor</th>
                                                 <th>Fecha</th>
                                                 <th>Acciones</th>
                                             </tr>
@@ -197,7 +198,7 @@
                                                 $productos = json_decode($venta['productos'], true);
                                                 ?>
                                                 <tr>
-                                                    <td>{{ $venta['id'] }}</td>
+                                                    {{-- <td>{{ $venta['id'] }}</td> --}}
                                                     <td>
                                                         <button id="boton-{{ $venta['id'] }}" class="btn btn-primary"
                                                             style="padding-left: 100px;padding-right: 100px"
@@ -247,7 +248,9 @@
                                                         </div>
                                                     </td>
                                                     <td>{{ $venta['total'] }}</td>
+
                                                     <td>{{ $venta['cliente'] }}</td>
+                                                    <td>{{ $venta['vendedor'] }}</td>
                                                     <td>{{ (new DateTime($venta['fecha']))->format('d/m/Y H:i:s') }}</td>
                                                     <td>
                                                         <a href="{{ route('generatePDF', ['venta' => $venta['id']]) }}"

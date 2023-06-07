@@ -25,6 +25,12 @@ class VentaController extends Controller
     {
         $usuarios = usuario::orderBy('id', 'asc')->get();
         $ventas = Venta::all()->toArray();
+
+        foreach ($ventas as &$venta) {
+            $vendedor = Usuario::find($venta['vendedor']);
+            $venta['vendedor'] = $vendedor->nombre;
+        }
+
         // dd($ventas);
         return view('venta.listar', compact('ventas', 'usuarios'));
     }
@@ -90,7 +96,7 @@ class VentaController extends Controller
             $productoDb->save();
         }
         Venta::create($datos);
-        return redirect()->route('listaProductos');
+        return redirect()->route('ventaProductos');
     }
 
     public function borrarVenta(Venta $venta)

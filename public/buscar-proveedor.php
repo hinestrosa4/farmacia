@@ -1,7 +1,20 @@
 <?php
 // Conectar a la base de datos
-$conexion = mysqli_connect("localhost", "root", "", "farmacia");
+require __DIR__ . '/../vendor/autoload.php';
 
+use Dotenv\Dotenv;
+
+// Carga el archivo .env
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+$conexion = mysqli_connect(
+    $_ENV['DB_HOST'],
+    $_ENV['DB_USERNAME'],
+    $_ENV['DB_PASSWORD'],
+    $_ENV['DB_DATABASE'],
+    $_ENV['DB_PORT']
+);
 // Verificar si la solicitud POST está configurada correctamente
 if (isset($_POST['funcion']) && isset($_POST['consulta'])) {
     $funcion = $_POST['funcion'];

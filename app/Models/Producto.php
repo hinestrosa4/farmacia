@@ -13,7 +13,7 @@ class Producto extends Authenticatable
     use SoftDeletes;
     protected $table = "producto";
     public $timestamps = false;
-    protected $fillable = ['id', 'nombre', 'concentracion', 'adicional', 'precio', 'imagen', 'producto_lab', 'producto_tipo', 'producto_pre'];
+    protected $fillable = ['id', 'nombre', 'concentracion', 'adicional', 'precio', 'descuento', 'imagen', 'producto_lab', 'producto_tipo', 'producto_pre'];
 
     public function laboratorio()
     {

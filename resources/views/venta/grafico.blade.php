@@ -349,6 +349,7 @@
     <!-- AdminLTE App -->
     <script src={{ asset('templates/dist/js/adminlte.min.js') }}></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-animate"></script>
 
     <!-- AdminLTE for demo purposes -->
     {{-- <script src={{ asset('templates/dist/js/demo.js') }}></script> --}}
@@ -369,6 +370,7 @@
             //- AREA CHART -
             //--------------
 
+            // Grafico de ventas
             let datos = []
             $.ajax({
                 url: 'getDataGrafico.php',
@@ -417,8 +419,12 @@
                         legend: {
                             display: false,
                         },
-
+                        animation: {
+                            duration: 2100, // Duración de la animación en milisegundos
+                            delay: 2100, // Retraso de inicio de la animación en milisegundos
+                        },
                     };
+
 
                     // This will get the first returned node in the jQuery collection.
                     new Chart(areaChartCanvas, {
@@ -426,6 +432,7 @@
                         data: areaChartData,
                         options: areaChartOptions,
                     });
+
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error(textStatus +
@@ -433,6 +440,7 @@
                 }
             });
 
+            // Grafico de venta por usuario
             let usuario = []
             let ventas = []
 
