@@ -3,6 +3,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <style>
     #cuerpo {
@@ -90,6 +91,47 @@
         padding: 5px;
         font-size: 16px;
     }
+
+    button.custom-checkbox:hover {
+        transform: translateY(-3px);
+        /* Eleva el botón 3 píxeles hacia arriba */
+    }
+
+    button.custom-checkbox {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        margin-left: 1%;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    button.custom-checkbox input[type=checkbox] {
+        display: none;
+    }
+
+    button.custom-checkbox span {
+        display: none;
+    }
+
+    button.custom-checkbox input[type=checkbox]:checked+label span.active {
+        color: white;
+        /* font-weight: normal; */
+        border-radius: 5px;
+        padding: 10px;
+        display: inline-block;
+        background-color: #158d1b;
+        /* Color verde oscuro */
+    }
+
+    button.custom-checkbox input[type=checkbox]:not(:checked)+label span.not-active {
+        color: rgb(255, 255, 255);
+        /* font-weight: normal; */
+        border-radius: 5px;
+        padding: 10px;
+        display: inline-block;
+        background-color: #8edb92;
+        /* Color verde claro */
+    }
 </style>
 
 @section('menu')
@@ -156,7 +198,7 @@
         <section>
             <div class="cotainer-fluid">
                 <div class="card card-info" style="">
-                    <div class="card-header">
+                    <div class="card-header mb-3">
                         <h3 class="card-title">Buscar producto</h3>
                         <div class="input-group">
                             <input type="text" id="buscar" placeholder="Introduzca nombre de un producto"
@@ -166,7 +208,7 @@
                         </div>
                     </div>
                     <div class="form-check form-switch d-flex" style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
-                        <div class="mt-2" style="margin-left: 12px">
+                        {{-- <div class="mt-2" style="margin-left: 12px">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="cbEstado">
                                 <label class="form-check-label" for="flexSwitchCheckDefault">Ordenar por
@@ -176,8 +218,38 @@
                                 <input class="form-check-input" type="checkbox" id="cbPrecio">
                                 <label class="form-check-label" for="flexSwitchCheckDefault">Ordenar por precio</label>
                             </div>
-                        </div>
+                        </div> --}}
+                        {{-- <button class="custom-checkbox mt-2">
+                            <input type="checkbox" id="check1" />
+                            <label for="check1">
+                                <span class="active">Comprimidos</span>
+                                <span class="not-active">Comprimidos</span>
+                            </label>
+                        </button>
+                        <button class="custom-checkbox mt-2">
+                            <input type="checkbox" id="check2" />
+                            <label for="check2">
+                                <span class="active">Cápsulas</span>
+                                <span class="not-active">Cápsulas</span>
+                            </label>
+                        </button> --}}
 
+                        {{-- Select --}}
+                        <p class="mr-2">Tipo:</p>
+                        <select name="selectTipo" id="selectTipo" style="width:180px">
+                            <option value="-1">Todos</option>
+                            @foreach ($tipos as $tipo)
+                                <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                            @endforeach
+                        </select>
+
+                        <p class="ml-5 mr-2">Presentación:</p>
+                        <select name="selectPre" id="selectPre" style="width:150px">
+                            <option value="-1">Todos</option>
+                            @foreach ($presentaciones as $presentacion)
+                                <option value="{{ $presentacion->id }}">{{ $presentacion->nombre }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <br>
                     @if (session()->has('message'))
@@ -210,186 +282,191 @@
     </div>
     </section>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('select').select2();
+        });
+
+        var presentaciones = <?php echo $presentaciones_json; ?>;
+        var laboratorios = <?php echo $laboratorios_json; ?>;
+        var tipos = <?php echo $tipos_json; ?>;
+
+        var filtro = " ORDER BY p.id";
+        var checkbox = document.getElementById('cbEstado')
+        var checkboxPrecio = document.getElementById('cbPrecio')
+
+        var c = 0
+        c == 0 ? buscarDatosSinFiltro() : ""
+        c++
+
+        // console.log("----------");
+        //sin filtros
+        function buscarDatosSinFiltro(consulta) {
+            console.log("todo");
+            funcion = "buscar";
+            if (!consulta) { // Si no hay consulta, selecciona todos los productos
+                consulta = "todos";
+            }
+
+            // $('#mostrarBorrados').change(function() {
+            $.ajax({
+                    url: 'buscar-productos.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        consulta: consulta,
+                        funcion: funcion,
+                        filtro: filtro
+                    },
+                })
+                .done(function(respuesta) {
+                    if (respuesta.length > 0) {
+                        // Borra los resultados anteriores
+                        $('#productos').empty();
+                        // Agrega los nuevos resultados al cuerpo del card
+                        // if (!this.checked) {
+
+                        respuesta.forEach(function(producto, indice) {
+                            let imagen = producto.imagen == null ?
+                                "img/productos/sinFoto.png" : producto
+                                .imagen;
+                            let descuento = producto.descuento != null ?
+                                "<span class='discount-badge'>-" + producto.descuento + "%</span>" :
+                                ""
+                            let presentacionNombre = presentaciones[indice]
+                            let laboratorioNombre = laboratorios[indice]
+                            let tipoNombre = tipos[indice]
+                            let precioTa = ((producto.descuento / 100) * producto.precio) +
+                                parseFloat(producto.precio)
+                            let precioTachado = parseFloat(precioTa).toFixed(2)
+                            let tachado = producto.descuento != null ?
+                                "<span class='mb-4' style='text-decoration:line-through;text-decoration-thickness: 1px;font-size:16px;color:#979B96'>" +
+                                precioTachado + " €<span>" :
+                                ""
+
+                            let botonComprarStyle = producto.stock == 0 ?
+                                "background-color: #BCBFBB;" : "background-color: #C4F6B0;";
+
+                            let botonComprarTexto = producto.stock == 0 ? "Agotado" : "Comprar";
+
+                            let html = `
+                                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                                    <div class="card bg-light d-flex flex-fill card-productos">
+                                        <a href="#" onclick="addCarrito(this)" class="enlace-card" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                                            <div class="card-body">
+                                                <div class="text-center">
+                                                    <img width=60% style="margin-bottom:20px;" src="${imagen}" class="img mt-4" alt="Product Image">
+                                                </div>
+
+                                                <p class="">${producto.nombre} ${producto.concentracion}</p>
+                                                <span class="price mr-3" style="font-size:20px; font-weight:bold">${producto.precio} €</span>
+                                                ${tachado}
+
+                                                <div class="mt-3">
+                                                    <a href="#" class="btn btn-sm mt-4" style="width:100%;${botonComprarStyle}" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
+                                                        <i class="bi bi-cart-plus-fill"></i> ${botonComprarTexto}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    ${descuento}
+                                </div>
+                            `;
+                            $('#productos').append(html);
+                        }); //foreach
+                        // } //if
+                        // else {
+                        //     console.log("borrados")
+                        // }
+                    } else {
+                        // Si no se encontraron resultados, muestra un mensaje de error
+                        $('#productos').html(
+                            '<p class="MgNoProduc">No se han encontrado resultados</p>');
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                });
+            // })// change checkbox
+        }
+
+        // Filtros
+        function aplicarFiltros() {
+            // console.log("con filtro");
+            var selectedPre = $('#selectPre').val();
+            var selectedTipo = $('#selectTipo').val();
+
+            // console.log(selectedPre);
+            // console.log(selectedTipo);
+
             var presentaciones = <?php echo $presentaciones_json; ?>;
             var laboratorios = <?php echo $laboratorios_json; ?>;
             var tipos = <?php echo $tipos_json; ?>;
 
-            var filtro = " ORDER BY p.id";
-            var checkbox = document.getElementById('cbEstado')
-            var checkboxPrecio = document.getElementById('cbPrecio')
+            var filtro = " WHERE ";
 
-            // verifica si el campo de búsqueda está vacío
-            if ($('#buscar').val() == "") {
-                buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
+            if (selectedPre != -1) {
+                filtro += "producto_pre IN(" + selectedPre + ")";
             }
 
-            $(document).on('keyup', '#buscar', function() {
-                let valor = $(this).val();
-                buscarDatosSinFiltro(valor); // Llama a buscarDatos() con el valor del campo de búsqueda
-            });
-
-            //sin filtros
-            function buscarDatosSinFiltro(consulta) {
-                funcion = "buscar";
-                if (!consulta) { // Si no hay consulta, selecciona todos los productos
-                    consulta = "todos";
+            if (selectedTipo != -1) {
+                if (selectedPre != -1) {
+                    filtro += " AND ";
                 }
-
-                // $('#mostrarBorrados').change(function() {
-                $.ajax({
-                        url: 'buscar-productos.php',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            consulta: consulta,
-                            funcion: funcion,
-                            filtro: filtro
-                        },
-                    })
-                    .done(function(respuesta) {
-                        if (respuesta.length > 0) {
-                            // Borra los resultados anteriores
-                            $('#productos').empty();
-                            // Agrega los nuevos resultados al cuerpo del card
-                            // if (!this.checked) {
-
-                            respuesta.forEach(function(producto, indice) {
-                                let imagen = producto.imagen == null ?
-                                    "img/productos/sinFoto.png" : producto
-                                    .imagen;
-                                let descuento = producto.descuento != null ?
-                                    "<span class='discount-badge'>-" + producto.descuento + "%</span>" :
-                                    ""
-                                let presentacionNombre = presentaciones[indice]
-                                let laboratorioNombre = laboratorios[indice]
-                                let tipoNombre = tipos[indice]
-                                let precioTa = ((producto.descuento / 100) * producto.precio) +
-                                    parseFloat(producto.precio)
-                                let precioTachado = parseFloat(precioTa).toFixed(2)
-                                let tachado = producto.descuento != null ?
-                                    "<span class='mb-4' style='text-decoration:line-through;text-decoration-thickness: 1px;font-size:16px;color:#979B96'>" +
-                                    precioTachado + " €<span>" :
-                                    ""
-
-                                let botonComprarStyle = producto.stock == 0 ?
-                                    "background-color: #BCBFBB;" : "background-color: #C4F6B0;";
-
-                                let botonComprarTexto = producto.stock == 0 ? "Agotado" : "Comprar";
-
-                                let html = `
-                                    <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-                                        <div class="card bg-light d-flex flex-fill card-productos">
-                                            <a href="#" onclick="addCarrito(this)" class="enlace-card" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                                                <div class="card-body">
-                                                    <div class="text-center">
-                                                        <img width=60% style="margin-bottom:20px" src="${imagen}" class="img mt-4" alt="Product Image">
-                                                    </div>
-
-                                                    <p class="">${producto.nombre} ${presentacionNombre} ${producto.concentracion}</p>
-                                                    <span class="price mr-3" style="font-size:20px; font-weight:bold">${producto.precio} €</span>
-                                                    ${tachado}
-                                                    
-                                                    <div class="mt-3">
-                                                        <a href="#" class="btn btn-sm mt-4" style="width:100%;${botonComprarStyle}" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                                                            <i class="bi bi-cart-plus-fill"></i> ${botonComprarTexto}
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        ${descuento}
-                                    </div>
-                                `;
-                                $('#productos').append(html);
-                            }); //foreach
-                            // } //if
-                            // else {
-                            //     console.log("borrados")
-                            // }
-                        } else {
-                            // Si no se encontraron resultados, muestra un mensaje de error
-                            $('#productos').html(
-                                '<p class="text-danger">No se encontraron resultados</p>');
-                        }
-                    })
-                    .fail(function() {
-                        console.log("error");
-                    });
-                // })// change checkbox
+                filtro += "producto_tipo IN(" + selectedTipo + ")";
             }
 
-            checkboxPrecio.addEventListener('click', function() {
-                if (checkboxPrecio.checked) {
-                    filtro = " ORDER BY p.precio desc"
-                    checkbox.checked = 0
+            if (selectedPre == "-1" && selectedTipo == "-1") {
+                filtro = " WHERE deleted_at IS NULL";
+            }
 
-                    // verifica si el campo de búsqueda está vacío
-                    if ($('#buscar').val() == "") {
-                        buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
-                    }
+            filtro += " AND deleted_at IS NULL";
 
-                    $(document).on('keyup', '#buscar', function() {
-                        let valor = $(this).val();
-                        buscarDatos(
-                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
-                    });
+            // console.log(filtro);
 
-                    //filtro precio
-                    function buscarDatos(consulta) {
-                        funcion = "buscar";
-                        if (!consulta) { // Si no hay consulta, selecciona todos los productos
-                            consulta = "todos";
-                        }
+            $.ajax({
+                    url: 'filtros.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        consulta: 'filtro',
+                        funcion: funcion,
+                        filtro: filtro
+                    },
+                })
+                .done(function(respuesta) {
+                    // console.log(respuesta);
+                    if (respuesta.length > 0) {
+                        // Borra los resultados anteriores
+                        $('#productos').empty();
+                        // Agrega los nuevos resultados al cuerpo del card
 
-                        // $('#mostrarBorrados').change(function() {
-                        $.ajax({
-                                url: 'buscar-productos.php',
-                                type: 'POST',
-                                dataType: 'json',
-                                data: {
-                                    consulta: consulta,
-                                    funcion: funcion,
-                                    filtro: filtro
-                                },
-                            })
-                            .done(function(respuesta) {
-                                if (respuesta.length > 0) {
-                                    // Borra los resultados anteriores
-                                    $('#productos').empty();
-                                    // Agrega los nuevos resultados al cuerpo del card
-                                    // if (!this.checked) {
+                        respuesta.forEach(function(producto, indice) {
+                            let imagen = producto.imagen == null ?
+                                "img/productos/sinFoto.png" : producto
+                                .imagen;
+                            let descuento = producto.descuento != null ?
+                                "<span class='discount-badge'>-" + producto.descuento + "%</span>" :
+                                ""
+                            let presentacionNombre = presentaciones[indice]
+                            let laboratorioNombre = laboratorios[indice]
+                            let tipoNombre = tipos[indice]
+                            let precioTa = ((producto.descuento / 100) * producto.precio) +
+                                parseFloat(producto.precio)
+                            let precioTachado = parseFloat(precioTa).toFixed(2)
+                            let tachado = producto.descuento != null ?
+                                "<span class='mb-4' style='text-decoration:line-through;text-decoration-thickness: 1px;font-size:16px;color:#979B96'>" +
+                                precioTachado + " €<span>" :
+                                ""
 
-                                    respuesta.forEach(function(producto, indice) {
-                                        let imagen = producto.imagen == null ?
-                                            "img/productos/sinFoto.png" : producto
-                                            .imagen;
-                                        let descuento = producto.descuento != null ?
-                                            "<span class='discount-badge'>-" + producto
-                                            .descuento + "%</span>" :
-                                            ""
-                                        let presentacionNombre = presentaciones[indice]
-                                        let laboratorioNombre = laboratorios[indice]
-                                        let tipoNombre = tipos[indice]
-                                        let precioTa = ((producto.descuento / 100) * producto
-                                                .precio) +
-                                            parseFloat(producto.precio)
-                                        let precioTachado = parseFloat(precioTa).toFixed(2)
-                                        let tachado = producto.descuento != null ?
-                                            "<span class='mb-4' style='text-decoration:line-through;text-decoration-thickness: 1px;font-size:16px;color:#979B96'>" +
-                                            precioTachado + " €<span>" :
-                                            ""
+                            let botonComprarStyle = producto.stock == 0 ?
+                                "background-color: #BCBFBB;" : "background-color: #C4F6B0;";
 
-                                        let botonComprarStyle = producto.stock == 0 ?
-                                            "background-color: #BCBFBB;" :
-                                            "background-color: #C4F6B0;";
+                            let botonComprarTexto = producto.stock == 0 ? "Agotado" : "Comprar";
 
-                                        let botonComprarTexto = producto.stock == 0 ?
-                                            "Agotado" : "Comprar";
-
-                                        let html = `
+                            let html = `
                                     <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                                         <div class="card bg-light d-flex flex-fill card-productos">
                                             <a href="#" onclick="addCarrito(this)" class="enlace-card" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
@@ -398,7 +475,7 @@
                                                         <img width=60% style="margin-bottom:20px" src="${imagen}" class="img mt-4" alt="Product Image">
                                                     </div>
 
-                                                    <p class="">${producto.nombre} ${presentacionNombre} ${producto.concentracion}</p>
+                                                    <p class="">${producto.nombre} ${producto.concentracion}</p>
                                                     <span class="price mr-3" style="font-size:20px; font-weight:bold">${producto.precio} €</span>
                                                     ${tachado}
                                                     
@@ -413,171 +490,24 @@
                                         ${descuento}
                                     </div>
                                 `;
-                                        $('#productos').append(html);
-                                    }); //foreach
-                                    // } //if
-                                    // else {
-                                    //     console.log("borrados")
-                                    // }
-                                } else {
-                                    // Si no se encontraron resultados, muestra un mensaje de error
-                                    $('#productos').html(
-                                        '<p class="text-danger">No se encontraron resultados</p>');
-                                }
-                            })
-                            .fail(function() {
-                                console.log("error");
-                            });
-                        // })// change checkbox
+                            $('#productos').append(html);
+                        }); //foreach
+                    } else {
+                        // Si no se encontraron resultados, muestra un mensaje de error
+                        $('#productos').html('<p class="MgNoProduc">No se han encontrado resultados</p>');
                     }
-                } else {
+                })
+                .fail(function() {
+                    // console.log("error");
+                });
+        }
 
-                    filtro = " ORDER BY p.id";
+        $('#selectPre').change(function() {
+            aplicarFiltros();
+        });
 
-                    // verifica si el campo de búsqueda está vacío
-                    if ($('#buscar').val() == "") {
-                        buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
-                    }
-
-                    $(document).on('keyup', '#buscar', function() {
-                        let valor = $(this).val();
-                        buscarDatosSinFiltro(
-                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
-                    });
-
-                    //sin filtro
-                    buscarDatosSinFiltro()
-                }
-            });
-
-            checkbox.addEventListener('click', function() {
-                if (checkbox.checked) {
-                    filtro = " ORDER BY p.stock desc"
-                    checkboxPrecio.checked = 0
-
-                    // verifica si el campo de búsqueda está vacío
-                    if ($('#buscar').val() == "") {
-                        buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
-                    }
-
-                    $(document).on('keyup', '#buscar', function() {
-                        let valor = $(this).val();
-                        buscarDatos(
-                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
-                    });
-
-                    //filtro stock/estado
-                    function buscarDatos(consulta) {
-                        funcion = "buscar";
-                        if (!consulta) { // Si no hay consulta, selecciona todos los productos
-                            consulta = "todos";
-                        }
-
-                        // $('#mostrarBorrados').change(function() {
-                        $.ajax({
-                                url: 'buscar-productos.php',
-                                type: 'POST',
-                                dataType: 'json',
-                                data: {
-                                    consulta: consulta,
-                                    funcion: funcion,
-                                    filtro: filtro
-                                },
-                            })
-                            .done(function(respuesta) {
-                                if (respuesta.length > 0) {
-                                    // Borra los resultados anteriores
-                                    $('#productos').empty();
-                                    // Agrega los nuevos resultados al cuerpo del card
-                                    // if (!this.checked) {
-
-                                    respuesta.forEach(function(producto, indice) {
-                                        let imagen = producto.imagen == null ?
-                                            "img/productos/sinFoto.png" : producto
-                                            .imagen;
-                                        let descuento = producto.descuento != null ?
-                                            "<span class='discount-badge'>-" + producto
-                                            .descuento + "%</span>" :
-                                            ""
-                                        let presentacionNombre = presentaciones[indice]
-                                        let laboratorioNombre = laboratorios[indice]
-                                        let tipoNombre = tipos[indice]
-                                        let precioTa = ((producto.descuento / 100) * producto
-                                                .precio) +
-                                            parseFloat(producto.precio)
-                                        let precioTachado = parseFloat(precioTa).toFixed(2)
-                                        let tachado = producto.descuento != null ?
-                                            "<span class='mb-4' style='text-decoration:line-through;text-decoration-thickness: 1px;font-size:16px;color:#979B96'>" +
-                                            precioTachado + " €<span>" :
-                                            ""
-
-                                        let botonComprarStyle = producto.stock == 0 ?
-                                            "background-color: #BCBFBB;" :
-                                            "background-color: #C4F6B0;";
-
-                                        let botonComprarTexto = producto.stock == 0 ?
-                                            "Agotado" : "Comprar";
-
-                                        let html = `
-                                    <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-                                        <div class="card bg-light d-flex flex-fill card-productos">
-                                            <a href="#" onclick="addCarrito(this)" class="enlace-card" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                                                <div class="card-body">
-                                                    <div class="text-center">
-                                                        <img width=60% style="margin-bottom:20px" src="${imagen}" class="img mt-4" alt="Product Image">
-                                                    </div>
-
-                                                    <p class="">${producto.nombre} ${presentacionNombre} ${producto.concentracion}</p>
-                                                    <span class="price mr-3" style="font-size:20px; font-weight:bold">${producto.precio} €</span>
-                                                    ${tachado}
-                                                    
-                                                    <div class="mt-3">
-                                                        <a href="#" class="btn btn-sm mt-4" style="width:100%;${botonComprarStyle}" onclick="addCarrito(this)" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
-                                                            <i class="bi bi-cart-plus-fill"></i> ${botonComprarTexto}
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        ${descuento}
-                                    </div>
-                                `;
-                                        $('#productos').append(html);
-                                    }); //foreach
-                                    // } //if
-                                    // else {
-                                    //     console.log("borrados")
-                                    // }
-                                } else {
-                                    // Si no se encontraron resultados, muestra un mensaje de error
-                                    $('#productos').html(
-                                        '<p class="text-danger">No se encontraron resultados</p>');
-                                }
-                            })
-                            .fail(function() {
-                                console.log("error");
-                            });
-                        // })// change checkbox
-                    }
-                } else {
-
-                    filtro = " ORDER BY p.id";
-
-                    // verifica si el campo de búsqueda está vacío
-                    if ($('#buscar').val() == "") {
-                        buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
-                    }
-
-                    $(document).on('keyup', '#buscar', function() {
-                        let valor = $(this).val();
-                        buscarDatosSinFiltro(
-                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
-                    });
-
-                    //sin filtro
-                    buscarDatosSinFiltro()
-                }
-            });
+        $('#selectTipo').change(function() {
+            aplicarFiltros();
         });
 
         let carrito = [];

@@ -88,6 +88,31 @@
         background-color: #bebebe;
         /* Establece el fondo gris clarito */
     }
+
+
+    .table-container {
+        max-height: 350px;
+        /* Ajusta la altura máxima deseada */
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #b8b8b8 #f0f0f0;
+    }
+
+    /* Estilos del scroll en navegadores basados en WebKit, como Chrome y Safari */
+    .table-container::-webkit-scrollbar {
+        width: 6px;
+        /* Ajusta el ancho del scroll */
+    }
+
+    .table-container::-webkit-scrollbar-track {
+        background-color: #fafafa;
+        /* Color de fondo del track del scroll */
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+        background-color: #bebebe;
+        /* Color del thumb del scroll */
+    }
 </style>
 
 <body class="hold-transition sidebar-mini">
@@ -133,28 +158,31 @@
                             <h4 class="text-center">Carrito de la compra</h4>
                             <div class="dropdown-divider"></div>
                             <div class="dropdown-container">
-                                <table id="cestaProductos" class="table text-center">
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Concentración</th>
-                                        <th>Adicional</th>
-                                        <th>Presentación</th>
-                                        <th>Precio</th>
-                                        <th>Eliminar</th>
-                                    </tr>
-                                </table>
-                                <div class="row ml-4">
+                                <div class="table-container">
+                                    <table id="cestaProductos" class="table">
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Nombre</th>
+                                            <th>Concentración</th>
+                                            <th>Adicional</th>
+                                            <th>Presentación</th>
+                                            <th>Precio</th>
+                                            <th>Eliminar</th>
+                                        </tr>
+                                        <!-- Filas de productos -->
+                                    </table>
+                                </div>
+                                <div class="row ml-4 mt-2">
                                     <button class="btn btn-danger" style="width: 47%" id="vaciarCarrito">
                                         <img class="mr-2 mb-1" width="32px"
-                                            src="{{ asset('img/vaciarCarrito.png') }}"> Vaciar
-                                        carrito</button>
+                                            src="{{ asset('img/vaciarCarrito.png') }}"> Vaciar carrito</button>
                                     <a href="{{ route('tramitarCompra') }}" class="btn btn-primary ml-2"
                                         style="width: 47%" id="tramitarCompra">
                                         <img class="mr-2 mb-1" width="32px"
-                                            src="{{ asset('img/tramitarCompra.png') }}"> Tramitar
-                                        compra</a>
+                                            src="{{ asset('img/tramitarCompra.png') }}"> Tramitar compra</a>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </li>

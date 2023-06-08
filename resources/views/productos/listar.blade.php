@@ -650,7 +650,7 @@
                         } else {
                             // Si no se encontraron resultados, muestra un mensaje de error
                             $('#productos').html(
-                                '<p class="text-danger">No se encontraron resultados</p>');
+                                '<p class="MgNoProduc">No se han encontrado resultados</p>');
                         }
                     })
                     .fail(function() {
@@ -761,7 +761,7 @@
                                 } else {
                                     // Si no se encontraron resultados, muestra un mensaje de error
                                     $('#productos').html(
-                                        '<p class="text-danger">No se encontraron resultados</p>');
+                                        '<p class="MgNoProduc">No se han encontrado resultados</p>');
                                 }
                             })
                             .fail(function() {
@@ -892,7 +892,7 @@
                                 } else {
                                     // Si no se encontraron resultados, muestra un mensaje de error
                                     $('#productos').html(
-                                        '<p class="text-danger">No se encontraron resultados</p>');
+                                        '<p class="MgNoProduc">No se han encontrado resultados</p>');
                                 }
                             })
                             .fail(function() {
