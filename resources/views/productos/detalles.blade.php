@@ -155,6 +155,7 @@
                                                     id="precio" placeholder="Precio" value="{{ old('precio') }}">
                                                 {!! $errors->first('precio', '<span style=color:red>:message</span>') !!}
                                             </div>
+
                                             <div class="col-md-4">
                                                 <label for="validationCustom01" class="form-label">Descuento</label>
                                                 <div class="form-check">
@@ -165,7 +166,8 @@
                                                     </label>
 
                                                     <input class="form-check-input ml-2" type="radio"
-                                                        name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                                        name="flexRadioDefault" id="flexRadioDefault2"
+                                                        onclick="borrarDescuento()">
                                                     <label class="form-check-label ml-4" for="flexRadioDefault2">
                                                         No
                                                     </label>
@@ -255,7 +257,6 @@
         var presentacion = "{{ $producto->producto_pre }}";
         var descuento = "{{ $producto->descuento }}";
 
-
         // Agregar listener al botón de "Editar"
         $('#editarBtn').click(function() {
             // Establecer los valores de los inputs y radio buttons
@@ -267,8 +268,11 @@
             $('#tipo').val(tipo);
             $('#presentacion').val(presentacion);
             $('#descuento').val(descuento);
-
         });
+
+        function borrarDescuento() {
+            $('#descuento').val("");
+        }
 
         //vaciar carrito
         $('#vaciarCarrito').click(function() {

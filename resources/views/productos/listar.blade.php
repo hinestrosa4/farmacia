@@ -610,7 +610,7 @@
                               <div class="row">
                                 <div class="col-12">
                                     <div class="text-center">
-                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
+                                    <img width=50% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
                                     </div>
                                   <h2 class=""><b>${producto.nombre}</b></h2>
                                   <h5>${producto.precio} €</h5>

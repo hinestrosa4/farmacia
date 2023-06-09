@@ -23,36 +23,36 @@ class EmailController extends Controller
         return $password;
     }
 
-    // public function enviarRecibo($email, $venta_id)
-    // {
-    //     $venta = Venta::findOrFail($venta_id);
-    //     $pdf = PDF::loadView('factura.factura', compact('venta'));
-    //     $pdf_path = 'reciboVenta.pdf';
-    //     $pdf->save($pdf_path);
-
-    //     Mail::send('email.reciboPDF', ['venta' => $venta], function ($message) use ($email, $pdf_path) {
-    //         $message->to($email)
-    //             ->subject("Recibo")
-    //             ->attach($pdf_path);
-    //     });
-
-    //     return redirect()->back();
-    // }
-
     public function enviarRecibo($email, $venta_id)
     {
         $venta = Venta::findOrFail($venta_id);
         $pdf = PDF::loadView('factura.factura', compact('venta'));
-        $pdf_content = $pdf->output();
+        $pdf_path = 'reciboVenta.pdf';
+        $pdf->save($pdf_path);
 
-        Mail::send('email.reciboPDF', ['venta' => $venta], function ($message) use ($email, $pdf) {
+        Mail::send('email.reciboPDF', ['venta' => $venta], function ($message) use ($email, $pdf_path) {
             $message->to($email)
                 ->subject("Recibo")
-                ->attachData($pdf->output(), 'Recibo.pdf');
+                ->attach($pdf_path);
         });
 
         return redirect()->back();
     }
+
+    // public function enviarRecibo($email, $venta_id)
+    // {
+    //     $venta = Venta::findOrFail($venta_id);
+    //     $pdf = PDF::loadView('factura.factura', compact('venta'));
+    //     $pdf_content = $pdf->output();
+
+    //     Mail::send('email.reciboPDF', ['venta' => $venta], function ($message) use ($email, $pdf) {
+    //         $message->to($email)
+    //             ->subject("Recibo")
+    //             ->attachData($pdf->output(), 'Recibo.pdf');
+    //     });
+
+    //     return redirect()->back();
+    // }
 
     function generatePass()
     {

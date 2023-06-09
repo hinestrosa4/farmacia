@@ -83,15 +83,21 @@ class ProductoController extends Controller
     public function actualizarImagen(Request $request)
     {
         $producto = Producto::findOrFail($request->producto_id);
-        // Si se cargó una nueva imagen, actualizar la ruta de la imagen en la base de datos
+
         if ($request->hasFile('imagen')) {
-            Storage::delete($producto->imagen); // Eliminar la imagen anterior
-            $nombre_imagen = $request->file('imagen')->getClientOriginalName();
-            $ruta_imagen = $request->file('imagen')->storeAs('img/productos', $nombre_imagen);
+            $imagen = $request->file('imagen');
+            $nombreArchivo = $imagen->getClientOriginalName();
+
+            // Eliminar la imagen anterior
+            Storage::delete($producto->imagen);
+
+            // Mover la imagen cargada al directorio adecuado
+            $ruta_imagen = $imagen->move('img/productos', $nombreArchivo);
+
+            // Actualizar la ruta de la imagen en la base de datos
             $producto->update(['imagen' => $ruta_imagen]);
-        }
-        // Si no se cargó una nueva imagen, mantener la imagen actual
-        else {
+        } else {
+            // Si no se cargó una nueva imagen, mantener la imagen actual
             $ruta_imagen = "img/productos/sinFoto.png";
             $producto->update(['imagen' => $ruta_imagen]);
         }
@@ -99,6 +105,7 @@ class ProductoController extends Controller
         session()->flash('message', 'La imagen del producto se ha actualizado correctamente');
         return redirect()->route('listaProductos');
     }
+
 
     public function listar()
     {

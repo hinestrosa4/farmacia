@@ -197,59 +197,51 @@
         </section>
         <section>
             <div class="cotainer-fluid">
-                <div class="card card-info" style="">
-                    <div class="card-header mb-3">
-                        <h3 class="card-title">Buscar producto</h3>
+                <div class="card" style="">
+                    {{-- <div class="card-header mb-3">
+                        <h3 class="card-title">Filtros</h3>
                         <div class="input-group">
                             <input type="text" id="buscar" placeholder="Introduzca nombre de un producto"
                                 class="form-control float-left">
                             <div class="input-group-append"><button class="btn btn-default"><i
                                         class="bi bi-search"></i></button></div>
                         </div>
-                    </div>
-                    <div class="form-check form-switch d-flex" style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
-                        {{-- <div class="mt-2" style="margin-left: 12px">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="cbEstado">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Ordenar por
-                                    estado</label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="cbPrecio">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Ordenar por precio</label>
-                            </div>
-                        </div> --}}
-                        {{-- <button class="custom-checkbox mt-2">
-                            <input type="checkbox" id="check1" />
-                            <label for="check1">
-                                <span class="active">Comprimidos</span>
-                                <span class="not-active">Comprimidos</span>
-                            </label>
-                        </button>
-                        <button class="custom-checkbox mt-2">
-                            <input type="checkbox" id="check2" />
-                            <label for="check2">
-                                <span class="active">Cápsulas</span>
-                                <span class="not-active">Cápsulas</span>
-                            </label>
-                        </button> --}}
-
-                        {{-- Select --}}
-                        <p class="mr-2">Tipo:</p>
-                        <select name="selectTipo" id="selectTipo" style="width:180px">
-                            <option value="-1">Todos</option>
-                            @foreach ($tipos as $tipo)
-                                <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
-                            @endforeach
-                        </select>
-
-                        <p class="ml-5 mr-2">Presentación:</p>
-                        <select name="selectPre" id="selectPre" style="width:150px">
-                            <option value="-1">Todos</option>
-                            @foreach ($presentaciones as $presentacion)
-                                <option value="{{ $presentacion->id }}">{{ $presentacion->nombre }}</option>
-                            @endforeach
-                        </select>
+                    </div> --}}
+                    <div class="form-check form-switch d-flex justify-content-center flex-wrap"
+                        style="margin-left:6%;padding: 25px; margin-right: 5px; margin-bottom: -20px;">
+                        <div class="col">
+                            <p class="mr-3">Tipo:</p>
+                            <select name="selectTipo" id="selectTipo" style="width:180px">
+                                <option value="-1">Todos</option>
+                                @foreach ($tipos as $tipo)
+                                    <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col">
+                            <p class=" mr-3">Presentación:</p>
+                            <select name="selectPre" id="selectPre" style="width:180px">
+                                <option value="-1">Todos</option>
+                                @foreach ($presentaciones as $presentacion)
+                                    <option value="{{ $presentacion->id }}">{{ $presentacion->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col">
+                            <p class="mr-3" for="priceRange">Precio máximo:</p>
+                            <input type="range" id="priceRange" min="0" max="50" value="25"
+                                step="1" oninput="updatePriceLabel()">
+                            <span id="priceLabel">25</span><span>€</span>
+                        </div>
+                        <div class="col">
+                            <p class="mr-3">Producto:</p>
+                            <select name="selectPro" id="selectPro" style="width:180px">
+                                <option value="-1">Todos</option>
+                                @foreach ($productos as $producto)
+                                    <option value="{{ $producto->id }}">{{ $producto->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <br>
                     @if (session()->has('message'))
@@ -288,6 +280,13 @@
             $('select').select2();
         });
 
+        function updatePriceLabel() {
+            var priceRange = document.getElementById("priceRange");
+            var priceLabel = document.getElementById("priceLabel");
+
+            priceLabel.innerText = priceRange.value;
+        }
+
         var presentaciones = <?php echo $presentaciones_json; ?>;
         var laboratorios = <?php echo $laboratorios_json; ?>;
         var tipos = <?php echo $tipos_json; ?>;
@@ -303,7 +302,7 @@
         // console.log("----------");
         //sin filtros
         function buscarDatosSinFiltro(consulta) {
-            console.log("todo");
+            // console.log("todo");
             funcion = "buscar";
             if (!consulta) { // Si no hay consulta, selecciona todos los productos
                 consulta = "todos";
@@ -356,7 +355,7 @@
                                         <a href="#" onclick="addCarrito(this)" class="enlace-card" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
                                             <div class="card-body">
                                                 <div class="text-center">
-                                                    <img width=60% style="margin-bottom:20px;" src="${imagen}" class="img mt-4" alt="Product Image">
+                                                    <img width=50% style="margin-bottom:20px;" src="${imagen}" class="img mt-4" alt="Product Image">
                                                 </div>
 
                                                 <p class="">${producto.nombre} ${producto.concentracion}</p>
@@ -394,12 +393,10 @@
 
         // Filtros
         function aplicarFiltros() {
-            // console.log("con filtro");
             var selectedPre = $('#selectPre').val();
             var selectedTipo = $('#selectTipo').val();
-
-            // console.log(selectedPre);
-            // console.log(selectedTipo);
+            var selectedPro = $('#selectPro').val();
+            var maxPrice = $('#priceRange').val();
 
             var presentaciones = <?php echo $presentaciones_json; ?>;
             var laboratorios = <?php echo $laboratorios_json; ?>;
@@ -418,11 +415,17 @@
                 filtro += "producto_tipo IN(" + selectedTipo + ")";
             }
 
-            if (selectedPre == "-1" && selectedTipo == "-1") {
-                filtro = " WHERE deleted_at IS NULL";
+            if (selectedPro != -1) {
+                if (selectedPre != -1 || selectedTipo != -1) {
+                    filtro += " AND ";
+                }
+                filtro += "id = " + selectedPro;
             }
 
-            filtro += " AND deleted_at IS NULL";
+            if (selectedPre == "-1" && selectedTipo == "-1" && selectedPro == "-1") {
+                filtro = " WHERE deleted_at IS NULL";
+            }
+            filtro += " AND precio <= " + maxPrice + " AND deleted_at IS NULL";
 
             // console.log(filtro);
 
@@ -472,7 +475,7 @@
                                             <a href="#" onclick="addCarrito(this)" class="enlace-card" data-id="${presentacionNombre}" data-info='${JSON.stringify(producto)}'>
                                                 <div class="card-body">
                                                     <div class="text-center">
-                                                        <img width=60% style="margin-bottom:20px" src="${imagen}" class="img mt-4" alt="Product Image">
+                                                        <img width=50% style="margin-bottom:20px" src="${imagen}" class="img mt-4" alt="Product Image">
                                                     </div>
 
                                                     <p class="">${producto.nombre} ${producto.concentracion}</p>
@@ -509,6 +512,15 @@
         $('#selectTipo').change(function() {
             aplicarFiltros();
         });
+
+        $('#selectPro').change(function() {
+            aplicarFiltros();
+        });
+
+        $('#priceRange').mouseup(function() {
+            aplicarFiltros();
+        });
+
 
         let carrito = [];
 
