@@ -25,7 +25,10 @@ if (isset($_POST['funcion']) && isset($_POST['consulta'])) {
     $filtro = $_POST['filtro'];
 
     if ($consulta == "filtro") {
-        $query = "SELECT * FROM producto";
+        $query = "SELECT p.*, pre.nombre as nombre_pre, lab.nombre as nombre_lab, t.nombre as nombre_tipo FROM producto p
+        JOIN presentacion pre on p.producto_pre = pre.id
+        JOIN laboratorio lab on p.producto_lab = lab.id
+        JOIN tipo_producto t on p.producto_tipo = t.id";
 
         if ($filtro != "") {
             $query .= $filtro;

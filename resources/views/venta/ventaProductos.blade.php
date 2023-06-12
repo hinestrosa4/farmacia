@@ -229,9 +229,9 @@
                         </div>
                         <div class="col">
                             <p class="mr-3" for="priceRange">Precio máximo:</p>
-                            <input type="range" id="priceRange" min="0" max="50" value="25"
+                            <input type="range" id="priceRange" min="0" max="50" value="50"
                                 step="1" oninput="updatePriceLabel()">
-                            <span id="priceLabel">25</span><span>€</span>
+                            <span id="priceLabel">50</span><span>€</span>
                         </div>
                         <div class="col">
                             <p class="mr-3">Producto:</p>
@@ -398,9 +398,9 @@
             var selectedPro = $('#selectPro').val();
             var maxPrice = $('#priceRange').val();
 
-            var presentaciones = <?php echo $presentaciones_json; ?>;
-            var laboratorios = <?php echo $laboratorios_json; ?>;
-            var tipos = <?php echo $tipos_json; ?>;
+            presentaciones = <?php echo $presentaciones_json; ?>;
+            laboratorios = <?php echo $laboratorios_json; ?>;
+            tipos = <?php echo $tipos_json; ?>;
 
             var filtro = " WHERE ";
 
@@ -419,15 +419,15 @@
                 if (selectedPre != -1 || selectedTipo != -1) {
                     filtro += " AND ";
                 }
-                filtro += "id = " + selectedPro;
+                filtro += "p.id = " + selectedPro;
             }
 
             if (selectedPre == "-1" && selectedTipo == "-1" && selectedPro == "-1") {
-                filtro = " WHERE deleted_at IS NULL";
+                filtro = " WHERE p.deleted_at IS NULL";
             }
-            filtro += " AND precio <= " + maxPrice + " AND deleted_at IS NULL";
+            filtro += " AND p.precio <= " + maxPrice + " AND p.deleted_at IS NULL";
 
-            // console.log(filtro);
+            console.log(filtro);
 
             $.ajax({
                     url: 'filtros.php',

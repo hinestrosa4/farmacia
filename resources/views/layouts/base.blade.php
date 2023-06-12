@@ -221,7 +221,7 @@
         </nav>
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="{{ route('listaProductos') }}" class="brand-link">
+            <a href="{{ route('ventaProductos') }}" class="brand-link">
                 <img src="{{ asset('img/logo.png') }}" alt="Logo" class="brand-image img-circle elevation-3">
                 <span class="brand-text font-weight-light">Farmalize</span>
             </a>
