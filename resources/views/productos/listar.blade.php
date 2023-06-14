@@ -114,8 +114,23 @@
                     <form id="deleteForm" action="{{ route('borrarProducto', '') }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                        <button id="btn-eliminar" type="submit" class="btn btn-danger">Eliminar</button>
                     </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            var btnIniciarSesion = document.getElementById("btn-eliminar");
+                            var haHechoClic = false;
+
+                            btnIniciarSesion.addEventListener("click", function(event) {
+                                if (haHechoClic) {
+                                    event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                    return false;
+                                }
+
+                                haHechoClic = true;
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>
@@ -201,6 +216,21 @@
                                 <button id="btnSubmitLote" class="btn btn-success" type="submit">Crear lote</button>
                             </div>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var btnIniciarSesion = document.getElementById("btnSubmitLote");
+                                var haHechoClic = false;
+
+                                btnIniciarSesion.addEventListener("click", function(event) {
+                                    if (haHechoClic) {
+                                        event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                        return false;
+                                    }
+
+                                    haHechoClic = true;
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -325,7 +355,21 @@
                                 <button id="btnSubmit" class="btn btn-success" type="submit">Crear producto</button>
                             </div>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var btnIniciarSesion = document.getElementById("btnSubmit");
+                                var haHechoClic = false;
 
+                                btnIniciarSesion.addEventListener("click", function(event) {
+                                    if (haHechoClic) {
+                                        event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                        return false;
+                                    }
+
+                                    haHechoClic = true;
+                                });
+                            });
+                        </script>
                         <script>
                             $(document).ready(function() {
                                 $('input[type="radio"]').change(function() {
@@ -481,7 +525,7 @@
         <section>
             <div class="cotainer-fluid">
                 <div class="card card-info" style="">
-                    <div class="card-header">
+                    {{-- <div class="card-header">
                         <h3 class="card-title">Buscar producto</h3>
                         <div class="input-group">
                             <input type="text" id="buscar" placeholder="Introduzca nombre de un producto"
@@ -489,8 +533,8 @@
                             <div class="input-group-append"><button class="btn btn-default"><i
                                         class="bi bi-search"></i></button></div>
                         </div>
-                    </div>
-                    <div class="form-check form-switch d-flex"
+                    </div> --}}
+                    {{-- <div class="form-check form-switch d-flex"
                         style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
                         <div class="mt-2" style="margin-left: 12px">
                             <div class="form-check form-switch">
@@ -507,6 +551,54 @@
                                 class="btn bg-gradient-danger mt-2"><i class="bi bi-box-seam-fill"></i> Poductos
                                 eliminados</a>
                         </div>
+                    </div> --}}
+                    <div class="form-check form-switch d-flex justify-content-center flex-wrap"
+                        style="padding: 25px; margin-right: 5px; margin-bottom: -20px;">
+                        <div class="col">
+                            <p class="mr-3">Laboratorio:</p>
+                            <select name="selectLaboratorio" id="selectLaboratorio" style="width:180px">
+                                <option value="-1">Todos</option>
+                                @foreach ($laboratorios as $laboratorio)
+                                    <option value="{{ $laboratorio->id }}">{{ $laboratorio->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col">
+                            <p class="mr-3">Tipo:</p>
+                            <select name="selectTipo" id="selectTipo" style="width:180px">
+                                <option value="-1">Todos</option>
+                                @foreach ($tipos as $tipo)
+                                    <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col">
+                            <p class="mr-3">Presentación:</p>
+                            <select name="selectPresentacion" id="selectPresentacion" style="width:180px">
+                                <option value="-1">Todos</option>
+                                @foreach ($presentaciones as $presentacion)
+                                    <option value="{{ $presentacion->id }}">{{ $presentacion->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col">
+                            <p class="mr-3">Producto:</p>
+                            <select name="selectProducto" id="selectProducto" style="width:180px">
+                                <option value="-1">Todos</option>
+                                @foreach ($productos as $producto)
+                                    <option value="{{ $producto->id }}">{{ $producto->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="ml-3">
+                        <button id="btnResetearFiltros" class="btn bg-info mt-3 ml-3">
+                            <i class="bi bi-arrow-clockwise"></i> Resetear filtros
+                        </button>
+                        <a type="button" href="{{ route('listaProductosBaja') }}"
+                            class="btn bg-gradient-danger mt-3"><i class="bi bi-box-seam-fill"></i> Prod.
+                            Eliminados</a>
                     </div>
                     <br>
                     @if (session()->has('message'))
@@ -549,23 +641,24 @@
         });
 
         $(document).ready(function() {
+            $('#btnResetearFiltros').click(function() {
+                console.log("RESETEO");
+                $('#selectProducto').val('-1').change();
+                $('#selectPresentacion').val('-1').change();
+                $('#selectLaboratorio').val('-1').change();
+                $('#selectTipo').val('-1').change();
+                aplicarFiltros();
+            });
+
             var presentaciones = <?php echo $presentaciones_json; ?>;
             var laboratorios = <?php echo $laboratorios_json; ?>;
             var tipos = <?php echo $tipos_json; ?>;
 
             var filtro = " ORDER BY p.id";
-            var checkbox = document.getElementById('cbEstado')
-            var checkboxPrecio = document.getElementById('cbPrecio')
 
-            // verifica si el campo de búsqueda está vacío
-            if ($('#buscar').val() == "") {
-                buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
-            }
-
-            $(document).on('keyup', '#buscar', function() {
-                let valor = $(this).val();
-                buscarDatosSinFiltro(valor); // Llama a buscarDatos() con el valor del campo de búsqueda
-            });
+            var c = 0
+            c == 0 ? buscarDatosSinFiltro() : ""
+            c++
 
             //sin filtros
             function buscarDatosSinFiltro(consulta) {
@@ -659,55 +752,60 @@
                 // })// change checkbox
             }
 
-            checkboxPrecio.addEventListener('click', function() {
-                if (checkboxPrecio.checked) {
-                    filtro = " ORDER BY p.precio desc"
-                    checkbox.checked = 0
+            // Filtros
+            function aplicarFiltros() {
+                var selectProducto = $('#selectProducto').val();
+                var selectPresentacion = $('#selectPresentacion').val();
+                var selectLaboratorio = $('#selectLaboratorio').val();
+                var selectTipo = $('#selectTipo').val();
 
-                    // verifica si el campo de búsqueda está vacío
-                    if ($('#buscar').val() == "") {
-                        buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
-                    }
+                var filtro = " WHERE p.deleted_at IS NULL";
 
-                    $(document).on('keyup', '#buscar', function() {
-                        let valor = $(this).val();
-                        buscarDatos(
-                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
-                    });
+                if (selectProducto != -1) {
+                    filtro += " AND p.id IN (" + selectProducto + ")";
+                }
 
-                    //filtro precio
-                    function buscarDatos(consulta) {
-                        funcion = "buscar";
-                        if (!consulta) { // Si no hay consulta, selecciona todos los productos
-                            consulta = "todos";
-                        }
+                if (selectPresentacion != -1) {
+                    filtro += " AND p.producto_pre IN (" + selectPresentacion + ")";
+                }
 
-                        // $('#mostrarBorrados').change(function() {
-                        $.ajax({
-                                url: 'buscar-productos.php',
-                                type: 'POST',
-                                dataType: 'json',
-                                data: {
-                                    consulta: consulta,
-                                    funcion: funcion,
-                                    filtro: filtro
-                                },
-                            })
-                            .done(function(respuesta) {
-                                if (respuesta.length > 0) {
-                                    // Borra los resultados anteriores
-                                    $('#productos').empty();
-                                    // Agrega los nuevos resultados al cuerpo del card
-                                    // if (!this.checked) {
+                if (selectLaboratorio != -1) {
+                    filtro += " AND p.producto_lab IN (" + selectLaboratorio + ")";
+                }
 
-                                    respuesta.forEach(function(producto, indice) {
-                                        let imagen = producto.imagen == null ?
-                                            "img/productos/sinFoto.png" : producto
-                                            .imagen;
-                                        let presentacionNombre = presentaciones[indice]
-                                        let laboratorioNombre = laboratorios[indice]
-                                        let tipoNombre = tipos[indice]
-                                        let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                if (selectTipo != -1) {
+                    filtro += " AND p.producto_tipo IN (" + selectTipo + ")";
+                }
+
+                // console.log(filtro);
+
+
+                $.ajax({
+                        url: 'filtrosProductos.php',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            consulta: 'filtro',
+                            funcion: funcion,
+                            filtro: filtro
+                        },
+                    })
+                    .done(function(respuesta) {
+                        if (respuesta.length > 0) {
+                            // Borra los resultados anteriores
+                            $('#productos').empty();
+                            // Agrega los nuevos resultados al cuerpo del card
+                            // if (!this.checked) {
+
+                            respuesta.forEach(function(producto, indice) {
+                                let imagen = producto.imagen == null ?
+                                    "img/productos/sinFoto.png" : producto
+                                    .imagen;
+                                let presentacionNombre = presentaciones[indice]
+                                let laboratorioNombre = laboratorios[indice]
+                                let tipoNombre = tipos[indice]
+
+                                let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                           <div class="card bg-light d-flex flex-fill">
                             <div class="card-header border-bottom-0 mb-4" style="background-color: ${producto.stock < 50 ? '#FF9A9A' : ''} ${producto.stock >= 50 && producto.stock < 100 ? '#FACC59' : ''} ${producto.stock >= 100 ? '#B1FF9A' : ''}">
                             <i class="bi bi-boxes"></i> ${producto.stock}
@@ -717,7 +815,7 @@
                               <div class="row">
                                 <div class="col-12">
                                     <div class="text-center">
-                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
+                                    <img width=50% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
                                     </div>
                                   <h2 class=""><b>${producto.nombre}</b></h2>
                                   <h5>${producto.precio} €</h5>
@@ -752,172 +850,30 @@
                           </div>
                         </div>
                         `;
-                                        $('#productos').append(html);
-                                    }); //foreach
-                                    // } //if
-                                    // else {
-                                    //     console.log("borrados")
-                                    // }
-                                } else {
-                                    // Si no se encontraron resultados, muestra un mensaje de error
-                                    $('#productos').html(
-                                        '<p class="MgNoProduc">No se han encontrado resultados</p>');
-                                }
-                            })
-                            .fail(function() {
-                                console.log("error");
-                            });
-                        // })// change checkbox
-                    }
-                } else {
-
-                    filtro = " ORDER BY p.id";
-
-                    // verifica si el campo de búsqueda está vacío
-                    if ($('#buscar').val() == "") {
-                        buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
-                    }
-
-                    $(document).on('keyup', '#buscar', function() {
-                        let valor = $(this).val();
-                        buscarDatosSinFiltro(
-                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
+                                $('#productos').append(html);
+                            }); //foreach                 
+                        } else {
+                            // Si no se encontraron resultados, muestra un mensaje de error
+                            $('#productos').html(
+                                '<p class="MgNoProduc">No se han encontrado resultados</p>');
+                        }
+                    })
+                    .fail(function() {
+                        // console.log("error");
                     });
+            }
 
-                    //sin filtro
-                    buscarDatosSinFiltro()
-                }
+            $('#selectTipo').change(function() {
+                aplicarFiltros();
             });
-
-            checkbox.addEventListener('click', function() {
-                if (checkbox.checked) {
-                    filtro = " ORDER BY p.stock desc"
-                    checkboxPrecio.checked = 0
-
-                    // verifica si el campo de búsqueda está vacío
-                    if ($('#buscar').val() == "") {
-                        buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
-                    }
-
-                    $(document).on('keyup', '#buscar', function() {
-                        let valor = $(this).val();
-                        buscarDatos(
-                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
-                    });
-
-                    //filtro stock/estado
-                    function buscarDatos(consulta) {
-                        funcion = "buscar";
-                        if (!consulta) { // Si no hay consulta, selecciona todos los productos
-                            consulta = "todos";
-                        }
-
-                        // $('#mostrarBorrados').change(function() {
-                        $.ajax({
-                                url: 'buscar-productos.php',
-                                type: 'POST',
-                                dataType: 'json',
-                                data: {
-                                    consulta: consulta,
-                                    funcion: funcion,
-                                    filtro: filtro
-                                },
-                            })
-                            .done(function(respuesta) {
-                                if (respuesta.length > 0) {
-                                    // Borra los resultados anteriores
-                                    $('#productos').empty();
-                                    // Agrega los nuevos resultados al cuerpo del card
-                                    // if (!this.checked) {
-
-                                    respuesta.forEach(function(producto, indice) {
-                                        let imagen = producto.imagen == null ?
-                                            "img/productos/sinFoto.png" : producto
-                                            .imagen;
-                                        let presentacionNombre = presentaciones[indice]
-                                        let laboratorioNombre = laboratorios[indice]
-                                        let tipoNombre = tipos[indice]
-
-                                        let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-                          <div class="card bg-light d-flex flex-fill">
-                            <div class="card-header border-bottom-0 mb-4" style="background-color: ${producto.stock < 50 ? '#FF9A9A' : ''} ${producto.stock >= 50 && producto.stock < 100 ? '#FACC59' : ''} ${producto.stock >= 100 ? '#B1FF9A' : ''}">
-                            <i class="bi bi-boxes"></i> ${producto.stock}
-                            </div>
-
-                            <div class="card-body pt-0">
-                              <div class="row">
-                                <div class="col-12">
-                                    <div class="text-center">
-                                    <img width=70% style="margin-bottom:20px" src="${imagen}" class="img" alt="Product Image">
-                                    </div>
-                                  <h2 class=""><b>${producto.nombre}</b></h2>
-                                  <h5>${producto.precio} €</h5>
-                                  <ul class="ml-2 fa-ul">
-                                    <li style="margin-left:-15px"><i class="fas fa-mortar-pestle"></i><strong> Concentración:</strong> ${producto.concentracion}</li>
-                                    <li style="margin-left:-15px"<i class="fas fa-prescription-bottle-alt"></i><strong> Adicional:</strong> ${producto.adicional}</li>
-                                    <li style="margin-left:-15px"><i class="fas fa-flask"></i><strong> Laboratorio:</strong> ${producto.nombre_lab}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-c-circle-fill"></i><strong> Tipo:</strong> ${producto.nombre_tipo}</li>
-                                    <li style="margin-left:-15px"><i class="bi bi-capsule-pill"></i><strong> Presentación:</strong> ${producto.nombre_pre}</li>
-                                    </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="card-footer">
-                              <div class="text-right">
-                                <a href="#" class="btn btn-sm btn-info mt-1" data-toggle="modal" data-target="#cambiarImagenModal" id="cambiarImagen" data-id="${producto.imagen}" data-id2="${producto.id}" onclick="mostrarImagen(this)">
-                                <i class="bi bi-card-image"></i> Imagen
-                            </a>
-                            
-                                <a href="#" class="btn btn-sm btn-danger mt-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${producto.id}" onclick="actualizarAccionFormulario(this)">
-                                    <i class="bi bi-trash"></i> Eliminar
-                                </a>
-                                <a href="{{ route('detallesProducto', '') }}/${producto.id}" class="btn btn-sm btn-warning mt-1">
-                                <i class="bi bi-pencil-square"></i> Editar
-                                </a>
-                                <a href="#" class="btn btn-sm btn-success mt-1" data-toggle="modal" data-target="#crearLote" data-id="${producto.id}" onclick="actualizarAccionFormularioLote(this)">
-                                    <i class="bi bi-clipboard2-plus"></i> Crear Lote
-                                </a>
-                            
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        `;
-                                        $('#productos').append(html);
-                                    }); //foreach
-                                    // } //if
-                                    // else {
-                                    //     console.log("borrados")
-                                    // }
-                                } else {
-                                    // Si no se encontraron resultados, muestra un mensaje de error
-                                    $('#productos').html(
-                                        '<p class="MgNoProduc">No se han encontrado resultados</p>');
-                                }
-                            })
-                            .fail(function() {
-                                console.log("error");
-                            });
-                        // })// change checkbox
-                    }
-                } else {
-
-                    filtro = " ORDER BY p.id";
-
-                    // verifica si el campo de búsqueda está vacío
-                    if ($('#buscar').val() == "") {
-                        buscarDatosSinFiltro(); // Llama a buscarDatos() sin pasar ningún parámetro
-                    }
-
-                    $(document).on('keyup', '#buscar', function() {
-                        let valor = $(this).val();
-                        buscarDatosSinFiltro(
-                            valor); // Llama a buscarDatos() con el valor del campo de búsqueda
-                    });
-
-                    //sin filtro
-                    buscarDatosSinFiltro()
-                }
+            $('#selectLaboratorio').change(function() {
+                aplicarFiltros();
+            });
+            $('#selectProducto').change(function() {
+                aplicarFiltros();
+            });
+            $('#selectPresentacion').change(function() {
+                aplicarFiltros();
             });
         });
         //vaciar carrito

@@ -42,7 +42,7 @@ class ProductoController extends Controller
         return redirect()->route('listaProductos');
     }
 
-    public function store()
+    public function store(Request $request)
     {
         $datos = request()->validate([
             'nombre' => '',
@@ -57,11 +57,19 @@ class ProductoController extends Controller
         ]);
 
         // dd($datos);
+        if ($request->hasFile('imagen')) {
+            $imagen = $request->file('imagen');
+            $nombreArchivo = $imagen->getClientOriginalName();
 
-        if (request()->hasFile('imagen')) {
-            $nombre_imagen = request()->file('imagen')->getClientOriginalName();
-            $datos['imagen'] = request()->file('imagen')->storeAs('img/productos', $nombre_imagen);
+            // Mover la imagen cargada al directorio adecuado
+            $ruta_imagen = $imagen->move('img/productos', $nombreArchivo);
+
+            $datos['imagen'] = $ruta_imagen;
+        } else {
+            // Si no se cargó una imagen, asignar una por defecto
+            $datos['imagen'] = "img/productos/sinFoto.png";
         }
+
 
         Producto::create($datos);
         session()->flash('message', 'El producto se ha creado correctamente');

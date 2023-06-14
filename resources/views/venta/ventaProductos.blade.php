@@ -208,7 +208,7 @@
                         </div>
                     </div> --}}
                     <div class="form-check form-switch d-flex justify-content-center flex-wrap"
-                        style="margin-left:6%;padding: 25px; margin-right: 5px; margin-bottom: -20px;">
+                        style="padding: 25px; margin-right: 5px; margin-bottom: -20px;">
                         <div class="col">
                             <p class="mr-3">Tipo:</p>
                             <select name="selectTipo" id="selectTipo" style="width:180px">
@@ -242,6 +242,11 @@
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+                    <div style="margin-left:30px" class="mt-3">
+                        <button id="btnResetearFiltros" class="btn bg-info">
+                            <i class="bi bi-arrow-clockwise"></i> Resetear filtros
+                        </button>
                     </div>
                     <br>
                     @if (session()->has('message'))
@@ -286,6 +291,17 @@
 
             priceLabel.innerText = priceRange.value;
         }
+
+        $('#btnResetearFiltros').click(function() {
+            console.log("RESETEO");
+            $('#priceRange').val('50').change();
+            $('#priceLabel').text('50').change();
+            $('#selectPre').val('-1').change();
+            $('#selectTipo').val('-1').change();
+            $('#selectPro').val('-1').change();
+
+            aplicarFiltros();
+        });
 
         var presentaciones = <?php echo $presentaciones_json; ?>;
         var laboratorios = <?php echo $laboratorios_json; ?>;
@@ -425,7 +441,7 @@
             if (selectedPre == "-1" && selectedTipo == "-1" && selectedPro == "-1") {
                 filtro = " WHERE p.deleted_at IS NULL";
             }
-            filtro += " AND p.precio <= " + maxPrice + " AND p.deleted_at IS NULL";
+            filtro += " AND p.precio <= " + maxPrice + " AND p.deleted_at IS NULL ORDER BY p.id";
 
             console.log(filtro);
 

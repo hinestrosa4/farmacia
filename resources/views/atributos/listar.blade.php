@@ -64,8 +64,23 @@
                         <form id="deleteFormLab" action="{{ route('borrarLab', '') }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                            <button id="btn-eliminar-lab" type="submit" class="btn btn-danger">Eliminar</button>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var btnIniciarSesion = document.getElementById("btn-eliminar-lab");
+                                var haHechoClic = false;
+
+                                btnIniciarSesion.addEventListener("click", function(event) {
+                                    if (haHechoClic) {
+                                        event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                        return false;
+                                    }
+
+                                    haHechoClic = true;
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -90,14 +105,29 @@
                         <form id="deleteFormTipo" action="{{ route('borrarTipo', '') }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                            <button id="btn-eliminar-tipo" type="submit" class="btn btn-danger">Eliminar</button>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var btnIniciarSesion = document.getElementById("btn-eliminar-tipo");
+                                var haHechoClic = false;
+
+                                btnIniciarSesion.addEventListener("click", function(event) {
+                                    if (haHechoClic) {
+                                        event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                        return false;
+                                    }
+
+                                    haHechoClic = true;
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal borrar tipo -->
+        <!-- Modal borrar presentacion -->
         <div class="modal fade" id="confirmPre" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -117,8 +147,23 @@
                             <form id="deleteFormPre" action="{{ route('borrarPre', '') }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                <button id="btn-eliminar-pre" type="submit" class="btn btn-danger">Eliminar</button>
                             </form>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    var btnIniciarSesion = document.getElementById("btn-eliminar-pre");
+                                    var haHechoClic = false;
+
+                                    btnIniciarSesion.addEventListener("click", function(event) {
+                                        if (haHechoClic) {
+                                            event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                            return false;
+                                        }
+
+                                        haHechoClic = true;
+                                    });
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -156,7 +201,21 @@
                                         laboratorio</button>
                                 </div>
                             </form>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    var btnIniciarSesion = document.getElementById("btnSubmit");
+                                    var haHechoClic = false;
 
+                                    btnIniciarSesion.addEventListener("click", function(event) {
+                                        if (haHechoClic) {
+                                            event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                            return false;
+                                        }
+
+                                        haHechoClic = true;
+                                    });
+                                });
+                            </script>
                             <script>
                                 $(document).ready(function() {
                                     $("#formlaboratorio").submit(function(event) {
@@ -278,7 +337,21 @@
                                     <button id="btnSubmittipo" class="btn btn-success" type="submit">Crear tipo</button>
                                 </div>
                             </form>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    var btnIniciarSesion = document.getElementById("btnSubmittipo");
+                                    var haHechoClic = false;
 
+                                    btnIniciarSesion.addEventListener("click", function(event) {
+                                        if (haHechoClic) {
+                                            event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                            return false;
+                                        }
+
+                                        haHechoClic = true;
+                                    });
+                                });
+                            </script>
                             <script>
                                 $(document).ready(function() {
                                     $("#formtipo").submit(function(event) {
@@ -401,7 +474,21 @@
                                         presentacion</button>
                                 </div>
                             </form>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    var btnIniciarSesion = document.getElementById("btnSubmitpresentacion");
+                                    var haHechoClic = false;
 
+                                    btnIniciarSesion.addEventListener("click", function(event) {
+                                        if (haHechoClic) {
+                                            event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                            return false;
+                                        }
+
+                                        haHechoClic = true;
+                                    });
+                                });
+                            </script>
                             <script>
                                 $(document).ready(function() {
                                     $("#formpresentacion").submit(function(event) {

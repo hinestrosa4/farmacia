@@ -1,5 +1,7 @@
 <?php
 // Conectar a la base de datos
+// $conexion = mysqli_connect("localhost", "root", "", "farmacia");
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
@@ -15,17 +17,23 @@ $conexion = mysqli_connect(
     $_ENV['DB_DATABASE'],
     $_ENV['DB_PORT']
 );
+
 // Verificar si la solicitud POST está configurada correctamente
 if (isset($_POST['funcion']) && isset($_POST['consulta'])) {
     $funcion = $_POST['funcion'];
     $consulta = $_POST['consulta'];
+    $filtro = $_POST['filtro'];
 
-    if ($consulta == "todos") { // Si la consulta es "todos", selecciona todos los lotes
-        $query = "SELECT l.*, p.imagen, p.nombre FROM lote l
-        JOIN producto p on lote_id_prod = p.id WHERE l.deleted_at IS NULL";
-    } else { // Si no, busca por id de lote que contengan la consulta
-        $query = "SELECT l.*, p.imagen, p.nombre FROM lote l JOIN producto p on lote_id_prod = p.id
-        WHERE p.nombre LIKE '%" . $consulta . "%' AND l.deleted_at IS NULL ORDER BY p.id";
+    if ($consulta == "filtro") {
+        $query = "SELECT p.*, pre.nombre as nombre_pre, lab.nombre as nombre_lab, t.nombre as nombre_tipo FROM producto p
+        JOIN presentacion pre on p.producto_pre = pre.id
+        JOIN laboratorio lab on p.producto_lab = lab.id
+        JOIN tipo_producto t on p.producto_tipo = t.id";
+
+        if ($filtro != "") {
+            $query .= $filtro;
+        }
+        // $query .= " ORDER BY p.id";
     }
 
     $result = mysqli_query($conexion, $query);

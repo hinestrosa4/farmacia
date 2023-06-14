@@ -95,11 +95,9 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check form-switch d-flex" style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
-                        <div class="ml-auto">
-                            <a type="button" href="{{ route('listaProveedores') }}" class="btn bg-gradient-success"><i
-                                    class="fa-solid fa-user-check"></i> Proveedores activos</a>
-                        </div>
+                    <div class="form-check form-switch d-flex mt-3">
+                        <a type="button" href="{{ route('listaProveedores') }}" class="btn bg-gradient-success"><i
+                                class="fa-solid fa-user-check"></i> Proveedores activos</a>
                     </div>
                     <br>
                     @if (session()->has('message'))

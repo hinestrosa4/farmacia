@@ -137,7 +137,8 @@
                                 });
                             </script>
                             <div class="row mb-3 px-3">
-                                <button type="submit" class="btn btn-blue text-center">Iniciar Sesión</button>
+                                <button id="btn-iniciar-sesion" type="submit" class="btn btn-blue text-center">Iniciar
+                                    Sesión</button>
                             </div>
                             <div class="row mb-4 px-3">
                                 <small class="font-weight" style="font-size:15px">No tienes una cuenta? <a
@@ -161,5 +162,21 @@
         </div>
     </form>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var btnIniciarSesion = document.getElementById("btn-iniciar-sesion");
+        var haHechoClic = false;
+
+        btnIniciarSesion.addEventListener("click", function(event) {
+            if (haHechoClic) {
+                event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                return false;
+            }
+
+            haHechoClic = true;
+        });
+    });
+</script>
+
 
 </html>

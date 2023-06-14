@@ -299,12 +299,10 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check form-switch d-flex"
+                    <div class="form-check form-switch d-flex p-2 ml-2"
                         style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
-                        <div class="ml-auto">
-                            <a type="button" href="{{ route('listaProductos') }}" class="btn bg-gradient-success"><i
-                                    class="bi bi-box-seam-fill"></i> Poductos activos</a>
-                        </div>
+                        <a type="button" href="{{ route('listaProductos') }}" class="btn bg-gradient-success"><i
+                                class="bi bi-box-seam-fill"></i> Poductos activos</a>
                     </div>
 
                     <br>

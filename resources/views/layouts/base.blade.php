@@ -247,7 +247,7 @@
                                 @elseif (Auth::user()->tipo == 2)
                                     <span style="color:rgb(66, 153, 30)">Farmacéutico</span>
                                 @elseif (Auth::user()->tipo == 3)
-                                    <span style="color:rgb(66, 153, 30)">Ténico</span>
+                                    <span style="color:rgb(66, 153, 30)">Técnico</span>
                                 @else
                                     <span style="color:rgb(66, 153, 30)">Auxiliar</span>
                                 @endif

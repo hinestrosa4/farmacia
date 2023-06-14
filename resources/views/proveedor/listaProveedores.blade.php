@@ -54,8 +54,23 @@
                     <form id="deleteForm" action="{{ route('borrarProveedor', '') }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Dar de Baja</button>
+                        <button id="btn-eliminar" type="submit" class="btn btn-danger">Dar de Baja</button>
                     </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            var btnIniciarSesion = document.getElementById("btn-eliminar");
+                            var haHechoClic = false;
+
+                            btnIniciarSesion.addEventListener("click", function(event) {
+                                if (haHechoClic) {
+                                    event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                    return false;
+                                }
+
+                                haHechoClic = true;
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>
@@ -114,7 +129,21 @@
                                 <button id="btnSubmit" class="btn btn-success" type="submit">Crear proveedor</button>
                             </div>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var btnIniciarSesion = document.getElementById("btnSubmit");
+                                var haHechoClic = false;
 
+                                btnIniciarSesion.addEventListener("click", function(event) {
+                                    if (haHechoClic) {
+                                        event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                        return false;
+                                    }
+
+                                    haHechoClic = true;
+                                });
+                            });
+                        </script>
                         <script>
                             $(document).ready(function() {
                                 $("#form").submit(function(event) {
@@ -250,13 +279,11 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check form-switch d-flex"
-                        style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
-                        <div class="ml-auto">
-                            <a type="button" href="{{ route('listaProveedoresBaja') }}"
-                                class="btn bg-gradient-danger"><i class="fa-sharp fa-solid fa-user-xmark"></i> Proveedores
-                                de baja</a>
-                        </div>
+                    <div class="form-check form-switch d-flex mt-3">
+                        <a type="button" href="{{ route('listaProveedoresBaja') }}" class="btn bg-gradient-danger"><i
+                                class="fa-sharp fa-solid fa-user-xmark"></i> Proveedores
+                            de baja</a>
+
                     </div>
                     <br>
                     @if (session()->has('message'))

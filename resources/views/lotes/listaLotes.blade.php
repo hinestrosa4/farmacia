@@ -47,8 +47,23 @@
                     <form id="deleteForm" action="{{ route('borrarLote', '') }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Eliminar lote</button>
+                        <button id="btn-eliminar" type="submit" class="btn btn-danger">Eliminar lote</button>
                     </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            var btnIniciarSesion = document.getElementById("btn-eliminar");
+                            var haHechoClic = false;
+
+                            btnIniciarSesion.addEventListener("click", function(event) {
+                                if (haHechoClic) {
+                                    event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                    return false;
+                                }
+
+                                haHechoClic = true;
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>
@@ -114,6 +129,21 @@
                                 <button id="btnSubmit" class="btn btn-success" type="submit">Crear lote</button>
                             </div>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var btnIniciarSesion = document.getElementById("btnSubmit");
+                                var haHechoClic = false;
+
+                                btnIniciarSesion.addEventListener("click", function(event) {
+                                    if (haHechoClic) {
+                                        event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                        return false;
+                                    }
+
+                                    haHechoClic = true;
+                                });
+                            });
+                        </script>
 
                         <script>
                             $(document).ready(function() {
@@ -186,10 +216,10 @@
                 <div class="row mb-2 mr-6">
                     <div class="col-sm-6">
                         <h1>Gestión de lotes</h1>
-                        @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2))
-                            <button type="button" data-toggle="modal" data-target="#crearLote"
-                                class="btn bg-gradient-primary" style="margin-top: 20px">Crear lote</button>
-                        @endif
+                        {{-- @if (Auth::check() && (Auth::user()->tipo == 1 || Auth::user()->tipo == 2)) --}}
+                        <button type="button" data-toggle="modal" data-target="#crearLote" class="btn bg-gradient-primary"
+                            style="margin-top: 20px">Crear lote</button>
+                        {{-- @endif --}}
                     </div>
                     <div class="col-sm-5">
                         <ol class="breadcrumb float-right">
@@ -202,22 +232,39 @@
         </section>
         <section>
             <div class="cotainer-fluid">
-                <div class="card card-warning">
-                    <div class="card-header">
-                        <h3 class="card-title">Buscar lote</h3>
-                        <div class="input-group">
-                            <input type="text" id="buscar" placeholder="Introduzca nombre de un lote"
-                                class="form-control float-left">
-                            <div class="input-group-append"><button class="btn btn-default"><i
-                                        class="bi bi-search"></i></button></div>
+                <div class="card">
+
+                    <div class="form-check form-switch d-flex justify-content-center flex-wrap"
+                        style="padding: 25px; margin-bottom: -20px;">
+                        <div class="col">
+                            <p class="mr-3">Proveedor:</p>
+                            <select name="selectProveedor" id="selectProveedor" style="width:180px">
+                                <option value="-1">Todos</option>
+                                @foreach ($proveedores as $proveedor)
+                                    <option value="{{ $proveedor->id }}">{{ $proveedor->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col">
+                            <p class="mr-3">Producto:</p>
+                            <select name="selectProducto" id="selectProducto" style="width:180px">
+                                <option value="-1">Todos</option>
+                                @foreach ($productos as $producto)
+                                    <option value="{{ $producto->id }}">{{ $producto->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col">
+                            <p class="mr-3">Fecha de caducidad:</p>
+                            <input type="date" class="form-control" style="width: 180px" id="filtroDate">
                         </div>
                     </div>
-                    <div class="form-check form-switch d-flex"
-                        style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
-                        <div class="ml-auto">
-                            <a type="button" href="{{ route('gestionLotesEliminados') }}"
-                                class="btn bg-gradient-danger"><i class="bi bi-archive-fill"></i> Lotes eliminados</a>
-                        </div>
+                    <div style="margin-left:30px" class="mt-3">
+                        <button id="btnResetearFiltros" class="btn bg-info">
+                            <i class="bi bi-arrow-clockwise"></i> Resetear filtros
+                        </button>
+                        <a type="button" href="{{ route('gestionLotesEliminados') }}" class="btn bg-gradient-danger"><i
+                                class="bi bi-archive-fill"></i> Lotes eliminados</a>
                     </div>
                     <br>
                     @if (session()->has('message'))
@@ -231,7 +278,20 @@
                     </div>
                 </div>
                 <div class="card-footer">
-
+                    <?php
+                    $productos = [];
+                    $productosImagen = [];
+                    
+                    ?>
+                    @foreach ($lotes as $lote)
+                        <?php
+                        $productos[] = $lote->producto->nombre;
+                        $productos_json = json_encode($productos);
+                        
+                        $productosImagen[] = $lote->producto->imagen;
+                        $productosImagen_json = json_encode($productosImagen);
+                        ?>
+                    @endforeach
                 </div>
             </div>
     </div>
@@ -245,46 +305,152 @@
         $(document).ready(function() {
             $('select').select2();
         });
+        $('#btnResetearFiltros').click(function() {
+            console.log("RESETEO");
+            $('#selectProducto').val('-1').change();
+            $('#selectProveedor').val('-1').change();
+            $('#filtroDate').val('').change();
+            aplicarFiltros();
+        });
+        var productos = <?php echo $productos_json; ?>;
+        var productosImagen = <?php echo $productosImagen_json; ?>;
 
-        $(document).ready(function() {
-            // verifica si el campo de búsqueda está vacío
-            if ($('#buscar').val() == "") {
-                buscarDatos(); // Llama a buscarDatos() sin pasar ningún parámetro
+        var filtro = " ORDER BY l.id";
+
+        var c = 0
+        c == 0 ? buscarDatos() : ""
+        c++
+
+        function buscarDatos(consulta) {
+            funcion = "buscar";
+            if (!consulta) { // Si no hay consulta, selecciona todos los clientes
+                consulta = "todos";
+            }
+            // $('#mostrarBorrados').change(function() {
+            $.ajax({
+                    url: 'buscar-lotes.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        consulta: consulta,
+                        funcion: funcion
+                    },
+                })
+                .done(function(respuesta) {
+                    if (respuesta.length > 0) {
+                        // Borra los resultados anteriores
+                        $('#lotes').empty();
+                        // Agrega los nuevos resultados al cuerpo del card
+                        // if (!this.checked) {
+                        respuesta.forEach(function(lote, indice) {
+
+                            let productoNombre = productos[indice]
+                            let productoImagen = productosImagen[indice]
+
+                            let d = lote.vencimiento.substring(8)
+                            let m = lote.vencimiento.substring(7, 5)
+                            let y = lote.vencimiento.substring(0, 4)
+
+                            let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                          <div class="card bg-light d-flex flex-fill">
+                            <div class="card-header text-muted border-bottom-0">
+                            </div>
+                            <div class="card-body pt-0">
+                              <div class="row">
+                                <div class="col-7">
+                                  <h2 class="lead"><b>Lote de ${productoNombre}</b></h2>
+                                  <br>
+                                  <ul class="ml-2 fa-ul">
+                                    <li class="small"><span class="fa-li"><i class="fa-solid fa-key"></i></span> <strong>Identificador:</strong> ${lote.id}</li>
+                                    <li class="small"><span class="fa-li"><i class="fa-solid fa-boxes-stacked"></i></span> <strong>Stock:</strong> ${lote.stock}</li>
+                                    <li></li>
+                                    <li class="small"><span class="fa-li"><i class="fa-regular fa-calendar fa-lg"></i></span> <strong>Fecha de caducidad:</strong> ${d}/${m}/${y}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-5 text-center">
+                                    <img width=70% style="margin-bottom:20px" src="${productoImagen}" class="img" alt="Product Image">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer">
+                              <div class="text-right">
+                                <a href="#" class="btn btn-sm btn-danger mt-1 mr-1" data-toggle="modal" data-target="#confirmDeleteModal" data-id="${lote.id}" onclick="actualizarAccionFormulario(this)">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </a>
+                            <a href="{{ route('editarLote', '') }}/${lote.id}" class="btn btn-sm btn-warning mt-1" id="editar" data-id="${lote.id}">
+                                <i class="bi bi-pencil-square"></i> Editar
+                                    </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>                                           
+                        `;
+                            $('#lotes').append(html);
+                        }); //foreach
+                        // } //if
+                        // else {
+                        //     console.log("borrados")
+                        // }
+                    } else {
+                        // Si no se encontraron resultados, muestra un mensaje de error
+                        $('#lotes').html(
+                            '<p class="MgNoProduc">No se han encontrado resultados</p>');
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                });
+            // })// change checkbox
+        }
+
+        // Filtros
+        function aplicarFiltros() {
+            var selectProveedor = $('#selectProveedor').val();
+            var selectProducto = $('#selectProducto').val();
+            var filtroDate = $('#filtroDate').val();
+            var filtro = " WHERE l.deleted_at IS NULL";
+
+            if (selectProveedor != -1) {
+                filtro += " AND l.lote_id_prov IN (" + selectProveedor + ")";
             }
 
-            $(document).on('keyup', '#buscar', function() {
-                let valor = $(this).val();
-                buscarDatos(valor); // Llama a buscarDatos() con el valor del campo de búsqueda
-            });
+            if (selectProducto != -1) {
+                filtro += " AND l.lote_id_prod IN (" + selectProducto + ")";
+            }
 
-            function buscarDatos(consulta) {
-                funcion = "buscar";
-                if (!consulta) { // Si no hay consulta, selecciona todos los clientes
-                    consulta = "todos";
-                }
-                // $('#mostrarBorrados').change(function() {
-                $.ajax({
-                        url: 'buscar-lotes.php',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            consulta: consulta,
-                            funcion: funcion
-                        },
-                    })
-                    .done(function(respuesta) {
-                        if (respuesta.length > 0) {
-                            // Borra los resultados anteriores
-                            $('#lotes').empty();
-                            // Agrega los nuevos resultados al cuerpo del card
-                            // if (!this.checked) {
-                            respuesta.forEach(function(lote, indice) {
+            if (selectProveedor == "-1" && selectProducto == "-1") {
+                // No se añade ninguna condición adicional en este caso
+            }
 
-                                let d = lote.vencimiento.substring(8)
-                                let m = lote.vencimiento.substring(7, 5)
-                                let y = lote.vencimiento.substring(0, 4)
+            if (filtroDate != "") {
+                filtro += " AND l.vencimiento > '" + filtroDate + "'";
+            }
 
-                                let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+            // console.log(filtro);
+
+            $.ajax({
+                    url: 'filtrosLote.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        consulta: 'filtro',
+                        funcion: funcion,
+                        filtro: filtro
+                    },
+                })
+                .done(function(respuesta) {
+                    if (respuesta.length > 0) {
+                        // Borra los resultados anteriores
+                        $('#lotes').empty();
+                        // Agrega los nuevos resultados al cuerpo del card
+                        // if (!this.checked) {
+                        respuesta.forEach(function(lote, indice) {
+
+                            let d = lote.vencimiento.substring(8)
+                            let m = lote.vencimiento.substring(7, 5)
+                            let y = lote.vencimiento.substring(0, 4)
+
+                            let html = `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                           <div class="card bg-light d-flex flex-fill">
                             <div class="card-header text-muted border-bottom-0">
                             </div>
@@ -318,24 +484,33 @@
                           </div>
                         </div>                                           
                         `;
-                                $('#lotes').append(html);
-                            }); //foreach
-                            // } //if
-                            // else {
-                            //     console.log("borrados")
-                            // }
-                        } else {
-                            // Si no se encontraron resultados, muestra un mensaje de error
-                            $('#lotes').html(
-                                '<p class="MgNoProduc">No se han encontrado resultados</p>');
-                        }
-                    })
-                    .fail(function() {
-                        console.log("error");
-                    });
-                // })// change checkbox
-            }
+                            $('#lotes').append(html);
+                        }); //foreach
+                        // } //if
+                        // else {
+                        //     console.log("borrados")
+                        // }
+                    } else {
+                        // Si no se encontraron resultados, muestra un mensaje de error
+                        $('#lotes').html(
+                            '<p class="MgNoProduc">No se han encontrado resultados</p>');
+                    }
+                })
+                .fail(function() {
+                    // console.log("error");
+                });
+        }
 
+        $('#selectProveedor').change(function() {
+            aplicarFiltros();
+        });
+
+        $('#selectProducto').change(function() {
+            aplicarFiltros();
+        });
+
+        $('#filtroDate').change(function() {
+            aplicarFiltros();
         });
 
         function actualizarAccionFormulario(botonEliminar) {

@@ -54,8 +54,23 @@
                     <form id="deleteForm" action="{{ route('borrarUsuario', '') }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Dar de Baja</button>
+                        <button id="btn-eliminar" type="submit" class="btn btn-danger">Dar de Baja</button>
                     </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            var btnIniciarSesion = document.getElementById("btn-eliminar");
+                            var haHechoClic = false;
+
+                            btnIniciarSesion.addEventListener("click", function(event) {
+                                if (haHechoClic) {
+                                    event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                    return false;
+                                }
+
+                                haHechoClic = true;
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>
@@ -89,6 +104,21 @@
                             <button type="submit" style="width: 46px" class="btn btn-primary"
                                 id="acceptPasswordButton">Sí</button>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var btnIniciarSesion = document.getElementById("acceptPasswordButton");
+                                var haHechoClic = false;
+
+                                btnIniciarSesion.addEventListener("click", function(event) {
+                                    if (haHechoClic) {
+                                        event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                        return false;
+                                    }
+
+                                    haHechoClic = true;
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -134,6 +164,21 @@
                             <button type="submit" style="width: 46px" class="btn btn-primary"
                                 id="acceptPasswordButton2">Sí</button>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var btnIniciarSesion = document.getElementById("acceptPasswordButton2");
+                                var haHechoClic = false;
+
+                                btnIniciarSesion.addEventListener("click", function(event) {
+                                    if (haHechoClic) {
+                                        event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                        return false;
+                                    }
+
+                                    haHechoClic = true;
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -150,8 +195,6 @@
             $('#formDescender').attr('action', action_url);
         });
     </script>
-
-
 
     <!-- Modal para crear un usuario -->
     <div class="modal fade" id="crearUsuario" tabindex="-1" role="dialog" aria-labelledby="crearUsuario-label"
@@ -233,7 +276,21 @@
                                 <button id="btnSubmit" class="btn btn-success" type="submit">Crear usuario</button>
                             </div>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var btnIniciarSesion = document.getElementById("btnSubmit");
+                                var haHechoClic = false;
 
+                                btnIniciarSesion.addEventListener("click", function(event) {
+                                    if (haHechoClic) {
+                                        event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                                        return false;
+                                    }
+
+                                    haHechoClic = true;
+                                });
+                            });
+                        </script>
                         <script>
                             $(document).ready(function() {
                                 $("#form").submit(function(event) {
@@ -402,12 +459,10 @@
                                         class="bi bi-search"></i></button></div>
                         </div>
                     </div>
-                    <div class="form-check form-switch d-flex"
-                        style="margin-top:5px;margin-right:5px;margin-bottom:-15px">
-                        <div class="ml-auto">
-                            <a type="button" href="{{ route('gestionUsuarioBaja') }}" class="btn bg-gradient-danger"><i
-                                    class="fa-sharp fa-solid fa-user-xmark"></i> Usuarios de baja</a>
-                        </div>
+                    <div class="form-check form-switch d-flex mt-3">
+
+                        <a type="button" href="{{ route('gestionUsuarioBaja') }}" class="btn bg-gradient-danger"><i
+                                class="fa-sharp fa-solid fa-user-xmark"></i> Usuarios de baja</a>
                     </div>
                     <br>
                     @if (session()->has('message'))

@@ -116,7 +116,8 @@
                             </form>
                             <br><br><br>
                             <div class="row mb-3 px-3">
-                                <button class="btn btn-blue text-center" type="submit">Registrarme</button>
+                                <button id="btn-register" class="btn btn-blue text-center"
+                                    type="submit">Registrarme</button>
                             </div>
                             <div class="row mb-4 px-3">
                                 <small class="font-weight-bold">Ya tienes una cuenta? <a href="{{ route('login') }}"
@@ -140,5 +141,20 @@
         </div>
     </form>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var btnIniciarSesion = document.getElementById("btn-register");
+        var haHechoClic = false;
+
+        btnIniciarSesion.addEventListener("click", function(event) {
+            if (haHechoClic) {
+                event.preventDefault(); // Evita que se envíe el formulario nuevamente
+                return false;
+            }
+
+            haHechoClic = true;
+        });
+    });
+</script>
 
 </html>
